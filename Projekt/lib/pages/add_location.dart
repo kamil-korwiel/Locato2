@@ -1,8 +1,21 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 final _addLocationKey = GlobalKey<FormState>();
 
-class AddLocation extends StatelessWidget {
+class AddLocation extends StatefulWidget {
+  @override
+  _AddLocationState createState() => _AddLocationState();
+}
+
+class _AddLocationState extends State<AddLocation> {
+  GoogleMapController mapController;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +48,24 @@ class AddLocation extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(
                 hintText: 'Adres',
+              ),
+            ),
+            Card(
+              child: ExpansionTile(
+                leading: Icon(Icons.location_on),
+                title: Text('Wybór z mapy'),
+                children: <Widget>[
+                  Container(
+                    height: 300,
+                    child: GoogleMap(
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(53.0321480, 18.6060900),
+                        zoom: 11.0,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           ],

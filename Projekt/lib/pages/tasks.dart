@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+import 'add_location.dart';
+
 class Tasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -30,10 +32,19 @@ class Tasks extends StatelessWidget {
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () => print('Dodaj Zadanie')),
           SpeedDialChild(
-              child: Icon(Icons.add_location),
-              label: 'Lokalizacja',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => print('Dodaj Lokalizacje')),
+            child: Icon(Icons.add_location),
+            label: 'Lokalizacja',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () {
+              print('Dodaj Lokalizacje');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddLocation(),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:pageview/pages/add_location.dart';
+import 'add_location.dart';
 
 class HomePageE extends StatelessWidget {
   @override
