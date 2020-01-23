@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pageview/pages/calendar.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/tasks.dart';
+import 'package:pageview/testsliver/homepagesilver.dart';
 
 void main() => runApp(MyApp());
 
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
         ),
         children: <Widget>[
           Calendar(),
-          HomePageE(),
+          HomePageTest(),
           Tasks(),
         ],
       ),
