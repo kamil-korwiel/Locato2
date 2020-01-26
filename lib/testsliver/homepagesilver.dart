@@ -33,8 +33,19 @@ class HomePageTest extends StatelessWidget {
 
   Widget makeAppBar(String header){
     return SliverAppBar(
-      pinned: true,
+      pinned: false,
       title: Text(header),
+    );
+  }
+  Widget makeAppBarSliver(String  header){
+    return SliverAppBar(
+      expandedHeight: 150.0,
+      //snap: true,
+      //floating: true,
+
+      flexibleSpace: FlexibleSpaceBar(
+        title: Text(header),
+      ),
     );
   }
 
@@ -61,41 +72,38 @@ class HomePageTest extends StatelessWidget {
     "task1",
     "task2",
     "task3",
-    "task4",
   ];
 
   Widget buildList(List<String> taskList){
     return SliverList(
-      delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-          final item = taskList[index];
+      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        final item = taskList[index];
 
-          return Dismissible(
-            key: Key(item),
-            child: Container(
+          return  Container(
               child: Column(
                 children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.check_box),
-                    title: Text(item),
-                  ),
-                  //////////////////////////////////
-                  Container(
-                    // color: Colors.blueGrey,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  ExpansionTile(
+                    leading: Icon(Icons.check_box_outline_blank),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Icon(Icons.pin_drop,size: 20,),
-                        Icon(Icons.alarm_on,size: 20),
-                        Icon(Icons.inbox,size: 20),
+                        Text(item),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Icon(Icons.pin_drop,size: 20,),
+                            Icon(Icons.alarm_on,size: 20),
+                            Icon(Icons.inbox,size: 20),
+                          ],
+                        ),
                       ],
                     ),
-                  )
+                  ),
+                  //////////////////////////////////
 
                 ],
               ),
-            ),
-          );
+            );
         },
         childCount: taskList.length,
       ),
@@ -107,7 +115,7 @@ class HomePageTest extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
-        makeAppBar(getDay(date.weekday)),
+        makeAppBarSliver(getDay(date.weekday)),
         buildList(dummlist),
         makeAppBar(getDay(date.weekday + 1)),
         buildList(dummlist),
@@ -124,4 +132,5 @@ class HomePageTest extends StatelessWidget {
       ],
     );
   }
+
 }
