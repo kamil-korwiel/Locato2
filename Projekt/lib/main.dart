@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:pageview/pages/calendar.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/tasks.dart';
 import 'package:pageview/testsliver/homepagesilver.dart';
+import 'package:pageview/testsliver/grouptask.dart';
 
 void main() => runApp(MyApp());
 
@@ -40,16 +42,55 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        controller: PageController(
-          initialPage: 1,
+    return SafeArea(
+      child: Scaffold(
+        body: PageView(
+          controller: PageController(
+            initialPage: 1,
+          ),
+          children: <Widget>[
+            Calendar(),
+            HomePageTest(),
+            GroupTask(),
+          ],
         ),
-        children: <Widget>[
-          Calendar(),
-          HomePageTest(),
-          Tasks(),
-        ],
+        floatingActionButton: SpeedDial(
+          elevation: 10.0,
+          animatedIcon: AnimatedIcons.add_event,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          closeManually: false,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          onOpen: () => print('Otwieram Dial na Tasks'),
+          onClose: () => print('Zamykam Dial na Tasks'),
+          heroTag: 'speed-dial-hero-tag',
+          children: [
+            SpeedDialChild(
+                child: Icon(Icons.event_note),
+                label: 'Wydarzenie',
+                labelStyle: TextStyle(fontSize: 18.0),
+                onTap: () => print('Dodaj Wydarzenie')),
+            SpeedDialChild(
+                child: Icon(Icons.check_box),
+                label: 'Zadanie',
+                labelStyle: TextStyle(fontSize: 18.0),
+                onTap: () => print('Dodaj Zadanie')),
+            SpeedDialChild(
+              child: Icon(Icons.add_location),
+              label: 'Lokalizacja',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () {
+                print('Dodaj Lokalizacje');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                   // builder: (context) => AddLocation(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
