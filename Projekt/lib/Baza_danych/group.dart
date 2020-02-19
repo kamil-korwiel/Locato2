@@ -1,16 +1,14 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
+// import 'dart:io';
+// import 'package:flutter/foundation.dart';
 
-class Group {
-  final int idGroup;
-  final String name;
-  //final DateTime term;
-  final int color;
+// class Group {
+//   final int idGroup;
+//   final String name;
+//   final int howMuchDone;
 
-  Group({
-    this.idGroup,
-    this.name,
-    //this.term,
-    this.color,
-  });
-}
+//   Group({
+//     this.idGroup,
+//     this.name,
+//     this.howMuchDone,
+//   });
+// }
