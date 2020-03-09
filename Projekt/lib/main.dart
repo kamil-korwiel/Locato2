@@ -38,7 +38,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Widget> pages = [Calendar(), HomePageE(), Tasks()];
+ // List<Widget> pages = [Calendar(), HomePageE(), Tasks()];
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +50,8 @@ class _HomePageState extends State<HomePage> {
           ),
           children: <Widget>[
             Calendar(),
-            HomePageTest(),
-            GroupTask(),
+            HomePageEvents(),
+            GroupTaskPage(),
           ],
         ),
         floatingActionButton: SpeedDial(
