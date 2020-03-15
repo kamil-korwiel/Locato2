@@ -3,6 +3,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:pageview/pages/calendar.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/tasks.dart';
+//import 'pages/add_location.dart';
+import 'pages/add_location2.dart';
 import 'package:pageview/testsliver/homepagesilver.dart';
 import 'package:pageview/testsliver/grouptask.dart';
 
@@ -38,22 +40,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
- // List<Widget> pages = [Calendar(), HomePageE(), Tasks()];
+  // List<Widget> pages = [Calendar(), HomePageE(), Tasks()];
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: PageView(
-          controller: PageController(
-            initialPage: 1,
-          ),
-          children: <Widget>[
-            Calendar(),
-            HomePageEvents(),
-            GroupTaskPage(),
-          ],
-        ),
         floatingActionButton: SpeedDial(
           elevation: 10.0,
           animatedIcon: AnimatedIcons.add_event,
@@ -84,11 +76,21 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                   // builder: (context) => AddLocation(),
+                    builder: (context) => AddLocation(),
                   ),
                 );
               },
             ),
+          ],
+        ),
+        body: PageView(
+          controller: PageController(
+            initialPage: 1,
+          ),
+          children: <Widget>[
+            Calendar(),
+            HomePageEvents(),
+            GroupTaskPage(),
           ],
         ),
       ),
