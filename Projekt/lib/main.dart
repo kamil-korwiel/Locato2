@@ -4,9 +4,11 @@ import 'package:pageview/pages/calendar.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/tasks.dart';
 //import 'pages/add_location.dart';
+import 'pages/add_event.dart';
 import 'pages/add_location2.dart';
 import 'package:pageview/testsliver/homepagesilver.dart';
 import 'package:pageview/testsliver/grouptask.dart';
+import 'pages/add_task.dart';
 
 void main() => runApp(MyApp());
 
@@ -61,12 +63,30 @@ class _HomePageState extends State<HomePage> {
                 child: Icon(Icons.event_note),
                 label: 'Wydarzenie',
                 labelStyle: TextStyle(fontSize: 18.0),
-                onTap: () => print('Dodaj Wydarzenie')),
+                onTap: () {
+                  print('Dodaj Wydarzenie');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddEvent(),
+                      )
+                  );
+                } ),
             SpeedDialChild(
                 child: Icon(Icons.check_box),
                 label: 'Zadanie',
                 labelStyle: TextStyle(fontSize: 18.0),
-                onTap: () => print('Dodaj Zadanie')),
+                onTap: () {
+                  print('Dodaj Zadanie');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddTask(),
+                    )
+                  );
+                }
+
+                ),
             SpeedDialChild(
               child: Icon(Icons.add_location),
               label: 'Lokalizacja',
