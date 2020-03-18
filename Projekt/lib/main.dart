@@ -9,8 +9,11 @@ import 'pages/add_location2.dart';
 import 'package:pageview/testsliver/homepagesilver.dart';
 import 'package:pageview/testsliver/grouptask.dart';
 import 'pages/add_task.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  initializeDateFormatting().then((_) => runApp(MyApp()));
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
