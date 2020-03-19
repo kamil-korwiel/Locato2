@@ -29,9 +29,16 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
+      headerStyle: HeaderStyle(
+        centerHeaderTitle: true,
+        formatButtonVisible: false,
+      ),
       locale: ('pl' 'PL'),
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarController: _calendarController,
+      onDaySelected: (date, events){
+        print(date.toIso8601String());
+      },
     );
   }
 }
