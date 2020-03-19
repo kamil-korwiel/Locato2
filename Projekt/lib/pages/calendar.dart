@@ -29,6 +29,9 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
+      calendarStyle: CalendarStyle(
+
+      ),
       headerStyle: HeaderStyle(
         centerHeaderTitle: true,
         formatButtonVisible: false,
@@ -39,6 +42,40 @@ class _CalendarState extends State<Calendar> {
       onDaySelected: (date, events){
         print(date.toIso8601String());
       },
-    );
+      builders: CalendarBuilders(
+        selectedDayBuilder: (context, date, events) =>
+            Container(
+              margin: const EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+              ),
+             child: Text(date.day.toString(), style: TextStyle(
+                 color:Colors.white)
+             )
+          ),
+          todayDayBuilder: (context, date, events) =>
+            Container(
+              margin: const EdgeInsets.all(5.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+              color: Colors.red,
+              shape: BoxShape.circle,
+              ),
+              child: Text(date.day.toString(), style: TextStyle(
+              color:Colors.white)
+            )
+          ),
+          /*dayBuilder: (context, date, events) =>
+             Text(date.day.toString(), style: TextStyle(
+               color: Colors.white)
+             ),
+             weekendDayBuilder: (context, date, events) =>
+               Text(date.day.toString(), style: TextStyle(
+            color: Colors.red)*/
+          )
+        //)
+      );
   }
 }
