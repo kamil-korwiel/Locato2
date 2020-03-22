@@ -75,9 +75,7 @@ class _HomePageState extends State<HomePage> {
                 print('Dodaj Lokalizacje');
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => AddLocation(),
-                  ),
+                  MaterialPageRoute(builder: (context) => AddLocation()),
                 );
               },
             ),

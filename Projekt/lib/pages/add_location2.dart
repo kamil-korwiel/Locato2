@@ -5,6 +5,74 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:throttling/throttling.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+
+// Autosugestia adresow
+Future<List> fetchAddress(String query, LatLng position) async {
+  String fullQuery = 'https://autosuggest.search.hereapi.com/v1/autosuggest?at=' +
+      position.latitude.toString() +
+      "," +
+      position.longitude.toString() +
+      "&limit=5&lang=pl&q=" +
+      query +
+      "&apiKey=wCXJuE5nXL-3L6I79NXtYR3kt-V0bqeqHNfTEFWoyk0&result_types=address";
+  /*String fullQuery =
+      'https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json?apiKey=wCXJuE5nXL-3L6I79NXtYR3kt-V0bqeqHNfTEFWoyk0&query=' +
+          query;*/
+  final response = await http.get(fullQuery);
+
+  if (response.statusCode == 200) {
+    // Serwer zwrocil OK, wiec przekaz obrobionego JSONa
+    var responseJson = json.decode(utf8.decode(response.bodyBytes))['items'];
+    /*return (responseJson['results'] as List)
+        .map((p) => Adresy.fromJson(p))
+        .toList();*/
+    return (responseJson as List).map((f) => Adres.fromJson(f)).toList();
+    /*return responseJson.map((f) {
+      return Adres.fromJson(f).toString();
+    }).toList();*/
+  } else {
+    throw Exception('Blad w ladowaniu adresow');
+  }
+}
+
+class Adres {
+  String ulica;
+  String numerDomu;
+  String miasto;
+  int odleglosc;
+
+  Adres({this.ulica, this.numerDomu, this.miasto, this.odleglosc});
+
+  factory Adres.fromJson(Map<String, dynamic> json) {
+    return new Adres(
+      ulica: json['address']['street'].toString(),
+      numerDomu: json['address']['houseNumber'].toString(),
+      miasto: json['address']['city'].toString(),
+      odleglosc: json['distance'],
+    );
+  }
+
+  @override
+  String toString() {
+    String adres = '';
+
+    if (!this.ulica.contains('null')) {
+      adres += this.ulica;
+    }
+    if (!this.numerDomu.contains('null')) {
+      adres += (" " + this.numerDomu);
+    }
+    if (adres == '') {
+      adres += this.miasto;
+    } else {
+      adres += (", " + this.miasto);
+    }
+    return adres;
+  }
+}
 
 final _addLocationKey = GlobalKey<FormState>();
 
@@ -15,6 +83,7 @@ class AddLocation extends StatefulWidget {
 
 class _AddLocationState extends State<AddLocation> {
   Completer<GoogleMapController> mapController = Completer();
+  Future<List<Adres>> futureAdresy;
 
   // Funkcja inicjujaca mape
   _onMapCreated(GoogleMapController controller) {
@@ -33,6 +102,7 @@ class _AddLocationState extends State<AddLocation> {
   void initState() {
     super.initState();
     _getLocation();
+    //futureAdresy = fetchAddress('', _initialPosition);
   }
 
   //Zmienne: kontroler TextField, pozycji na mapie
@@ -159,7 +229,7 @@ class _AddLocationState extends State<AddLocation> {
     );
   }
 
-  Widget _buildAdres() {
+  /*Widget _buildAdres() {
     return TextFormField(
         controller: adresController,
         style: TextStyle(
@@ -169,6 +239,40 @@ class _AddLocationState extends State<AddLocation> {
         onFieldSubmitted: (String value) {
           addressToLocation(value);
         });
+  }*/
+
+  Widget _buildAdres() {
+    return Form(
+      child: TypeAheadFormField(
+        textFieldConfiguration: TextFieldConfiguration(
+          controller: adresController,
+          decoration: _buildInputDecoration("Adres", ''),
+          style: TextStyle(color: Color.fromRGBO(252, 252, 252, 1)),
+        ),
+        suggestionsCallback: (pattern) {
+          if (pattern.isNotEmpty) return fetchAddress(pattern, _lastPosition);
+          return null;
+        },
+        itemBuilder: (context, suggestion) {
+          return ListTile(
+            //contentPadding: EdgeInsets.fromLTRB(10.0, 0, 20.0, 0),
+            leading: Icon(Icons.location_on),
+            title: Text(suggestion.toString()),
+            trailing: Text(suggestion.odleglosc < 1000
+                ? (suggestion.odleglosc.toString() + "m")
+                : ((suggestion.odleglosc / 1000).toStringAsFixed(1) + "km")),
+          );
+        },
+        transitionBuilder: (context, suggestionsBox, controller) {
+          return suggestionsBox;
+        },
+        onSuggestionSelected: (suggestion) {
+          print("Wybrano adres: " + suggestion.toString());
+          adresController.text = suggestion.toString();
+          addressToLocation(suggestion.toString());
+        },
+      ),
+    );
   }
 
   Widget _buildMapa() {
