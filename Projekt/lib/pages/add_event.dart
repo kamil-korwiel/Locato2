@@ -3,14 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-void main() => runApp(DateTimePicker());
-
-class DateTimePicker extends StatefulWidget {
+class AddEvent extends StatefulWidget {
   @override
-  _DateTimePickerState createState() => _DateTimePickerState();
+  _AddEventState createState() => _AddEventState();
 }
 
-class _DateTimePickerState extends State<DateTimePicker> {
+class _AddEventState extends State<AddEvent> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
