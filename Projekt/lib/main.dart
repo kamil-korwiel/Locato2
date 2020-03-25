@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:pageview/pages/add_event.dart';
+import 'package:pageview/pages/add_task.dart';
 import 'package:pageview/pages/calendar.dart';
 import 'package:pageview/pages/homepage.dart';
-import 'package:pageview/pages/tasks.dart';
-//import 'pages/add_location.dart';
+import 'package:pageview/pages/grouptaskpage.dart';
 import 'pages/add_location2.dart';
-import 'package:pageview/testsliver/homepagesilver.dart';
-import 'package:pageview/testsliver/grouptask.dart';
+
+import 'Baza_danych/database_helper.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final DatabaseHelper dbHelper = DatabaseHelper();
+  //final dbHelper = DatabaseHelper.instance;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: HomePage(),
@@ -40,7 +34,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // List<Widget> pages = [Calendar(), HomePageE(), Tasks()];
 
   @override
   Widget build(BuildContext context) {
@@ -61,26 +54,30 @@ class _HomePageState extends State<HomePage> {
                 child: Icon(Icons.event_note),
                 label: 'Wydarzenie',
                 labelStyle: TextStyle(fontSize: 18.0),
-                onTap: () => print('Dodaj Wydarzenie')),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddEvent(),),);
+                }),
             SpeedDialChild(
                 child: Icon(Icons.check_box),
                 label: 'Zadanie',
                 labelStyle: TextStyle(fontSize: 18.0),
-                onTap: () => print('Dodaj Zadanie')),
-            SpeedDialChild(
-              child: Icon(Icons.add_location),
-              label: 'Lokalizacja',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () {
-                print('Dodaj Lokalizacje');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddLocation(),
-                  ),
-                );
-              },
-            ),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask(),),);
+                }),
+//            SpeedDialChild(
+//              child: Icon(Icons.add_location),
+//              label: 'Lokalizacja',
+//              labelStyle: TextStyle(fontSize: 18.0),
+//              onTap: () {
+//                print('Dodaj Lokalizacje');
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                    builder: (context) => AddLocation(),
+//                  ),
+//                );
+//              },
+//            ),
           ],
         ),
         body: PageView(

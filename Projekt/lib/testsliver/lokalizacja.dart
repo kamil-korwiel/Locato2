@@ -17,15 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mapa gÓÓgle',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'goooogle'),
@@ -36,14 +28,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -76,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //Zmienne: kontroler TextField, pozycji na mapie
   var adresController = TextEditingController();
   final Throttling thrTxt =
-      new Throttling(duration: Duration(milliseconds: 500));
+  new Throttling(duration: Duration(milliseconds: 500));
   static LatLng _initialPosition;
   static LatLng _lastPosition = _initialPosition;
 
@@ -99,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
           borderSide: BorderSide(color: Color.fromRGBO(248, 218, 87, 1))),
       suffixIcon: hint == 'Adres'
           ? IconButton(
-              icon: Icon(Icons.clear), onPressed: () => adresController.clear())
+          icon: Icon(Icons.clear), onPressed: () => adresController.clear())
           : null,
     );
   }
@@ -131,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Zamiana lokalizacji na adres - ulica i numer
   void locationToAddress() async {
     final coordinates =
-        new Coordinates(_lastPosition.latitude, _lastPosition.longitude);
+    new Coordinates(_lastPosition.latitude, _lastPosition.longitude);
     var adres = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var adresKrotki = adres.first.addressLine.toString().split(",");
 
@@ -184,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _buildNazwaLokalizacji() {
     return TextFormField(
       validator: (value) =>
-          value.isEmpty ? 'Nazwa lokalizacji nie może być pusta' : null,
+      value.isEmpty ? 'Nazwa lokalizacji nie może być pusta' : null,
       style: TextStyle(
           color: Color.fromRGBO(252, 252, 252, 1), fontFamily: 'RadikalLight'),
       decoration: _buildInputDecoration("Nazwa lokalizacji", ''),
@@ -211,27 +195,27 @@ class _MyHomePageState extends State<MyHomePage> {
         // Nie wyswietli mapy dopóki nie ma lokalizacji użytkownika - zajebiste
         child: _initialPosition == null
             ? Center(
-                child: Text('Ładowanie mapy...',
-                    style: TextStyle(
-                        fontFamily: 'RadikaLight',
-                        color: Color.fromRGBO(252, 252, 252, 1))))
+            child: Text('Ładowanie mapy...',
+                style: TextStyle(
+                    fontFamily: 'RadikaLight',
+                    color: Color.fromRGBO(252, 252, 252, 1))))
             : Stack(children: <Widget>[
-                GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
-                    initialCameraPosition:
-                        CameraPosition(target: _initialPosition, zoom: 15.0),
-                    onCameraMove: _onCameraMove,
-                    // Mapa nie ruszana = wyswietl adres
-                    onCameraIdle: () {
-                      locationToAddress();
-                    }),
-                Align(
-                  alignment: Alignment.center,
-                  child: Icon(Icons.flag),
-                ),
-              ]));
+          GoogleMap(
+              onMapCreated: _onMapCreated,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              initialCameraPosition:
+              CameraPosition(target: _initialPosition, zoom: 15.0),
+              onCameraMove: _onCameraMove,
+              // Mapa nie ruszana = wyswietl adres
+              onCameraIdle: () {
+                locationToAddress();
+              }),
+          Align(
+            alignment: Alignment.center,
+            child: Icon(Icons.flag),
+          ),
+        ]));
   }
 
   Widget _buildDodaj(BuildContext context) {

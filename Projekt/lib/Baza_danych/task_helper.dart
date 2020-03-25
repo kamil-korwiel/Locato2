@@ -1,78 +1,89 @@
-// import 'dart:io';
-// import 'package:flutter/foundation.dart';
-// import 'task.dart';
-// import 'database_helper.dart';
+import 'package:pageview/Classes/Task.dart';
 
-// class TaskHelper {
-//   static final dbHelper = DatabaseHelper.instance;
-//   static List<Task> _tasks = [];
-//   List<Task> get tasks {
-//     return [..._tasks];
-//   }
+import 'database_helper.dart';
 
-//   static Future<void> addTask(
-//     String pickedName,
-//     DateTime pickedEndTime,
-//     int pickedIdLocation,
-//     int pickedGroup,
-//   ) async {
-//     int pickedIdTask = await dbHelper.queryRowCount('Task');
-//     final newTask = Task(
-//       idTask: pickedIdTask + 1,
-//       name: pickedName,
-//       endTime: pickedEndTime,
-//       idLocation: pickedIdLocation,
-//       group: pickedGroup,
-//     );
-//     _tasks.add(newTask);
-//     dbHelper.insert('Task', {
-//       'ID_Task': newTask.idTask,
-//       'Nazwa': newTask.name,
-//       'Do_Kiedy': newTask.endTime,
-//       'ID_Lokalizacja': newTask.idLocation,
-//       'Grupa': newTask.group,
-//     });
-//   }
+class TaskHelper {
+  static final dbHelper = DatabaseHelper.instance;
 
-//   static Future<void> updateTask(
-//     int pickedIdTask,
-//     String pickedName,
-//     DateTime pickedEndTime,
-//     int pickedIdLocation,
-//     int pickedGroup,
-//   ) async {
-//     final updatedTask = Task(
-//       idTask: pickedIdTask,
-//       name: pickedName,
-//       endTime: pickedEndTime,
-//       idLocation: pickedIdLocation,
-//       group: pickedGroup,
-//     );
 
-//     dbHelper.update('Task', 'ID_Task', pickedIdTask, {
-//       'Nazwa': updatedTask.name,
-//       'Do_Kiedy': updatedTask.endTime,
-//       'ID_Lokalizacja': updatedTask.idLocation,
-//       'Grupa': updatedTask.group,
-//     });
-//   }
+  static Future<void> add( Task newTask ) async {
+    int IdTask = await dbHelper.query("SELECT max(ID_Task) FROM Task");
+    dbHelper.insert('Task', {
+      'ID_Task': IdTask + 1,
+      'Nazwa': newTask.name,
+      'Zrobione': newTask.done,
+      'Do_Kiedy': newTask.endTime,
+      'Opis': newTask.description,
+      'Lokalizacja': newTask.idLocalizaton,
+      'Powiadomienie': newTask.idNotification,
+      'Grupa': newTask.idGroup,
+    });
+  }
 
-//   static Future<void> deleteTask(
-//     int pickedIdTask,
-//   ) async {
-//     dbHelper.delete('Task', 'ID_Task', pickedIdTask);
-//   }
+  static Future<void> update( updatedTask ) async {
+    dbHelper.update('Task', 'ID_Task', updatedTask.id,{
+      'Nazwa': updatedTask.name,
+      'Zrobione': updatedTask.done,
+      'Do_Kiedy': updatedTask.endTime,
+      'Opis': updatedTask.description,
+      'Powiadomienie': updatedTask.idNotification,
+      'Lokalizacja': updatedTask.idLocalizaton,
+      'Grupa': updatedTask.idGroup,
+    });
+  }
 
-//   static Future<List<Task>> listsTasks() async {
-//     final List<Map<String, dynamic>> maps = await dbHelper.queryAllRows('Task');
-//     return List.generate(maps.length, (i) {
-//       return Task(
-//         idTask: maps[i]['ID_Task'],
-//         name: maps[i]['Nazwa'],
-//         endTime: maps[i]['Do_Kiedy'],
-//         idLocation: maps[i]['ID_Lokalizacja'],
-//         group: maps[i]['Grupa'],
-//       );
-//     });
-//   }
-// }
+  static Future<void> delete(int pickedIdTask,) async {
+    dbHelper.delete('Task', 'ID_Task', pickedIdTask);
+  }
+
+
+
+  static Future<List<Task>> lists() async {
+    final List<Map<String, dynamic>> maps = await dbHelper.queryAllRows('Task');
+    return List.generate(maps.length, (i) {
+      return Task(
+        id: maps[i]['ID_Task'],
+        done: maps[i]['Zrobione'],
+        name: maps[i]['Nazwa'],
+        endTime: maps[i]['Do_Kiedy'],
+        description: maps[i]['Opis'],
+        idLocalizaton: maps[i]['Lokalizacja'],
+        idNotification: maps[i]['Powiadomienie'],
+        idGroup: maps[i]['Grupa'],
+      );
+    });
+  }
+
+  static Future<List<Task>> listsID(int id) async {
+    final List<Map<String, dynamic>> maps = await dbHelper.queryIdRowsTask(id);
+    return List.generate(maps.length, (i) {
+      return Task(
+        id: maps[i]['ID_Task'],
+        done: maps[i]['Zrobione'],
+        name: maps[i]['Nazwa'],
+        endTime: maps[i]['Do_Kiedy'],
+        description: maps[i]['Opis'],
+        idLocalizaton: maps[i]['Lokalizacja'],
+        idNotification: maps[i]['Powiadomienie'],
+        idGroup: maps[i]['Grupa'],
+      );
+    });
+  }
+
+//  static Future<List<Task>> listsWeekend() async {
+//    final List<Map<String, dynamic>> maps = await dbHelper.queryTaskWeekend();
+//    return List.generate(maps.length, (i) {
+//      return Task(
+//        id: maps[i]['ID_Task'],
+//        done: maps[i]['Zrobione'],
+//        name: maps[i]['Nazwa'],
+//        endTime: maps[i]['Do_Kiedy'],
+//        description: maps[i]['Opis'],
+//        idLocalizaton: maps[i]['Lokalizacja'],
+//        idNotification: maps[i]['Powiadomienie'],
+//        idGroup: maps[i]['Grupa'],
+//      );
+//    });
+//  }
+
+}

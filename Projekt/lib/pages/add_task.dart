@@ -2,33 +2,24 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:pageview/Classes/Task.dart';
 
-void main() => runApp(DateTimePicker());
 
-class DateTimePicker extends StatefulWidget {
+class AddTask extends StatefulWidget {
   @override
-  _DateTimePickerState createState() => _DateTimePickerState();
+  _AddTaskState createState() => _AddTaskState();
+
+  Task task;
+
+  AddTask({this.task});
 }
 
-class _DateTimePickerState extends State<DateTimePicker> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
+class _AddTaskState extends State<AddTask> {
   String _date = "Nie wybrano daty";
   String _time1 = "Nie wybrano godziny rozpoczęcia";
 
+
+  Task newtask = Task();
   @override
   void initState() {
     super.initState();
@@ -45,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+//            mainAxisSize: MainAxisSize.max,
+//            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new TextFormField(
                 decoration: new InputDecoration(

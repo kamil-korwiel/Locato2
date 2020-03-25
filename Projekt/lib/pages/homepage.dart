@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:pageview/Baza_danych/event_helper.dart';
+import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Items/ItemsEvent.dart';
 import 'add_location.dart';
@@ -7,6 +9,7 @@ import 'add_location.dart';
 class HomePageEvents extends StatefulWidget {
   @override
   _HomePageEventsState createState() => _HomePageEventsState();
+
 }
 
 class _HomePageEventsState extends State<HomePageEvents> {
@@ -20,12 +23,6 @@ class _HomePageEventsState extends State<HomePageEvents> {
     "Niedziela"
   ];
 
-  List<Event> l = [
-    Event("Event 1",DateTime.now(),DateTime.now(),"a",false,"D7","0x"),
-    Event("Event 2",DateTime.now(),DateTime.now(),'b',true,"D7","0x"),
-    Event("Event 3",DateTime.now(),DateTime.now(),"c",true,"D7","0x")
-  ];
-
   double heightExtededAppBar = 200.0;
   //ScrollController _scrollController;
 
@@ -34,11 +31,11 @@ class _HomePageEventsState extends State<HomePageEvents> {
 
   DateTime _date;
 
+
   @override
   void initState() {
     super.initState();
     _date = DateTime.now();
-   // _scrollController = ScrollController(initialScrollOffset: heightExtededAppBar - 50);
   }
 
   String getDay(int day){
@@ -47,23 +44,14 @@ class _HomePageEventsState extends State<HomePageEvents> {
     return listOfDays[val];
   }
 
-  List<Event> getEventsList(){
-    List<Event> list = new List();
 
-    final String opis = "asdghkjashjkghaskjd asudhg kjahsd jkg ajkshdgk kjahg kjhakj akjsdhg kjah skjgfhalsfdg akjsdfg halkjsdhg kaksdjfg hkla" ;
-    for (int i=0; i<10; i++){
-      list.add(Event("Event $i",_date,_date,opis,true,"D7","0x"));
-    }
-    return list;
-
-  }
 
   List<Event> getEventsListDay(int day){
-    List<Event> list = new List();
+    List<Event> l = new List();
 
+    EventHelper.listsDay(day).then((onValue) => l = onValue);
 
-
-    return list;
+    return l;
   }
 
   Widget buildAppBarExtended(String day){
@@ -118,7 +106,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
         final Event item = eventsList[index];
         return ItemEvent.classevent(item, function: (){
           setState(() {
-            l.removeAt(index);
+
           });
         },);
       },
@@ -134,7 +122,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
           //controller: _scrollController,
           slivers: <Widget>[
             buildAppBarExtended(getDay(0)),
-            bulidListofEvents(l),
+            bulidListofEvents(getEventsListDay(0)),
             buildAppBar(getDay(1)),
             bulidListofEvents(getEventsListDay(1)),
             buildAppBar(getDay(2)),

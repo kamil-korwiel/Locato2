@@ -1,37 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
+import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/Items/ItemTask.dart';
+import 'dart:async';
 
 class GroupTaskPage extends StatefulWidget {
 
-
   @override
   _GroupTaskPageState createState() => _GroupTaskPageState();
+
+  List<Group> listOfGroup;
+
+  GroupTaskPage(){
+    GroupHelper.lists().then((onValue) => this.listOfGroup = onValue);
+  }
+
 }
 
 class _GroupTaskPageState extends State<GroupTaskPage> {
-
-  List<Task> l = [
-      Task("Task_1", true, "Torun, ul.Dan", DateTime.now(), 1),
-      Task("Task_2", false, "Torun, ul.Dan", DateTime.now(), 1),
-      Task("Task_1", true, "Torun, ul.Dan", DateTime.now(), 2),
-  ];
-  List<Group> lg = [
-      Group(1,"Group_1",1),
-      Group(2,"Group_2",1),
-  ];
-
 
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
-        SliverList(delegate: SliverChildBuilderDelegate(
-          _buildWidgetGroup,
-          childCount:lg.length,
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            _buildWidgetGroup,
+            childCount: widget.listOfGroup.length,
         ),
         ),
       ],
@@ -39,24 +37,11 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
     );
   }
 
-  double getPercent(int id_group){
 
-    int countTask = 0;
-    int countTrue = 0;
-    for (Task task in l) {
-      if(task.group_id == id_group){
-        countTask++;
-        if(task.done == true)
-          countTrue++;
-      }
-    }
-
-    return (countTrue/countTask)*100;
-  }
 
 
   Widget _buildWidgetGroup(BuildContext context, int index) {
-    double donePercent = getPercent(lg[index].id); //<=
+    int donePercent = GroupHelper.getPercent(widget.listOfGroup[index].id) as int; //<=
     return Stack(
       children: <Widget>[
         Container(
@@ -79,7 +64,7 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
         ),
         ExpansionTile(
           initiallyExpanded: true,
-          title: Text(lg[index].name,         //<=
+          title: Text(widget.listOfGroup[index].name,         //<=
             style: TextStyle(
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
@@ -92,23 +77,19 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
                 color: Colors.white,
                 fontSize: 17),
           ),
-          children: _buildListofTask(lg[index].id,index),  //<=
+          children: _buildListofTask(widget.listOfGroup[index].id,index),  //<=
         ),
       ],
     );
   }
 
   List<Widget> _buildListofTask (int id_group,int index){
-    List<Widget> listOfWidget = new List<Widget>();
 
-    for (Task task in l) {
-      if(task.group_id == id_group)
-        listOfWidget.add(ItemTask.classtask(task,function: () {
-          setState(() {
-            //print(index);
-            l.removeAt(index);
-          });
-        },));
+    List<Widget> listOfWidget = new List<Widget>();
+    List<Task> listOfTask = TaskHelper.listsID(id_group) as List<Task>;
+
+    for (Task task in listOfTask) {
+        listOfWidget.add(ItemTask.classtask(task));
     }
 
     return listOfWidget;

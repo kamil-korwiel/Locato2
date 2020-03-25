@@ -1,34 +1,30 @@
+//import 'dart:html';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:pageview/Classes/Event.dart';
 
-void main() => runApp(DateTimePicker());
-
-class DateTimePicker extends StatefulWidget {
+class AddEvent extends StatefulWidget {
   @override
-  _DateTimePickerState createState() => _DateTimePickerState();
+  _AddEventState createState() => _AddEventState();
+
+  Event event;
+  AddEvent({this.event});
+
 }
 
-class _DateTimePickerState extends State<DateTimePicker> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
-    );
-  }
-}
+class _AddEventState extends State<AddEvent> {
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
+  final formKeyName = GlobalKey<FormState>();
+  final formKeyDec = GlobalKey<FormState>();
 
-class _HomeScreenState extends State<HomeScreen> {
+
   String _date = "Nie wybrano daty";
   String _time1 = "Nie wybrano godziny rozpoczęcia";
   String _time2 = "Nie wybrano godziny zakończenia";
+
+  Event newevent = new Event();
 
   @override
   void initState() {
@@ -46,20 +42,22 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            //mainAxisSize: MainAxisSize.max,
+            //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new TextFormField(
+                key: formKeyName,
                 decoration: new InputDecoration(
                   labelText: "Nazwa",
                   border: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(0.0),
-                    borderSide: new BorderSide(
-                    ),
+                    borderSide: new BorderSide(),
                   ),
                 ),
                 keyboardType: TextInputType.text,
+                onSaved: (value) => newevent.name = value,  //<- tu jest problem
+                validator: (val) { return val;} ,
               ),
               SizedBox(
                 height: 20.0,
@@ -75,9 +73,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       showTitleActions: true,
                       minTime: DateTime(2000, 1, 1),
-                      maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
+                      maxTime: DateTime(2022, 12, 31),
+                      onConfirm: (date) {                                      /// tu jest  save data
                         print('confirm $date');
-                        _date = '${date.year} - ${date.month} - ${date.day}';
+                        _date = '${date.year}-${date.month}-${date.day}';
                         setState(() {});
                       }, currentTime: DateTime.now(), locale: LocaleType.pl);
                 },
@@ -92,14 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Container(
                             child: Row(
                               children: <Widget>[
-                                Icon(
-                                  Icons.date_range,
-                                  size: 18.0,
-                                ),
-                                Text(
-                                  " $_date",
-                                  style: TextStyle(
-                                  ),
+                                Icon(Icons.date_range,size: 18.0,),
+                                Text("$_date",style: TextStyle(),
                                 ),
                               ],
                             ),
@@ -123,11 +116,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       theme: DatePickerTheme(
                         containerHeight: 210.0,
                       ),
-                      showTitleActions: true, onConfirm: (time) {
+                      showSecondsColumn: false,
+                      showTitleActions: true,
+                      onConfirm: (time) {
                         print('confirm $time');
-                        _time1 = '${time.hour} : ${time.minute} : ${time.second}';
+                        String hour = time.hour < 10 ? '0${time.hour}':'${time.hour}';
+                        String minute = time.minute < 10 ? '0${time.minute}':'${time.minute}';
+                        _time1 = hour+':' + minute;
                         setState(() {});
-                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                      },
+                      currentTime: DateTime.now(),
+                      locale: LocaleType.en
+                  );
                   setState(() {});
                 },
                 child: Container(
@@ -172,9 +172,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       theme: DatePickerTheme(
                         containerHeight: 210.0,
                       ),
-                      showTitleActions: true, onConfirm: (time) {
+                      showTitleActions: true,
+                      showSecondsColumn: false,
+                      onConfirm: (time) {
                         print('confirm $time');
-                        _time2 = '${time.hour} : ${time.minute} : ${time.second}';
+                        String hour = time.hour < 10 ? '0${time.hour}':'${time.hour}';
+                        String minute = time.minute < 10 ? '0${time.minute}':'${time.minute}';
+                        _time2 = hour+':' + minute;
                         setState(() {});
                       }, currentTime: DateTime.now(), locale: LocaleType.en);
                   setState(() {});
@@ -213,6 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 20.0,
               ),
               new TextFormField(
+                key:formKeyDec,
                 decoration: new InputDecoration(
                   labelText: "Opis",
                   border: new OutlineInputBorder(
@@ -222,6 +227,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 keyboardType: TextInputType.text,
+                onSaved: (value) => newevent.description = value,//<- tu jest problem
+                validator: (val) { return val;} ,
               ),
               SizedBox(
                 height: 20.0,
@@ -229,6 +236,10 @@ class _HomeScreenState extends State<HomeScreen> {
               new DropdownButton<String>(
                 isExpanded: true,
                 items: [
+                  DropdownMenuItem<String>(
+                    child: Text('Powiadomienie'),  //TODO:
+                    value: null,
+                  ),
                   DropdownMenuItem<String>(
                     child: Text('15min przed'),
                     value: 'one',
@@ -240,14 +251,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   DropdownMenuItem<String>(
                     child: Text('60min przed'),
                     value: 'three',
-                  ),
+                  )
+                  //TODO: Tu dodac custom
                 ],
                 onChanged: (String value) {
                   setState(() {
                     _value = value;
+                    //newevent.idNotification = ;
                   });
                 },
-                hint: Text('Powiadomienie'),
                 value: _value,
               ),
               SizedBox(
@@ -256,6 +268,10 @@ class _HomeScreenState extends State<HomeScreen> {
               new DropdownButton<String>(
                 isExpanded: true,
                 items: [
+                  DropdownMenuItem<String>(
+                    child: Text('Cykl'),  //TODO:
+                    value: null,
+                  ),
                   DropdownMenuItem<String>(
                     child: Text('Codziennie'),
                     value: 'one',
@@ -268,13 +284,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text('Co dwa tygodnie'),
                     value: 'three',
                   ),
+                  //TODO: Tu dodać custom
                 ],
                 onChanged: (String value) {
                   setState(() {
                     _value = value;
+                    newevent.cycle = value;
                   });
                 },
-                hint: Text('Cykl'),
                 value: _value,
               ),
               SizedBox(
@@ -282,9 +299,26 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               new ButtonBar(children:[
                 RaisedButton(
-                    child:Text("Anuluj")),
+                    child:Text("Anuluj"),
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                ),
                 RaisedButton(
-                    child:Text("Dodaj")),
+                    child:Text("Dodaj"),
+                    onPressed: (){
+                      formKeyName.currentState.save();  //<- tu jest problem
+                      formKeyDec.currentState.save();   //<- tu jest problem
+                      newevent.beginTime = _date + " " + _time1;
+                      newevent.endTime = _date + " " + _time2;
+                      print(newevent.name);
+                      print(newevent.beginTime);
+                      print( newevent.endTime);
+                      print(newevent.cycle);
+                      print(newevent.description);
+
+                    },
+                ),
               ],
                   alignment:MainAxisAlignment.center,
                   mainAxisSize:MainAxisSize.max,

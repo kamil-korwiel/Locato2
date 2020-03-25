@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Classes/Event.dart';
+import 'package:pageview/pages/add_event.dart';
 
 class ItemEvent extends StatefulWidget {
   @override
@@ -13,16 +15,20 @@ class ItemEvent extends StatefulWidget {
   String cycle;
   bool is_cyclic;
   String description;
+
+  Event event;
+
   Color color;
-  ItemEvent(String this.name,String this.eventStarts ,String this.eventEnds,String this.description,bool this.is_cyclic, String this.cycle, Color this.color,{this.function});
+  //ItemEvent(String this.name,String this.eventStarts ,String this.eventEnds,String this.description,bool this.is_cyclic, String this.cycle, Color this.color,{this.function});
   ItemEvent.classevent(Event event, {this.function}){
     this.name = event.name;
-    this.eventStarts = event.start;
-    this.eventEnds = event.end;
+    this.eventStarts = event.beginTime;
+    this.eventEnds = event.endTime;
     this.description = event.description;
-    this.is_cyclic =event.is_cyclic ;
+    this.is_cyclic = event.cycle.isEmpty ;
     this.cycle = event.cycle;
-    this.color = event.color;
+    this.color = Colors.blueAccent;//event.color;
+    this.event = event;
   }
 
 }
@@ -61,14 +67,21 @@ class _ItemEventState extends State<ItemEvent> {
                 child: MaterialButton(
                   child: Icon(Icons.edit),
                   color: Colors.blueAccent,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddEvent()),
+                    );
+                  },
                 )
             ),
             Expanded(
                 child:  MaterialButton(
                   child: Icon(Icons.delete),
                   color: Colors.redAccent,
-                  onPressed: widget.function,
+                  onPressed: (){
+                    EventHelper.delete(widget.event.id);
+                  },
                 )
             ),
           ],

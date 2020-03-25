@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Task.dart';
+import 'package:pageview/pages/add_task.dart';
 class ItemTask extends StatefulWidget {
   @override
   _ItemTaskState createState() => _ItemTaskState();
 
-  final Function function;
+  Task task;
 
   String name;
   bool done;
   String where;
-  DateTime date;
+  String date;
 
-  ItemTask(String this.name,bool this.done,DateTime this.date,String this.where,{this.function});
-  ItemTask.classtask(Task task,{this.function}){
+  //ItemTask(String this.name,bool this.done,String this.date,String this.where);
+  ItemTask.classtask(Task task){
     this.name = task.name;
     this.done = task.done;
-    this.date = task.date;
-    this.where = task.where;
+    this.date = task.endTime;
+    this.where = "TO DO";
+    this.task = task;
   }
 
 }
@@ -53,14 +56,23 @@ class _ItemTaskState extends State<ItemTask> {
                 child: FlatButton(
                   child: Icon(Icons.edit),
                   color: Colors.blueAccent,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddTask(task: widget.task)),
+                    );
+                  },
                 )
             ),
             Expanded(
                 child:  FlatButton(
                   child: Icon(Icons.delete),
                   color: Colors.redAccent,
-                  onPressed: widget.function,
+                  onPressed: (){
+                    setState(() {
+                      TaskHelper.delete(widget.task.id);
+                    });
+                  },
                 )
             ),
           ],

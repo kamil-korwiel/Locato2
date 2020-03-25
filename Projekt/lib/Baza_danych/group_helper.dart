@@ -1,64 +1,52 @@
-// import 'dart:io';
-// import 'package:flutter/foundation.dart';
-// import 'group.dart';
-// import 'database_helper.dart';
+import 'package:pageview/Classes/Group.dart';
 
-// class GroupHelper {
-//   static final dbHelper = DatabaseHelper.instance;
-//   static List<Group> _groups = [];
-//   List<Group> get groups {
-//     return [..._groups];
-//   }
+import 'database_helper.dart';
 
-//   static Future<void> addGroup(
-//     String pickedName,
-//     int pickedhowMuchDone,
-//   ) async {
-//     int pickedIdGroup = await dbHelper.queryRowCount('Grupa');
-//     final newGroup = Group(
-//       idGroup: pickedIdGroup + 1,
-//       name: pickedName,
-//       howMuchDone: pickedhowMuchDone,
-//     );
-//     _groups.add(newGroup);
-//     dbHelper.insert('Grupa', {
-//       'ID_Grupa': newGroup.idGroup,
-//       'Nazwa_grupa': newGroup.name,
-//       'Ile_wykonane': newGroup.howMuchDone,
-//     });
-//   }
+class GroupHelper {
+  static final dbHelper = DatabaseHelper.instance;
 
-//   static Future<void> updateGroup(
-//     int pickedIdGroup,
-//     String pickedName,
-//     int pickedhowMuchDone,
-//   ) async {
-//     final updatedGroup = Group(
-//       idGroup: pickedIdGroup,
-//       name: pickedName,
-//       howMuchDone: pickedhowMuchDone,
-//     );
-//     dbHelper.update('Grupa', 'ID_Grupa', pickedIdGroup, {
-//       'Nazwa_grupa': updatedGroup.name,
-//       'Ile_wykonane': updatedGroup.howMuchDone,
-//     });
-//   }
 
-//   static Future<void> deleteGroup(
-//     int pickedIdGroup,
-//   ) async {
-//     dbHelper.delete('Grupa', 'ID_Grupa', pickedIdGroup);
-//   }
+  static Future<void> add(Group newGroup) async {
+    int IdGroup = await dbHelper.query("SELECT max(ID_Grupa) FROM Grupa");
+    dbHelper.insert('Grupa', {
+      'ID_Grupa': IdGroup + 1,
+      'Nazwa_grupa': newGroup.name,
+      'Ile_wykonane': newGroup.howMuchDone,
+    });
+  }
 
-//   static Future<List<Group>> listsGroups() async {
-//     final List<Map<String, dynamic>> maps =
-//         await dbHelper.queryAllRows('Grupa');
-//     return List.generate(maps.length, (i) {
-//       return Group(
-//         idGroup: maps[i]['ID_Wydarzenie'],
-//         name: maps[i]['Nazwa_grupa'],
-//         howMuchDone: maps[i]['Ile_wykonane'],
-//       );
-//     });
-//   }
-// }
+  static Future<void> update(Group updatedGroup) async {
+
+    dbHelper.update('Grupa', 'ID_Grupa', updatedGroup.id, {
+      'Nazwa_grupa': updatedGroup.name,
+      'Ile_wykonane': updatedGroup.howMuchDone,
+    });
+  }
+
+  static Future<void> delete(int pickedIdGroup,) async {
+
+    dbHelper.delete('Grupa', 'ID_Grupa', pickedIdGroup);
+
+  }
+
+  static Future<int> getPercent(int id) async {
+    int countdone = await dbHelper.query("SELECT COUNT(*) FROM Task WHERE Grupa=$id AND Zrobione=1");
+    int countALL = await dbHelper.query("SELECT COUNT(*) FROM Task WHERE Grupa=$id");
+
+    return (100 * (countdone/countALL)).round();
+  }
+
+  static Future<List<Group>> lists() async {
+    final List<Map<String, dynamic>> maps = await dbHelper.queryAllRows('Grupa');
+    return List.generate(maps.length, (i) {
+      return Group(
+        id: maps[i]['ID_Grupa'],
+        name: maps[i]['Nazwa_grupa'],
+        howMuchDone: maps[i]['Ile_wykonane'],
+      );
+    });
+  }
+
+
+
+}
