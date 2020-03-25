@@ -8,5 +8,6 @@ class Group {
     this.id,
     this.name,
     this.howMuchDone,
-  });
+  }
+  );
 }
