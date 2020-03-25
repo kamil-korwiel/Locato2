@@ -16,8 +16,8 @@ class AddEvent extends StatefulWidget {
 
 class _AddEventState extends State<AddEvent> {
 
-  final formKeyName = GlobalKey<FormState>();
-  final formKeyDec = GlobalKey<FormState>();
+  final controllerName = TextEditingController();
+  final controllerDec = TextEditingController();
 
 
   String _date = "Nie wybrano daty";
@@ -47,8 +47,8 @@ class _AddEventState extends State<AddEvent> {
             //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new TextFormField(
-                key: formKeyName,
-                decoration: new InputDecoration(
+                  controller: controllerName,
+                  decoration: new InputDecoration(
                   labelText: "Nazwa",
                   border: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(0.0),
@@ -56,8 +56,6 @@ class _AddEventState extends State<AddEvent> {
                   ),
                 ),
                 keyboardType: TextInputType.text,
-                onSaved: (value) => newevent.name = value,  //<- tu jest problem
-                validator: (val) { return val;} ,
               ),
               SizedBox(
                 height: 20.0,
@@ -217,7 +215,7 @@ class _AddEventState extends State<AddEvent> {
                 height: 20.0,
               ),
               new TextFormField(
-                key:formKeyDec,
+                controller: controllerDec,
                 decoration: new InputDecoration(
                   labelText: "Opis",
                   border: new OutlineInputBorder(
@@ -227,8 +225,6 @@ class _AddEventState extends State<AddEvent> {
                   ),
                 ),
                 keyboardType: TextInputType.text,
-                onSaved: (value) => newevent.description = value,//<- tu jest problem
-                validator: (val) { return val;} ,
               ),
               SizedBox(
                 height: 20.0,
@@ -307,8 +303,8 @@ class _AddEventState extends State<AddEvent> {
                 RaisedButton(
                     child:Text("Dodaj"),
                     onPressed: (){
-                      formKeyName.currentState.save();  //<- tu jest problem
-                      formKeyDec.currentState.save();   //<- tu jest problem
+                      newevent.name = controllerName.value.toString();
+                      newevent.description =controllerDec.value.toString();    //<- tu jest problem
                       newevent.beginTime = _date + " " + _time1;
                       newevent.endTime = _date + " " + _time2;
                       print(newevent.name);
