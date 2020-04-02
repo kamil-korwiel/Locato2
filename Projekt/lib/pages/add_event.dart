@@ -10,19 +10,20 @@ class AddEvent extends StatefulWidget {
   _AddEventState createState() => _AddEventState();
 
   Event event;
-  AddEvent({this.event});
 
+  AddEvent({this.event});
 }
 
 class _AddEventState extends State<AddEvent> {
-
   final controllerName = TextEditingController();
   final controllerDec = TextEditingController();
-
 
   String _date = "Nie wybrano daty";
   String _time1 = "Nie wybrano godziny rozpoczęcia";
   String _time2 = "Nie wybrano godziny zakończenia";
+  String _notification = "Ustaw powiadomienie";
+  DateTime _start = new DateTime.now();
+  DateTime _end = new DateTime.now().add(new Duration(hours: 1));
 
   Event newevent = new Event();
 
@@ -47,8 +48,8 @@ class _AddEventState extends State<AddEvent> {
             //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new TextFormField(
-                  controller: controllerName,
-                  decoration: new InputDecoration(
+                controller: controllerName,
+                decoration: new InputDecoration(
                   labelText: "Nazwa",
                   border: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(0.0),
@@ -72,12 +73,12 @@ class _AddEventState extends State<AddEvent> {
                       ),
                       showTitleActions: true,
                       minTime: DateTime(2000, 1, 1),
-                      maxTime: DateTime(2022, 12, 31),
-                      onConfirm: (date) {                                      /// tu jest  save data
-                        print('confirm $date');
-                        _date = '${date.year}-${date.month}-${date.day}';
-                        setState(() {});
-                      }, currentTime: DateTime.now(), locale: LocaleType.pl);
+                      maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
+                    /// tu jest  save data
+                    print('confirm $date');
+                    _date = '${date.year}-${date.month}-${date.day}';
+                    setState(() {});
+                  }, currentTime: DateTime.now(), locale: LocaleType.pl);
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -90,8 +91,13 @@ class _AddEventState extends State<AddEvent> {
                           Container(
                             child: Row(
                               children: <Widget>[
-                                Icon(Icons.date_range,size: 18.0,),
-                                Text("$_date",style: TextStyle(),
+                                Icon(
+                                  Icons.date_range,
+                                  size: 18.0,
+                                ),
+                                Text(
+                                  "$_date",
+                                  style: TextStyle(),
                                 ),
                               ],
                             ),
@@ -117,17 +123,16 @@ class _AddEventState extends State<AddEvent> {
                         containerHeight: 210.0,
                       ),
                       showSecondsColumn: false,
-                      showTitleActions: true,
-                      onConfirm: (time) {
-                        print('confirm $time');
-                        String hour = time.hour < 10 ? '0${time.hour}':'${time.hour}';
-                        String minute = time.minute < 10 ? '0${time.minute}':'${time.minute}';
-                        _time1 = hour+':' + minute;
-                        setState(() {});
-                      },
-                      currentTime: DateTime.now(),
-                      locale: LocaleType.en
-                  );
+                      showTitleActions: true, onConfirm: (time) {
+                    print('confirm $time');
+                    _start = time;
+                    String hour =
+                        time.hour < 10 ? '0${time.hour}' : '${time.hour}';
+                    String minute =
+                        time.minute < 10 ? '0${time.minute}' : '${time.minute}';
+                    _time1 = hour + ':' + minute;
+                    setState(() {});
+                  }, currentTime: DateTime.now(), locale: LocaleType.pl);
                   setState(() {});
                 },
                 child: Container(
@@ -147,8 +152,7 @@ class _AddEventState extends State<AddEvent> {
                                 ),
                                 Text(
                                   " $_time1",
-                                  style: TextStyle(
-                                  ),
+                                  style: TextStyle(),
                                 ),
                               ],
                             ),
@@ -174,14 +178,16 @@ class _AddEventState extends State<AddEvent> {
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,
-                      showSecondsColumn: false,
-                      onConfirm: (time) {
-                        print('confirm $time');
-                        String hour = time.hour < 10 ? '0${time.hour}':'${time.hour}';
-                        String minute = time.minute < 10 ? '0${time.minute}':'${time.minute}';
-                        _time2 = hour+':' + minute;
-                        setState(() {});
-                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                      showSecondsColumn: false, onConfirm: (time) {
+                    print('confirm $time');
+                    _end = time;
+                    String hour =
+                        time.hour < 10 ? '0${time.hour}' : '${time.hour}';
+                    String minute =
+                        time.minute < 10 ? '0${time.minute}' : '${time.minute}';
+                    _time2 = hour + ':' + minute;
+                    setState(() {});
+                  }, currentTime: _start.add(Duration(minutes: 1)), locale: LocaleType.pl);
                   setState(() {});
                 },
                 child: Container(
@@ -201,8 +207,7 @@ class _AddEventState extends State<AddEvent> {
                                 ),
                                 Text(
                                   " $_time2",
-                                  style: TextStyle(
-                                  ),
+                                  style: TextStyle(),
                                 ),
                               ],
                             ),
@@ -217,17 +222,42 @@ class _AddEventState extends State<AddEvent> {
               SizedBox(
                 height: 20.0,
               ),
-              new TextFormField(
-                controller: controllerDec,
-                decoration: new InputDecoration(
-                  labelText: "Opis",
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(0.0),
-                    borderSide: new BorderSide(
-                    ),
+              RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                elevation: 4.0,
+                onPressed: () {
+                  
+                  setState(() {});
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.access_alarms,
+                                  size: 18.0,
+                                ),
+                                Text(
+                                  "$_notification",
+                                  style: TextStyle(),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                keyboardType: TextInputType.text,
+                color: Colors.white,
               ),
               SizedBox(
                 height: 20.0,
@@ -236,7 +266,7 @@ class _AddEventState extends State<AddEvent> {
                 isExpanded: true,
                 items: [
                   DropdownMenuItem<String>(
-                    child: Text('Powiadomienie'),  //TODO:
+                    child: Text('Powiadomienie'), //TODO:
                     value: null,
                   ),
                   DropdownMenuItem<String>(
@@ -268,7 +298,7 @@ class _AddEventState extends State<AddEvent> {
                 isExpanded: true,
                 items: [
                   DropdownMenuItem<String>(
-                    child: Text('Cykl'),  //TODO:
+                    child: Text('Cykl'), //TODO:
                     value: null,
                   ),
                   DropdownMenuItem<String>(
@@ -296,31 +326,58 @@ class _AddEventState extends State<AddEvent> {
               SizedBox(
                 height: 20.0,
               ),
-              new ButtonBar(children:[
-                RaisedButton(
-                    child:Text("Anuluj"),
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
+              new TextFormField(
+                controller: controllerDec,
+                decoration: new InputDecoration(
+                  labelText: "Opis",
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(0.0),
+                    borderSide: new BorderSide(),
+                  ),
                 ),
-                RaisedButton(
-                    child:Text("Dodaj"),
-                    onPressed: (){
-                      newevent.name = controllerName.value.toString();
-                      newevent.description =controllerDec.value.toString();    //<- tu jest problem
-                      newevent.beginTime = _date + " " + _time1;
-                      newevent.endTime = _date + " " + _time2;
-                      print(newevent.name);
-                      print(newevent.beginTime);
-                      print( newevent.endTime);
-                      print(newevent.cycle);
-                      print(newevent.description);
-
-                    },
-                ),
-              ],
-                  alignment:MainAxisAlignment.center,
-                  mainAxisSize:MainAxisSize.max,
+                keyboardType: TextInputType.text,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              new ButtonBar(
+                  children: [
+                    RaisedButton(
+                      child: Text("Anuluj"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text("Dodaj"),
+                      onPressed: () {
+                        if (_end.isBefore(_start)) {
+                          print("ERROR");
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Błędne dane"),
+                                  content: Text("Godzina zakończenia nie może być przed rozpoczęciem."),
+                                );
+                              });
+                        } else {
+                          newevent.name = controllerName.value.toString();
+                          newevent.description = controllerDec.value
+                              .toString(); //<- tu jest problem
+                          newevent.beginTime = _date + " " + _time1;
+                          newevent.endTime = _date + " " + _time2;
+                          print(newevent.name);
+                          print(newevent.beginTime);
+                          print(newevent.endTime);
+                          print(newevent.cycle);
+                          print(newevent.description);
+                        }
+                      },
+                    ),
+                  ],
+                  alignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
                   buttonMinWidth: 150),
             ],
           ),
