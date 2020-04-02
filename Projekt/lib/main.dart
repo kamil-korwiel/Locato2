@@ -11,6 +11,22 @@ import 'Baza_danych/database_helper.dart';
 
 void main() => runApp(MyApp());
 
+MaterialColor myGrey = const MaterialColor(0xFF333333,
+  const {
+  50 : const Color(0xFF333333),
+  100: const Color(0xFF333333),
+  200: const Color(0xFF333333),
+  300: const Color(0xFF333333),
+  400: const Color(0xFF333333),
+  500: const Color(0xFF333333),
+  600: const Color(0xFF333333),
+  700: const Color(0xFF333333),
+  800: const Color(0xFF333333),
+  900: const Color(0xFF333333),
+});
+
+
+
 class MyApp extends StatelessWidget {
   final DatabaseHelper dbHelper = DatabaseHelper();
   //final dbHelper = DatabaseHelper.instance;
@@ -20,13 +36,23 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
+        accentColor: Colors.amber,
+        canvasColor: Colors.grey[900],
+        brightness: Brightness.dark,
+        primaryTextTheme: TextTheme(
+          title: TextStyle(
+            color: Colors.amberAccent
+          )
+        )
+
       ),
       home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -53,21 +79,30 @@ class _HomePageState extends State<HomePage> {
             SpeedDialChild(
                 child: Icon(Icons.event_note),
                 label: 'Wydarzenie',
-                labelStyle: TextStyle(fontSize: 18.0),
+                labelStyle: TextStyle(
+                    color: Colors.grey[900],
+                    fontSize: 18.0),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddEvent(),),);
                 }),
             SpeedDialChild(
                 child: Icon(Icons.check_box),
                 label: 'Zadanie',
-                labelStyle: TextStyle(fontSize: 18.0),
+                labelStyle:
+                TextStyle(
+                color: Colors.grey[900],
+                fontSize: 18.0),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask(),),);
                 }),
 //            SpeedDialChild(
 //              child: Icon(Icons.add_location),
 //              label: 'Lokalizacja',
-//              labelStyle: TextStyle(fontSize: 18.0),
+//              labelStyle:
+//              color: Theme.of(context).accentColor,
+//              TextStyle(
+//              color: Colors.grey[900],
+//              fontSize: 18.0),
 //              onTap: () {
 //                print('Dodaj Lokalizacje');
 //                Navigator.push(
