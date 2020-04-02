@@ -257,7 +257,7 @@ class _AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
-                color: Colors.white,
+                color: Colors.amber[400],
               ),
               SizedBox(
                 height: 20.0,
