@@ -27,7 +27,7 @@ class ItemEvent extends StatefulWidget {
     this.description = event.description;
     this.is_cyclic = event.cycle.isEmpty ;
     this.cycle = event.cycle;
-    this.color = Colors.blueAccent;//event.color;
+    this.color = color;//event.color;
     this.event = event;
   }
 
@@ -66,7 +66,7 @@ class _ItemEventState extends State<ItemEvent> {
             Expanded(
                 child: MaterialButton(
                   child: Icon(Icons.edit),
-                  color: Colors.blueAccent,
+                  color: Theme.of(context).accentColor,
                   onPressed: () {
                     Navigator.push(
                       context,

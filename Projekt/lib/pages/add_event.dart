@@ -67,6 +67,7 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showDatePicker(context,
                       theme: DatePickerTheme(
+                        backgroundColor: Colors.amber[400],
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,
@@ -100,7 +101,7 @@ class _AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
-                color: Colors.white,
+                color: Colors.amber[400],
               ),
               SizedBox(
                 height: 20.0,
@@ -112,6 +113,7 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
+                        backgroundColor: Colors.amber[400],
                         containerHeight: 210.0,
                       ),
                       showSecondsColumn: false,
@@ -156,7 +158,7 @@ class _AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
-                color: Colors.white,
+                color: Colors.amber[400],
               ),
               SizedBox(
                 height: 20.0,
@@ -168,6 +170,7 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
+                        backgroundColor: Colors.amber[400],
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,
@@ -209,7 +212,7 @@ class _AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
-                color: Colors.white,
+                color: Colors.amber[400],
               ),
               SizedBox(
                 height: 20.0,

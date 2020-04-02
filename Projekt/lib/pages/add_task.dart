@@ -61,6 +61,7 @@ class _AddTaskState extends State<AddTask> {
                 onPressed: () {
                   DatePicker.showDatePicker(context,
                       theme: DatePickerTheme(
+                        backgroundColor: Colors.amber[400],
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,
@@ -99,7 +100,7 @@ class _AddTaskState extends State<AddTask> {
                     ],
                   ),
                 ),
-                color: Colors.white,
+                color: Colors.amber[400],
               ),
               SizedBox(
                 height: 10.0,
@@ -111,6 +112,7 @@ class _AddTaskState extends State<AddTask> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
+                        backgroundColor: Colors.amber[400],
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true, onConfirm: (time) {
@@ -148,7 +150,7 @@ class _AddTaskState extends State<AddTask> {
                     ],
                   ),
                 ),
-                color: Colors.white,
+                color: Colors.amber[400],
               ),
               SizedBox(
                 height: 10.0,
