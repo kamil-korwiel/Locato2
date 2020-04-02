@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:pageview/Classes/Event.dart';
+import 'package:pageview/pages/add_cycle.dart';
+import 'add_notification.dart';
 
 class AddEvent extends StatefulWidget {
   @override
@@ -21,7 +23,8 @@ class _AddEventState extends State<AddEvent> {
   String _date = "Nie wybrano daty";
   String _time1 = "Nie wybrano godziny rozpoczęcia";
   String _time2 = "Nie wybrano godziny zakończenia";
-  String _notification = "Ustaw powiadomienie";
+  String _notification = "Nie wybrano powiadomień";
+  String _cycle = "Wydarzenie nie jest cykliczne";
   DateTime _start = new DateTime.now();
   DateTime _end = new DateTime.now().add(new Duration(hours: 1));
 
@@ -224,8 +227,8 @@ class _AddEventState extends State<AddEvent> {
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
-                  
-                  setState(() {});
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddNotification()));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -239,13 +242,10 @@ class _AddEventState extends State<AddEvent> {
                             child: Row(
                               children: <Widget>[
                                 Icon(
-                                  Icons.access_alarms,
+                                  Icons.notifications,
                                   size: 18.0,
                                 ),
-                                Text(
-                                  "$_notification",
-                                  style: TextStyle(),
-                                ),
+                                Text(" $_notification"),
                               ],
                             ),
                           )
@@ -259,66 +259,39 @@ class _AddEventState extends State<AddEvent> {
               SizedBox(
                 height: 20.0,
               ),
-              new DropdownButton<String>(
-                isExpanded: true,
-                items: [
-                  DropdownMenuItem<String>(
-                    child: Text('Powiadomienie'), //TODO:
-                    value: null,
-                  ),
-                  DropdownMenuItem<String>(
-                    child: Text('15min przed'),
-                    value: 'one',
-                  ),
-                  DropdownMenuItem<String>(
-                    child: Text('30min przed'),
-                    value: 'two',
-                  ),
-                  DropdownMenuItem<String>(
-                    child: Text('60min przed'),
-                    value: 'three',
-                  )
-                  //TODO: Tu dodac custom
-                ],
-                onChanged: (String value) {
-                  setState(() {
-                    _value = value;
-                    //newevent.idNotification = ;
-                  });
+              RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                elevation: 4.0,
+                onPressed: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddCycle()));
                 },
-                value: _value,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              new DropdownButton<String>(
-                isExpanded: true,
-                items: [
-                  DropdownMenuItem<String>(
-                    child: Text('Cykl'), //TODO:
-                    value: null,
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.timelapse,
+                                  size: 18.0,
+                                ),
+                                Text(" $_cycle"),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
-                  DropdownMenuItem<String>(
-                    child: Text('Codziennie'),
-                    value: 'one',
-                  ),
-                  DropdownMenuItem<String>(
-                    child: Text('Co tydzień'),
-                    value: 'two',
-                  ),
-                  DropdownMenuItem<String>(
-                    child: Text('Co dwa tygodnie'),
-                    value: 'three',
-                  ),
-                  //TODO: Tu dodać custom
-                ],
-                onChanged: (String value) {
-                  setState(() {
-                    _value = value;
-                    newevent.cycle = value;
-                  });
-                },
-                value: _value,
+                ),
+                color: Colors.white,
               ),
               SizedBox(
                 height: 20.0,

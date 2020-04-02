@@ -5,6 +5,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/pages/add_group.dart';
 import 'package:pageview/Classes/Task.dart';
+import 'package:pageview/pages/add_notification.dart';
 
 
 
@@ -17,57 +18,6 @@ class AddTask extends StatefulWidget {
   AddTask({this.task});
 }
 
-Future<Group> groupAdd(BuildContext context) async {
-  return await showDialog<Group>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: const Text('Wybierz grupę'),
-          children: <Widget>[
-
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context, "grupa1");
-              },
-              child: const Text('Grupa pierwsza'),
-            ),
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context, "grupa2");
-              },
-              child: const Text('Grupa druga'),
-            ),
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.pop(context, "grupa3");
-              },
-              child: const Text('Grupa trzecia'),
-            ),
-            new TextFormField(
-              // controller: _text,
-              decoration: new InputDecoration(
-                labelText: "Dodaj nową grupę",
-                border: new OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(0.0),
-                  borderSide: new BorderSide(
-                  ),
-                ),
-              ),
-              keyboardType: TextInputType.text,
-            ),
-            new RaisedButton(
-              onPressed: () {
-
-                Navigator.pop(context);
-              },
-              child: Text('Dodaj'),
-            ),
-          ],
-        );
-      });
-}
-
 class _AddTaskState extends State<AddTask> {
   final controllerName = TextEditingController();
   final controllerDesc = TextEditingController();
@@ -75,6 +25,7 @@ class _AddTaskState extends State<AddTask> {
   String _date = "Nie wybrano daty";
   String _time1 = "Nie wybrano godziny zakończenia";
   String _group = "Nie wybrano grupy";
+  String _notification = "Nie wybrano powiadomień";
 
   Task newtask = Task();
 
@@ -214,9 +165,8 @@ class _AddTaskState extends State<AddTask> {
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
-                 // groupAdd(context);
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddGroup()));
+                    MaterialPageRoute(builder: (context) => AddGroup()));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -247,29 +197,39 @@ class _AddTaskState extends State<AddTask> {
               SizedBox(
                 height: 10.0,
               ),
-              new DropdownButton<String>(
-                isExpanded: true,
-                items: [
-                  DropdownMenuItem<String>(
-                    child: Text('15min przed'),
-                    value: 'one',
-                  ),
-                  DropdownMenuItem<String>(
-                    child: Text('30min przed'),
-                    value: 'two',
-                  ),
-                  DropdownMenuItem<String>(
-                    child: Text('60min przed'),
-                    value: 'three',
-                  ),
-                ],
-                onChanged: (String value) {
-                  setState(() {
-                    _value = value;
-                  });
+              RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                elevation: 4.0,
+                onPressed: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddNotification()));
                 },
-                hint: Text('Powiadomienie'),
-                value: _value,
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.notifications,
+                                  size: 18.0,
+                                ),
+                                Text(" $_notification"),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                color: Colors.white,
               ),
               SizedBox(
                 height: 10.0,

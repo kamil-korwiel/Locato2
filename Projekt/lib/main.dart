@@ -14,7 +14,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   final DatabaseHelper dbHelper = DatabaseHelper();
   //final dbHelper = DatabaseHelper.instance;
-  // This widget is the root of your application.
+  // This widget is the root of your application.ę
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
