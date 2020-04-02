@@ -231,7 +231,7 @@ class _AddTaskState extends State<AddTask> {
                     ],
                   ),
                 ),
-                color: Colors.white,
+                color: Colors.amber[400],
               ),
               SizedBox(
                 height: 10.0,
