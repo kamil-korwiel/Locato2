@@ -71,7 +71,10 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showDatePicker(context,
                       theme: DatePickerTheme(
-                        backgroundColor: Colors.amber[400],
+                        backgroundColor: Colors.black38,
+                        itemStyle: TextStyle(color: Colors.white),
+                        cancelStyle: TextStyle(color: Colors.amber[400]),
+                        doneStyle: TextStyle(color: Colors.green[400]),
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,
@@ -122,7 +125,10 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
-                        backgroundColor: Colors.amber[400],
+                        backgroundColor: Colors.black38,
+                        itemStyle: TextStyle(color: Colors.white),
+                        cancelStyle: TextStyle(color: Colors.amber[400]),
+                        doneStyle: TextStyle(color: Colors.green[400]),
                         containerHeight: 210.0,
                       ),
                       showSecondsColumn: false,
@@ -177,7 +183,10 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
-                        backgroundColor: Colors.amber[400],
+                        backgroundColor: Colors.black38,
+                        itemStyle: TextStyle(color: Colors.white),
+                        cancelStyle: TextStyle(color: Colors.amber[400]),
+                        doneStyle: TextStyle(color: Colors.green[400]),
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,

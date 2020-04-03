@@ -70,7 +70,10 @@ class _AddTaskState extends State<AddTask> {
                 onPressed: () {
                   DatePicker.showDatePicker(context,
                       theme: DatePickerTheme(
-                        backgroundColor: Colors.amber[400],
+                        backgroundColor: Colors.black38,
+                        itemStyle: TextStyle(color: Colors.white),
+                        cancelStyle: TextStyle(color: Colors.amber[400]),
+                        doneStyle: TextStyle(color: Colors.green[400]),
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,
@@ -120,14 +123,18 @@ class _AddTaskState extends State<AddTask> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
-                        backgroundColor: Colors.amber[400],
+                         backgroundColor: Colors.black38,
+                        itemStyle: TextStyle(color: Colors.white),
+                        cancelStyle: TextStyle(color: Colors.amber[400]),
+                        doneStyle: TextStyle(color: Colors.green[400]),
                         containerHeight: 210.0,
                       ),
+                      showSecondsColumn: false,
                       showTitleActions: true, onConfirm: (time) {
                     print('confirm $time');
-                    _time1 = '${time.hour} : ${time.minute} : ${time.second}';
+                    _time1 = '${time.hour} : ${time.minute}';
                     setState(() {});
-                  }, currentTime: DateTime.now(), locale: LocaleType.en);
+                  }, currentTime: DateTime.now(), locale: LocaleType.pl);
                   setState(() {});
                 },
                 child: Container(
