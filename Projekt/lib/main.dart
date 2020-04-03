@@ -11,9 +11,8 @@ import 'Baza_danych/database_helper.dart';
 
 void main() => runApp(MyApp());
 
-MaterialColor myGrey = const MaterialColor(0xFF333333,
-  const {
-  50 : const Color(0xFF333333),
+MaterialColor myGrey = const MaterialColor(0xFF333333, const {
+  50: const Color(0xFF333333),
   100: const Color(0xFF333333),
   200: const Color(0xFF333333),
   300: const Color(0xFF333333),
@@ -25,8 +24,6 @@ MaterialColor myGrey = const MaterialColor(0xFF333333,
   900: const Color(0xFF333333),
 });
 
-
-
 class MyApp extends StatelessWidget {
   final DatabaseHelper dbHelper = DatabaseHelper();
   //final dbHelper = DatabaseHelper.instance;
@@ -36,23 +33,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.grey,
-        accentColor: Colors.amber,
-        canvasColor: Colors.grey[900],
-        brightness: Brightness.dark,
-        primaryTextTheme: TextTheme(
-          title: TextStyle(
-            color: Colors.amberAccent
-          )
-        )
-
-      ),
+          primarySwatch: Colors.grey,
+          accentColor: Colors.amber,
+          canvasColor: Colors.grey[900],
+          brightness: Brightness.dark,
+          primaryTextTheme:
+              TextTheme(title: TextStyle(color: Colors.amberAccent))),
       home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-
 
 class HomePage extends StatefulWidget {
   @override
@@ -60,7 +51,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -79,21 +69,26 @@ class _HomePageState extends State<HomePage> {
             SpeedDialChild(
                 child: Icon(Icons.event_note),
                 label: 'Wydarzenie',
-                labelStyle: TextStyle(
-                    color: Colors.grey[900],
-                    fontSize: 18.0),
+                labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddEvent(),),);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddEvent(),
+                    ),
+                  );
                 }),
             SpeedDialChild(
                 child: Icon(Icons.check_box),
                 label: 'Zadanie',
-                labelStyle:
-                TextStyle(
-                color: Colors.grey[900],
-                fontSize: 18.0),
+                labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask(),),);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddTask(),
+                    ),
+                  );
                 }),
 //            SpeedDialChild(
 //              child: Icon(Icons.add_location),

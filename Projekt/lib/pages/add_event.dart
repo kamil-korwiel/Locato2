@@ -199,7 +199,9 @@ class _AddEventState extends State<AddEvent> {
                         time.minute < 10 ? '0${time.minute}' : '${time.minute}';
                     _time2 = hour + ':' + minute;
                     setState(() {});
-                  }, currentTime: _start.add(Duration(minutes: 1)), locale: LocaleType.pl);
+                  },
+                      currentTime: _start.add(Duration(minutes: 1)),
+                      locale: LocaleType.pl);
                   setState(() {});
                 },
                 child: Container(
@@ -239,8 +241,10 @@ class _AddEventState extends State<AddEvent> {
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddNotification()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddNotification()));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -277,7 +281,7 @@ class _AddEventState extends State<AddEvent> {
                 elevation: 4.0,
                 onPressed: () {
                   Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddCycle()));
+                      MaterialPageRoute(builder: (context) => AddCycle()));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -340,7 +344,8 @@ class _AddEventState extends State<AddEvent> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text("Błędne dane"),
-                                  content: Text("Godzina zakończenia nie może być przed rozpoczęciem."),
+                                  content: Text(
+                                      "Godzina zakończenia nie może być przed rozpoczęciem."),
                                 );
                               });
                         } else {

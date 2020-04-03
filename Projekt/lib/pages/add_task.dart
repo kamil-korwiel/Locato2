@@ -7,8 +7,6 @@ import 'package:pageview/pages/add_group.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/add_notification.dart';
 
-
-
 class AddTask extends StatefulWidget {
   @override
   _AddTaskState createState() => _AddTaskState();
@@ -123,7 +121,7 @@ class _AddTaskState extends State<AddTask> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
-                         backgroundColor: Colors.black38,
+                        backgroundColor: Colors.black38,
                         itemStyle: TextStyle(color: Colors.white),
                         cancelStyle: TextStyle(color: Colors.amber[400]),
                         doneStyle: TextStyle(color: Colors.green[400]),
@@ -175,7 +173,7 @@ class _AddTaskState extends State<AddTask> {
                 elevation: 4.0,
                 onPressed: () {
                   Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddGroup()));
+                      MaterialPageRoute(builder: (context) => AddGroup()));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -211,8 +209,10 @@ class _AddTaskState extends State<AddTask> {
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddNotification()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddNotification()));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -288,5 +288,3 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 }
-
-
