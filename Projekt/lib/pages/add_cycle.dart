@@ -59,7 +59,7 @@ class _AddCycleState extends State<AddCycle> {
                 shrinkWrap: true,
                 itemCount: cycles.length,
                 itemBuilder: (context, index) {
-                  return RaisedButton(
+                 return RaisedButton(
                     child: Container(
                       alignment: Alignment.center,
                       height: 50.0,
@@ -84,16 +84,11 @@ class _AddCycleState extends State<AddCycle> {
                         ],
                       ),
                     ),
-                    onPressed: () => setState(() {
-                      if (_currentIndex == 0) {
-                        _currentIndex = 1;
-                      } else {
-                        _currentIndex = 0;
-                      }
+                    onPressed: () => Scaffold
+                    .of(context)
+                    .showSnackBar(SnackBar(content: Text(cycles[index]))),
+              );
                     }),
-                    color: _colors[_currentIndex],
-                  );
-                }),
             SizedBox(
               height: 10.0,
             ),

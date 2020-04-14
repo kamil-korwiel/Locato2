@@ -5,6 +5,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/pages/add_group.dart';
 import 'package:pageview/Classes/Task.dart';
+import 'package:pageview/pages/add_notification.dart';
 
 class AddTask extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _AddTaskState extends State<AddTask> {
   String _date = "Nie wybrano daty";
   String _time1 = "Nie wybrano godziny zakończenia";
   String _group = "Nie wybrano grupy";
+  String _notification = "Nie wybrano powiadomień";
 
   Task newtask = Task();
 

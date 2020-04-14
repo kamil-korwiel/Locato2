@@ -86,16 +86,11 @@ class _AddNotificationState extends State<AddNotification> {
                         ],
                       ),
                     ),
-                    onPressed: () => setState(() {
-                      if (_currentIndex == 0) {
-                        _currentIndex = 1;
-                      } else {
-                        _currentIndex = 0;
-                      }
+                    onPressed: () => Scaffold
+                    .of(context)
+                    .showSnackBar(SnackBar(content: Text(notifications[index]))),
+              );
                     }),
-                    color: _colors[_currentIndex],
-                  );
-                }),
             SizedBox(
               height: 10.0,
             ),

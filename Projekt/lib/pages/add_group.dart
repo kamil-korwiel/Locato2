@@ -13,6 +13,7 @@ class AddGroup extends StatefulWidget {
   AddGroup({this.group});
 }
 
+
 class _AddGroupState extends State<AddGroup> {
   final _text = TextEditingController();
 
@@ -66,6 +67,7 @@ class _AddGroupState extends State<AddGroup> {
                 shrinkWrap: true,
                 itemCount: groups.length,
                 itemBuilder: (context, index) {
+                
                   return RaisedButton(
                     child: Container(
                       alignment: Alignment.center,
@@ -91,16 +93,12 @@ class _AddGroupState extends State<AddGroup> {
                         ],
                       ),
                     ),
-                    onPressed: () => setState(() {
-                      if (_currentIndex == 0) {
-                        _currentIndex = 1;
-                      } else {
-                        _currentIndex = 0;
-                      }
+                    onPressed: () => Scaffold
+                    .of(context)
+                    .showSnackBar(SnackBar(content: Text(groups[index]))),
+              );
                     }),
-                    color: _colors[_currentIndex],
-                  );
-                }),
+                
             SizedBox(
               height: 10.0,
             ),
@@ -114,3 +112,4 @@ class _AddGroupState extends State<AddGroup> {
     );
   }
 }
+
