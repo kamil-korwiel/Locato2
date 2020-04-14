@@ -1,38 +1,33 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/pages/add_task.dart';
 
-class AddGroup extends StatefulWidget {
+class AddNotification extends StatefulWidget {
   @override
-  _AddGroupState createState() => _AddGroupState();
+  _AddNotificationState createState() => _AddNotificationState();
 
-  Group group;
-  AddGroup({this.group});
+  // Notification notification;
+  // AddNotification({this.notification});
+
 }
 
-class _AddGroupState extends State<AddGroup> {
-  final _text = TextEditingController();
+class _AddNotificationState extends State<AddNotification> {
+  List<String> notifications = ["15 minut", "30 minut"];
+  List<Color> _colors = [Colors.grey, Colors.amber[400]];
+  int _currentIndex = 0;
 
-  Group newgroup = Group();
+  final TextEditingController _text = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
   }
 
-  String _value;
-  String _group;
-  List<String> groups = ["Grupa A", "Grupa B"];
-  List<Color> _colors = [Colors.grey, Colors.amber[400]];
-  int _currentIndex = 0;
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj cykl"),
+        title: Text("Dodaj powiadomienie"),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -40,7 +35,7 @@ class _AddGroupState extends State<AddGroup> {
             new TextFormField(
               controller: _text,
               decoration: new InputDecoration(
-                labelText: "Nowy Cykl",
+                labelText: "Nowe powiadomienie",
                 border: new OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(0.0),
                   borderSide: new BorderSide(),
@@ -53,7 +48,7 @@ class _AddGroupState extends State<AddGroup> {
             ),
             new RaisedButton(
               onPressed: () {
-                groups.add(_text.text);
+                notifications.add(_text.text);
                 _text.clear();
                 setState(() {});
               },
@@ -64,7 +59,7 @@ class _AddGroupState extends State<AddGroup> {
             ),
             new ListView.builder(
                 shrinkWrap: true,
-                itemCount: groups.length,
+                itemCount: notifications.length,
                 itemBuilder: (context, index) {
                   return RaisedButton(
                     child: Container(
@@ -82,7 +77,7 @@ class _AddGroupState extends State<AddGroup> {
                                       Icons.account_circle,
                                       size: 18.0,
                                     ),
-                                    Text(groups[index]),
+                                    Text(notifications[index]),
                                   ],
                                 ),
                               )

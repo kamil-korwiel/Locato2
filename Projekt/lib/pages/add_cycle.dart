@@ -1,33 +1,26 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:pageview/Classes/Group.dart';
-import 'package:pageview/pages/add_task.dart';
+import 'package:pageview/pages/add_event.dart';
 
-class AddGroup extends StatefulWidget {
+class AddCycle extends StatefulWidget {
   @override
-  _AddGroupState createState() => _AddGroupState();
+  _AddCycleState createState() => _AddCycleState();
 
-  Group group;
-  AddGroup({this.group});
+  // Cycle cycle;
+  // AddCycle({this.cycle});
 }
 
-class _AddGroupState extends State<AddGroup> {
-  final _text = TextEditingController();
-
-  Group newgroup = Group();
+class _AddCycleState extends State<AddCycle> {
+  List<String> cycles = ["Codziennie", "co tydzień"];
+  List<Color> _colors = [Colors.grey, Colors.amber[400]];
+  int _currentIndex = 0;
+  final TextEditingController _text = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
   }
-
-  String _value;
-  String _group;
-  List<String> groups = ["Grupa A", "Grupa B"];
-  List<Color> _colors = [Colors.grey, Colors.amber[400]];
-  int _currentIndex = 0;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +46,7 @@ class _AddGroupState extends State<AddGroup> {
             ),
             new RaisedButton(
               onPressed: () {
-                groups.add(_text.text);
+                cycles.add(_text.text);
                 _text.clear();
                 setState(() {});
               },
@@ -64,7 +57,7 @@ class _AddGroupState extends State<AddGroup> {
             ),
             new ListView.builder(
                 shrinkWrap: true,
-                itemCount: groups.length,
+                itemCount: cycles.length,
                 itemBuilder: (context, index) {
                   return RaisedButton(
                     child: Container(
@@ -82,7 +75,7 @@ class _AddGroupState extends State<AddGroup> {
                                       Icons.account_circle,
                                       size: 18.0,
                                     ),
-                                    Text(groups[index]),
+                                    Text(cycles[index]),
                                   ],
                                 ),
                               )
