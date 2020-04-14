@@ -12,7 +12,6 @@ class ItemTask extends StatefulWidget {
   bool done;
   String where;
   String date;
-  //Color color;
 
   //ItemTask(String this.name,bool this.done,String this.date,String this.where);
   ItemTask.classtask(Task task){
@@ -21,7 +20,6 @@ class ItemTask extends StatefulWidget {
     this.date = task.endTime;
     this.where = "TO DO";
     this.task = task;
-    //this.color = color;
   }
 
 }

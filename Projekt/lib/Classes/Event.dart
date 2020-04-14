@@ -2,8 +2,8 @@
 class Event {
    int id;
    String name;
-   String beginTime;
-   String endTime;
+   DateTime beginTime;
+   DateTime endTime;
    String cycle;
    String color;
    String description;

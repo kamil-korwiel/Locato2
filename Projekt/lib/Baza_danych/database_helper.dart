@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
+
 class DatabaseHelper {
   static final _databaseName = "/Baza_danych";
   static final _databaseVersion = 1;
@@ -29,7 +30,7 @@ class DatabaseHelper {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = documentsDirectory.path +  _databaseName;
     print("path: " + path);
-    deleteDatabase(path);
+    //deleteDatabase(path);
     return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
   }
 

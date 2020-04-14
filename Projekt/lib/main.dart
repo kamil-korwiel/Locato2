@@ -5,47 +5,24 @@ import 'package:pageview/pages/add_task.dart';
 import 'package:pageview/pages/calendar.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/grouptaskpage.dart';
+import 'Baza_danych/event_helper.dart';
+import 'Classes/Event.dart';
 import 'pages/add_location2.dart';
 
 import 'Baza_danych/database_helper.dart';
 
 void main() => runApp(MyApp());
 
-MaterialColor myGrey = const MaterialColor(0xFF333333,
-  const {
-  50 : const Color(0xFF333333),
-  100: const Color(0xFF333333),
-  200: const Color(0xFF333333),
-  300: const Color(0xFF333333),
-  400: const Color(0xFF333333),
-  500: const Color(0xFF333333),
-  600: const Color(0xFF333333),
-  700: const Color(0xFF333333),
-  800: const Color(0xFF333333),
-  900: const Color(0xFF333333),
-});
-
-
-
 class MyApp extends StatelessWidget {
   final DatabaseHelper dbHelper = DatabaseHelper();
   //final dbHelper = DatabaseHelper.instance;
-  // This widget is the root of your application.ę
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.grey,
-        accentColor: Colors.amber,
-        canvasColor: Colors.grey[900],
-        brightness: Brightness.dark,
-        primaryTextTheme: TextTheme(
-          title: TextStyle(
-            color: Colors.amberAccent
-          )
-        )
-
+        primarySwatch: Colors.blue,
       ),
       home: HomePage(),
       debugShowCheckedModeBanner: false,
@@ -53,13 +30,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
+  int _counter;
+  DateTime _date;
+  @override
+  void initState() {
+    _date = DateTime.now();
+    _counter = 0;
+
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,30 +66,37 @@ class _HomePageState extends State<HomePage> {
             SpeedDialChild(
                 child: Icon(Icons.event_note),
                 label: 'Wydarzenie',
-                labelStyle: TextStyle(
-                    color: Colors.grey[900],
-                    fontSize: 18.0),
+                labelStyle: TextStyle(fontSize: 18.0),
                 onTap: () {
+//                  _counter++;
+//                  _date = _date.add(Duration(days: 1));
+//
+//                  Event e = Event(
+//                    id:_counter,
+//                    name:"Name $_counter",
+//                    beginTime: _date,
+//                    endTime: _date,
+//                    cycle:"D6",
+//                    description:"bal bal bal",
+//                    idNotification: 1,
+//                  );
+//                  print(e.toString());
+//
+//                  EventHelper.add(e);
+//                  setState(() {});
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddEvent(),),);
                 }),
             SpeedDialChild(
                 child: Icon(Icons.check_box),
                 label: 'Zadanie',
-                labelStyle:
-                TextStyle(
-                color: Colors.grey[900],
-                fontSize: 18.0),
+                labelStyle: TextStyle(fontSize: 18.0),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask(),),);
                 }),
 //            SpeedDialChild(
 //              child: Icon(Icons.add_location),
 //              label: 'Lokalizacja',
-//              labelStyle:
-//              color: Theme.of(context).accentColor,
-//              TextStyle(
-//              color: Colors.grey[900],
-//              fontSize: 18.0),
+//              labelStyle: TextStyle(fontSize: 18.0),
 //              onTap: () {
 //                print('Dodaj Lokalizacje');
 //                Navigator.push(
@@ -120,9 +114,9 @@ class _HomePageState extends State<HomePage> {
             initialPage: 1,
           ),
           children: <Widget>[
-            Calendar(),
+//            Calendar(),
             HomePageEvents(),
-            GroupTaskPage(),
+//            GroupTaskPage(),
           ],
         ),
       ),

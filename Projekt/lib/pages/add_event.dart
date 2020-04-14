@@ -3,9 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/pages/add_cycle.dart';
-import 'add_notification.dart';
 
 class AddEvent extends StatefulWidget {
   @override
@@ -20,11 +20,11 @@ class _AddEventState extends State<AddEvent> {
   final controllerName = TextEditingController();
   final controllerDec = TextEditingController();
 
-  String _date = "Nie wybrano daty";
+  String _date = "Nie wybrano Daty";
   String _time1 = "Nie wybrano godziny rozpoczęcia";
   String _time2 = "Nie wybrano godziny zakończenia";
-  String _notification = "Nie wybrano powiadomień";
-  String _cycle = "Wydarzenie nie jest cykliczne";
+  String _notification = "Ustaw powiadomienie";
+  DateTime _dataTime = new DateFormat("yyyy-MM-dd hh:mm").parse("0000-00-00 00:00");
   DateTime _start = new DateTime.now();
   DateTime _end = new DateTime.now().add(new Duration(hours: 1));
 
@@ -71,7 +71,6 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showDatePicker(context,
                       theme: DatePickerTheme(
-                        backgroundColor: Colors.amber[400],
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,
@@ -79,7 +78,11 @@ class _AddEventState extends State<AddEvent> {
                       maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
                     /// tu jest  save data
                     print('confirm $date');
-                    _date = '${date.year}-${date.month}-${date.day}';
+                    _dataTime = date;
+
+                    String month = date.month < 10 ? '0${date.month}' : '${date.month}';
+                    String day = date.day < 10 ? '0${date.day}' : '${date.day}';
+                    _date = '${date.year}-$month-$day';
                     setState(() {});
                   }, currentTime: DateTime.now(), locale: LocaleType.pl);
                 },
@@ -110,7 +113,7 @@ class _AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
-                color: Colors.amber[400],
+                color: Colors.white,
               ),
               SizedBox(
                 height: 20.0,
@@ -122,7 +125,6 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
-                        backgroundColor: Colors.amber[400],
                         containerHeight: 210.0,
                       ),
                       showSecondsColumn: false,
@@ -165,7 +167,7 @@ class _AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
-                color: Colors.amber[400],
+                color: Colors.white,
               ),
               SizedBox(
                 height: 20.0,
@@ -177,7 +179,6 @@ class _AddEventState extends State<AddEvent> {
                 onPressed: () {
                   DatePicker.showTimePicker(context,
                       theme: DatePickerTheme(
-                        backgroundColor: Colors.amber[400],
                         containerHeight: 210.0,
                       ),
                       showTitleActions: true,
@@ -220,7 +221,7 @@ class _AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
-                color: Colors.amber[400],
+                color: Colors.white,
               ),
               SizedBox(
                 height: 20.0,
@@ -230,8 +231,8 @@ class _AddEventState extends State<AddEvent> {
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddNotification()));
+                  
+                  setState(() {});
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -245,10 +246,13 @@ class _AddEventState extends State<AddEvent> {
                             child: Row(
                               children: <Widget>[
                                 Icon(
-                                  Icons.notifications,
+                                  Icons.access_alarms,
                                   size: 18.0,
                                 ),
-                                Text(" $_notification"),
+                                Text(
+                                  "$_notification",
+                                  style: TextStyle(),
+                                ),
                               ],
                             ),
                           )
@@ -257,44 +261,71 @@ class _AddEventState extends State<AddEvent> {
                     ],
                   ),
                 ),
-                color: Colors.amber[400],
+                color: Colors.white,
               ),
               SizedBox(
                 height: 20.0,
               ),
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                elevation: 4.0,
-                onPressed: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddCycle()));
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.timelapse,
-                                  size: 18.0,
-                                ),
-                                Text(" $_cycle"),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
+              new DropdownButton<String>(
+                isExpanded: true,
+                items: [
+                  DropdownMenuItem<String>(
+                    child: Text('Powiadomienie'), //TODO:
+                    value: null,
                   ),
-                ),
-                color: Colors.amber[400],
+                  DropdownMenuItem<String>(
+                    child: Text('15min przed'),
+                    value: 'one',
+                  ),
+                  DropdownMenuItem<String>(
+                    child: Text('30min przed'),
+                    value: 'two',
+                  ),
+                  DropdownMenuItem<String>(
+                    child: Text('60min przed'),
+                    value: 'three',
+                  )
+                  //TODO: Tu dodac custom
+                ],
+                onChanged: (String value) {
+                  setState(() {
+                    _value = value;
+                    //newevent.idNotification = ;
+                  });
+                },
+                value: _value,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              new DropdownButton<String>(
+                isExpanded: true,
+                items: [
+                  DropdownMenuItem<String>(
+                    child: Text('Cykl'), //TODO:
+                    value: null,
+                  ),
+                  DropdownMenuItem<String>(
+                    child: Text('Codziennie'),
+                    value: 'one',
+                  ),
+                  DropdownMenuItem<String>(
+                    child: Text('Co tydzień'),
+                    value: 'two',
+                  ),
+                  DropdownMenuItem<String>(
+                    child: Text('Co dwa tygodnie'),
+                    value: 'three',
+                  ),
+                  //TODO: Tu dodać custom
+                ],
+                onChanged: (String value) {
+                  setState(() {
+                    _value = value;
+                    newevent.cycle = value;
+                  });
+                },
+                value: _value,
               ),
               SizedBox(
                 height: 20.0,
@@ -335,16 +366,23 @@ class _AddEventState extends State<AddEvent> {
                                 );
                               });
                         } else {
-                          newevent.name = controllerName.value.toString();
-                          newevent.description = controllerDec.value
-                              .toString(); //<- tu jest problem
-                          newevent.beginTime = _date + " " + _time1;
-                          newevent.endTime = _date + " " + _time2;
+                          newevent.name = controllerName.value.text;
+                          newevent.description = controllerDec.value.text;//<- tu jest problem
+
+
+                          DateTime t1 = DateTime.parse("$_date $_time1");
+                          DateTime t2 = DateTime.parse("$_date $_time2");
+
+
+                          newevent.beginTime = t1;
+                          newevent.endTime = t2;
                           print(newevent.name);
                           print(newevent.beginTime);
                           print(newevent.endTime);
                           print(newevent.cycle);
                           print(newevent.description);
+
+                          EventHelper.add(newevent);
                         }
                       },
                     ),

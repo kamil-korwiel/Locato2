@@ -22,7 +22,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
     "Sobota",
     "Niedziela"
   ];
-
+  List<Event> list;
   double heightExtededAppBar = 200.0;
   //ScrollController _scrollController;
 
@@ -35,24 +35,17 @@ class _HomePageEventsState extends State<HomePageEvents> {
   @override
   void initState() {
     super.initState();
-    _date = DateTime.now();
+    _date = DateTime.now().add(Duration(days: 1));
+    list = List();
   }
 
   String getDay(int day){
     //print(_date.timeZoneOffset);
-    int val = (_date.day - 1 + day -_date.timeZoneOffset.inHours )%7;
+    int val = (_date.day + day )%7;
     return listOfDays[val];
   }
 
 
-
-  List<Event> getEventsListDay(int day){
-    List<Event> l = new List();
-
-    EventHelper.listsDay(day).then((onValue) => l = onValue);
-
-    return l;
-  }
 
   Widget buildAppBarExtended(String day){
     return SliverAppBar(
@@ -104,11 +97,12 @@ class _HomePageEventsState extends State<HomePageEvents> {
     return SliverList(
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
         final Event item = eventsList[index];
-        return ItemEvent.classevent(item, function: (){
-          setState(() {
+        return ItemEvent(item,
+          onPressedEdit: null,
+          onPressedDelete: null,
+        );
 
-          });
-        },);
+
       },
         childCount: eventsList.length,
       ),
@@ -118,25 +112,53 @@ class _HomePageEventsState extends State<HomePageEvents> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-          //controller: _scrollController,
-          slivers: <Widget>[
-            buildAppBarExtended(getDay(0)),
-            bulidListofEvents(getEventsListDay(0)),
-            buildAppBar(getDay(1)),
-            bulidListofEvents(getEventsListDay(1)),
-            buildAppBar(getDay(2)),
-            bulidListofEvents(getEventsListDay(2)),
-            buildAppBar(getDay(3)),
-            bulidListofEvents(getEventsListDay(3)),
-            buildAppBar(getDay(4)),
-            bulidListofEvents(getEventsListDay(4)),
-            buildAppBar(getDay(5)),
-            bulidListofEvents(getEventsListDay(5)),
-            buildAppBar(getDay(6)),
-            bulidListofEvents(getEventsListDay(6)),
-          ],
-        );
+    return FutureBuilder(
+      future: EventHelper.lists(),
+      builder: (ctxt, userData) {
+
+
+        switch (userData.connectionState) {
+          case ConnectionState.none:
+            return Container();
+          case ConnectionState.waiting:
+            return Container();
+          case ConnectionState.active:
+          case ConnectionState.done:
+
+            list = userData.data;
+            if(list != null) {
+
+              return CustomScrollView(
+                //controller: _scrollController,
+                slivers: <Widget>[
+                  buildAppBarExtended(getDay(0)),
+                  bulidListofEvents(list),
+                  buildAppBar(getDay(1)),
+                  bulidListofEvents(List()),
+                  buildAppBar(getDay(2)),
+                  bulidListofEvents(List()),
+                  buildAppBar(getDay(3)),
+                  bulidListofEvents(List()),
+                  buildAppBar(getDay(4)),
+                  bulidListofEvents(List()),
+                  buildAppBar(getDay(5)),
+                  bulidListofEvents(List()),
+                  buildAppBar(getDay(6)),
+                  bulidListofEvents(List()),
+                ],
+              );
+
+            }
+            return Center(child: Text("zero"));
+        }
+
+        return Container();
+
+
+
+//
+      },
+    );
 
 
   }
