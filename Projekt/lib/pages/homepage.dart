@@ -22,6 +22,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
     "Sobota",
     "Niedziela"
   ];
+  int day;
   List<Event> list;
   double heightExtededAppBar = 200.0;
   //ScrollController _scrollController;
@@ -37,6 +38,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
     super.initState();
     _date = DateTime.now().add(Duration(days: 1));
     list = List();
+    day = DateTime.now().day;
   }
 
   String getDay(int day){
@@ -98,8 +100,11 @@ class _HomePageEventsState extends State<HomePageEvents> {
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
         final Event item = eventsList[index];
         return ItemEvent(item,
-          onPressedEdit: null,
-          onPressedDelete: null,
+          onPressedEdit: (){},
+          onPressedDelete: (){
+            EventHelper.delete(item.id);
+            setState(() {});
+          },
         );
 
 
@@ -119,32 +124,66 @@ class _HomePageEventsState extends State<HomePageEvents> {
 
         switch (userData.connectionState) {
           case ConnectionState.none:
-            return Container();
+           // return Container();
           case ConnectionState.waiting:
-            return Container();
+           // return Container();
           case ConnectionState.active:
           case ConnectionState.done:
 
             list = userData.data;
             if(list != null) {
 
+              List<Event> list1 = List();
+              List<Event> list2 = List();
+              List<Event> list3 = List();
+              List<Event> list4 = List();
+              List<Event> list5 = List();
+              List<Event> list6 = List();
+              List<Event> list7 = List();
+
+
+              for(Event item in list){
+                if(item.beginTime.day == day){
+                  list1.add(item);
+                }
+                if(item.beginTime.day == day+1){
+                  list2.add(item);
+                }
+                if(item.beginTime.day == day+2){
+                  list3.add(item);
+                }
+                if(item.beginTime.day == day+3){
+                  list4.add(item);
+                }
+                if(item.beginTime.day == day+4){
+                  list5.add(item);
+                }
+                if(item.beginTime.day == day+5){
+                  list6.add(item);
+                }
+                if(item.beginTime.day == day+6){
+                  list7.add(item);
+                }
+
+              }
+
               return CustomScrollView(
                 //controller: _scrollController,
                 slivers: <Widget>[
                   buildAppBarExtended(getDay(0)),
-                  bulidListofEvents(list),
+                  bulidListofEvents(list1),
                   buildAppBar(getDay(1)),
-                  bulidListofEvents(List()),
+                  bulidListofEvents(list2),
                   buildAppBar(getDay(2)),
-                  bulidListofEvents(List()),
+                  bulidListofEvents(list3),
                   buildAppBar(getDay(3)),
-                  bulidListofEvents(List()),
+                  bulidListofEvents(list4),
                   buildAppBar(getDay(4)),
-                  bulidListofEvents(List()),
+                  bulidListofEvents(list5),
                   buildAppBar(getDay(5)),
-                  bulidListofEvents(List()),
+                  bulidListofEvents(list6),
                   buildAppBar(getDay(6)),
-                  bulidListofEvents(List()),
+                  bulidListofEvents(list7),
                 ],
               );
 

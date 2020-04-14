@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/pages/add_cycle.dart';
 import 'add_notification.dart';
@@ -82,7 +83,6 @@ class _AddEventState extends State<AddEvent> {
                       maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
                     /// tu jest  save data
                     print('confirm $date');
-                    _dataTime = date;
 
                     String month = date.month < 10 ? '0${date.month}' : '${date.month}';
                     String day = date.day < 10 ? '0${date.day}' : '${date.day}';
