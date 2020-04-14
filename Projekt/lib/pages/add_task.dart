@@ -7,6 +7,8 @@ import 'package:pageview/pages/add_group.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/add_notification.dart';
 
+import 'add_notification.dart';
+
 class AddTask extends StatefulWidget {
   @override
   _AddTaskState createState() => _AddTaskState();
@@ -78,7 +80,9 @@ class _AddTaskState extends State<AddTask> {
                       minTime: DateTime(2000, 1, 1),
                       maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
                     print('confirm $date');
-                    _date = '${date.year} - ${date.month} - ${date.day}';
+                    String month = date.month < 10 ? '0${date.month}' : '${date.month}';
+                    String day = date.day < 10 ? '0${date.day}' : '${date.day}';
+                    _date = '${date.year}-$month-$day';
                     setState(() {});
                   }, currentTime: DateTime.now(), locale: LocaleType.pl);
                 },
@@ -130,7 +134,11 @@ class _AddTaskState extends State<AddTask> {
                       showSecondsColumn: false,
                       showTitleActions: true, onConfirm: (time) {
                     print('confirm $time');
-                    _time1 = '${time.hour} : ${time.minute}';
+                    String hour =
+                    time.hour < 10 ? '0${time.hour}' : '${time.hour}';
+                    String minute =
+                    time.minute < 10 ? '0${time.minute}' : '${time.minute}';
+                    _time1 = hour + ':' + minute;
                     setState(() {});
                   }, currentTime: DateTime.now(), locale: LocaleType.pl);
                   setState(() {});
@@ -280,7 +288,8 @@ class _AddTaskState extends State<AddTask> {
                   ],
                   alignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
-                  buttonMinWidth: 150),
+                  buttonMinWidth: 150
+              ),
             ],
           ),
         ),

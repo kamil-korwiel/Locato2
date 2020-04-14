@@ -6,6 +6,9 @@ class ItemTask extends StatefulWidget {
   @override
   _ItemTaskState createState() => _ItemTaskState();
 
+  final Function onPressedEdit;
+  final Function onPressedDelete;
+
   Task task;
 
   String name;
@@ -14,7 +17,7 @@ class ItemTask extends StatefulWidget {
   String date;
 
   //ItemTask(String this.name,bool this.done,String this.date,String this.where);
-  ItemTask.classtask(Task task){
+  ItemTask(Task task,{this.onPressedEdit,this.onPressedDelete}){
     this.name = task.name;
     this.done = task.done;
     this.date = task.endTime;
@@ -56,23 +59,14 @@ class _ItemTaskState extends State<ItemTask> {
                 child: FlatButton(
                   child: Icon(Icons.edit),
                   color: Colors.blueAccent,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddTask(task: widget.task)),
-                    );
-                  },
+                  onPressed: widget.onPressedEdit
                 )
             ),
             Expanded(
                 child:  FlatButton(
                   child: Icon(Icons.delete),
                   color: Colors.redAccent,
-                  onPressed: (){
-                    setState(() {
-                      TaskHelper.delete(widget.task.id);
-                    });
-                  },
+                  onPressed: widget.onPressedDelete
                 )
             ),
           ],

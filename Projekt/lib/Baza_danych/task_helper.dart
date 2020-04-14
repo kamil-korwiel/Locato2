@@ -8,6 +8,7 @@ class TaskHelper {
 
   static Future<void> add( Task newTask ) async {
     int IdTask = await dbHelper.query("SELECT max(ID_Task) FROM Task");
+    IdTask = IdTask == null ? 0 : IdTask;
     dbHelper.insert('Task', {
       'ID_Task': IdTask + 1,
       'Nazwa': newTask.name,

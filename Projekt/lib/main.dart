@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/pages/add_event.dart';
 import 'package:pageview/pages/add_task.dart';
 import 'package:pageview/pages/calendar.dart';
@@ -7,6 +8,7 @@ import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/grouptaskpage.dart';
 import 'Baza_danych/event_helper.dart';
 import 'Classes/Event.dart';
+import 'Classes/Group.dart';
 import 'pages/add_location2.dart';
 
 import 'Baza_danych/database_helper.dart';
@@ -86,12 +88,6 @@ class _HomePageState extends State<HomePage> {
                 label: 'Wydarzenie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddEvent(),
-                    ),
-                  );
 //                  _counter++;
 //                  _date = _date.add(Duration(days: 1));
 //
@@ -115,12 +111,12 @@ class _HomePageState extends State<HomePage> {
                 label: 'Zadanie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddTask(),
-                    ),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask(),),);
+//                _counter++;
+//                Group g= Group(id:_counter,name:"lol",howMuchDone: 0);
+//                GroupHelper.add(g);
+                setState(() {});
+
                 }),
 //            SpeedDialChild(
 //              child: Icon(Icons.add_location),
@@ -149,7 +145,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
 //            Calendar(),
             HomePageEvents(),
-//            GroupTaskPage(),
+            GroupTaskPage(),
           ],
         ),
       ),

@@ -83,6 +83,10 @@ class _AddEventState extends State<AddEvent> {
                       maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
                     /// tu jest  save data
                     print('confirm $date');
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8f5a91cb35e73065edec80687e6ff5d5a11bed4c
                     String month = date.month < 10 ? '0${date.month}' : '${date.month}';
                     String day = date.day < 10 ? '0${date.day}' : '${date.day}';
                     _date = '${date.year}-$month-$day';
