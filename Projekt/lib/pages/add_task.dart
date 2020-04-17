@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
+import 'package:pageview/Classes/NotificationDescription.dart';
 import 'package:pageview/pages/add_group.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/add_notification.dart';
+import 'package:pageview/Classes/NotificationDescription.dart';
 
 import 'add_notification.dart';
 
@@ -25,6 +27,7 @@ class _AddTaskState extends State<AddTask> {
   final controllerName = TextEditingController();
   final controllerDesc = TextEditingController();
 
+
   String _name;
   String _decription;
   String _date ;
@@ -37,7 +40,6 @@ class _AddTaskState extends State<AddTask> {
   int _idGroup = 0;
 
   Task newtask = Task();
-
 
   DateTime _end ;
 
@@ -55,7 +57,6 @@ class _AddTaskState extends State<AddTask> {
     super.initState();
   }
 
-  String _value;
 
   @override
   Widget build(BuildContext context) {

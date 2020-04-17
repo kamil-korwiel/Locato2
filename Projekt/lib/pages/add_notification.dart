@@ -163,9 +163,13 @@ DropdownButton<String>(
                         ],
                       ),
                     ),
-                    onPressed: () => Scaffold
-                    .of(context)
-                   .showSnackBar(SnackBar(content: Text(notificationlist[index].nazwa))),
+                    color: notificationlist[index].isSelected ? Colors.amber[400] : Colors.grey,
+                    onPressed: () => setState(() { 
+                      if(notificationlist[index].isSelected == false)
+                        notificationlist[index].isSelected = true;
+                      else
+                      notificationlist[index].isSelected = false;
+                      })
               );
                     }),
             SizedBox(
