@@ -2,6 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
+import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/pages/add_group.dart';
 import 'package:pageview/Classes/Task.dart';
@@ -13,24 +16,42 @@ class AddTask extends StatefulWidget {
   @override
   _AddTaskState createState() => _AddTaskState();
 
-  Task task;
+  Task update;
 
-  AddTask({this.task});
+  AddTask({this.update});
 }
 
 class _AddTaskState extends State<AddTask> {
   final controllerName = TextEditingController();
   final controllerDesc = TextEditingController();
 
-  String _date = "Nie wybrano daty";
-  String _time1 = "Nie wybrano godziny zakończenia";
-  String _group = "Nie wybrano grupy";
-  String _notification = "Nie wybrano powiadomień";
+  String _name;
+  String _decription;
+  String _date ;
+  String _time1 ;
+  String _group ;
+  String _notification;
+
+  int _idNotification = 0;
+  int _idLocalizaton = 0;
+  int _idGroup = 0;
 
   Task newtask = Task();
 
+
+  DateTime _end ;
+
   @override
   void initState() {
+    _name = (widget.update == null)? null : widget.update.name;
+    _decription = (widget.update == null)? null : widget.update.description;
+    _date = (widget.update == null)? "Nie wybrano daty" : DateFormat("yyyy-MM-dd").format(widget.update.endTime);
+    _time1 = (widget.update == null)?"Nie wybrano godziny rozpoczęcia" : DateFormat("hh:mm").format(widget.update.endTime);
+    _group = (widget.update == null)? "Nie wybrano grupy": "ErrorUpdate";
+    _notification = (widget.update == null)? "Nie wybrano powiadomień": "ErrorUpdate";
+
+    _end = (widget.update == null)?new DateTime.now(): widget.update.endTime;
+
     super.initState();
   }
 
@@ -59,6 +80,7 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
                 keyboardType: TextInputType.text,
+                initialValue: _name,
               ),
               SizedBox(
                 height: 10.0,
@@ -84,7 +106,7 @@ class _AddTaskState extends State<AddTask> {
                     String day = date.day < 10 ? '0${date.day}' : '${date.day}';
                     _date = '${date.year}-$month-$day';
                     setState(() {});
-                  }, currentTime: DateTime.now(), locale: LocaleType.pl);
+                  }, currentTime: _end, locale: LocaleType.pl);
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -140,7 +162,7 @@ class _AddTaskState extends State<AddTask> {
                     time.minute < 10 ? '0${time.minute}' : '${time.minute}';
                     _time1 = hour + ':' + minute;
                     setState(() {});
-                  }, currentTime: DateTime.now(), locale: LocaleType.pl);
+                  }, currentTime:_end, locale: LocaleType.pl);
                   setState(() {});
                 },
                 child: Container(
@@ -261,6 +283,7 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
                 keyboardType: TextInputType.text,
+                initialValue: _decription,
               ),
               SizedBox(
                 height: 10.0,
@@ -276,13 +299,36 @@ class _AddTaskState extends State<AddTask> {
                     RaisedButton(
                       child: Text("Dodaj"),
                       onPressed: () {
-                        newtask.name = controllerName.text;
-                        newtask.description = controllerDesc.text;
-                        newtask.endTime = _date + " " + _time1;
-                        print(newtask.name);
-                        print(newtask.endTime);
-                        print(newtask.idGroup);
-                        print(newtask.description);
+
+                        if(widget.update != null){
+                          widget.update.name = controllerName.value.text;
+                          DateTime t1 = DateTime.parse("$_date $_time1");
+                          widget.update.endTime = t1;
+
+//                          widget.update.idNotification = _idNotification;
+//                          widget.update.idGroup = _idGroup;
+//                          widget.update.idLocalizaton = _idLocalizaton;
+
+                          //TODO: Update grupe
+                          TaskHelper.update(widget.update);
+                          Navigator.of(context).pop();
+                        }else{
+                          newtask.name = controllerName.text;
+                          newtask.description = controllerDesc.text;
+                          newtask.endTime =  DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time1);
+
+                          newtask.idNotification = _idNotification;
+                          newtask.idGroup = _idGroup;
+                          newtask.idLocalizaton = _idLocalizaton;
+                          //TODO: Dodać grupe
+//                          print(newtask.name);
+//                          print(newtask.endTime);
+//                          print(newtask.idGroup);
+//                          print(newtask.description);
+                          TaskHelper.add(newtask);
+                          Navigator.of(context).pop();
+                        }
+
                       },
                     ),
                   ],

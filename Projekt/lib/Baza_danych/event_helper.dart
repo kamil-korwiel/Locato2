@@ -27,8 +27,8 @@ class EventHelper {
   static Future<void> update(Event updatedEvent) async {
     dbHelper.update('Wydarzenie', 'ID_Wydarzenie', updatedEvent.id, {
       'Nazwa': updatedEvent.name,
-      'Termin_od': updatedEvent.beginTime,
-      'Termin_do': updatedEvent.endTime,
+      'Termin_od': DateFormat("yyyy-MM-dd hh:mm").format(updatedEvent.beginTime),
+      'Termin_do': DateFormat("yyyy-MM-dd hh:mm").format(updatedEvent.endTime),
       'Cykl': updatedEvent.cycle,
       'Powiadomienie':updatedEvent.idNotification,
       'Kolor': updatedEvent.color,

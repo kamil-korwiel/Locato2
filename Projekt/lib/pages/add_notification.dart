@@ -14,7 +14,7 @@ class AddNotification extends StatefulWidget {
 }
 
 class _AddNotificationState extends State<AddNotification> {
-  
+
   final TextEditingController _text = new TextEditingController();
   final notifications = FlutterLocalNotificationsPlugin();
 
@@ -38,7 +38,7 @@ class _AddNotificationState extends State<AddNotification> {
        // MaterialPageRoute(builder: (context) => SecondPage(payload: payload)),
     //  );
 
- 
+
   List<MyNotification> notificationlist = [];
   int _currentIndex = 0;
   List<String> unitlist = ["Minuty", "Godziny", "Dni"];
@@ -49,7 +49,7 @@ class _AddNotificationState extends State<AddNotification> {
   var duration;
   int czas;
   int length = 0;
-  
+
 
   void getDropDownItem(){
     setState(() {
@@ -67,7 +67,7 @@ class _AddNotificationState extends State<AddNotification> {
           child: ListView(children: <Widget>[
             new Row(
     crossAxisAlignment: CrossAxisAlignment.center,
-    children: <Widget>[   
+    children: <Widget>[
 DropdownButton<String>(
 	value: _value,
 	icon: Icon(Icons.arrow_drop_down),

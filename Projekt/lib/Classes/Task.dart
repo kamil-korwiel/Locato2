@@ -2,7 +2,7 @@ class Task {
   int id;
   String name;
   bool done;
-  String endTime;
+  DateTime endTime;
   String description;
   int idNotification;
   int idLocalizaton;

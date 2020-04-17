@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/add_task.dart';
@@ -20,7 +21,7 @@ class ItemTask extends StatefulWidget {
   ItemTask(Task task,{this.onPressedEdit,this.onPressedDelete}){
     this.name = task.name;
     this.done = task.done;
-    this.date = task.endTime;
+    this.date =  DateFormat("yyyy-MM-dd hh:mm").format(task.endTime);
     this.where = "TO DO";
     this.task = task;
   }
