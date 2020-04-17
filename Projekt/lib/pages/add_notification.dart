@@ -49,12 +49,8 @@ class _AddNotificationState extends State<AddNotification> {
   var duration;
   int czas;
   int length = 0;
-<<<<<<< HEAD
   String name;
   
-=======
-
->>>>>>> 498806557332295ca464ef54222151c37c886b79
 
   void getDropDownItem(){
     setState(() {
