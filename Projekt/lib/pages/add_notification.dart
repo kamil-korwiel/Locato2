@@ -49,6 +49,7 @@ class _AddNotificationState extends State<AddNotification> {
   var duration;
   int czas;
   int length = 0;
+  String name;
   
 
   void getDropDownItem(){
@@ -109,17 +110,20 @@ DropdownButton<String>(
                 if(holder == "Minuty"){
                 czas = int.parse(_text.text);
                 duration = new Duration(minutes: czas);
+                name = "$czas minut przed";
                 }
                 if(holder == "Godziny"){
                 czas = int.parse(_text.text);
                 duration = new Duration(minutes: czas);
+                name = "$czas godzin przed";
                 }
                 if(holder == "Dni"){
                 czas = int.parse(_text.text);
                 duration = new Duration(minutes: czas);
+                name = "$czas dni przed";
                 }
                 pom = teraz.add(duration);
-                notificationlist.add(new MyNotification(_currentIndex, pom));
+                notificationlist.add(new MyNotification(id: _currentIndex,when: pom, nazwa: name));
                 _text.clear();
                 _currentIndex++;
                 length = notificationlist.length;

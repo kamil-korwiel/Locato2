@@ -6,11 +6,11 @@ class MyNotification {
    String nazwa;
    DateTime when;
 
-  MyNotification(int _id, DateTime _when) {
-    this.id = _id;
-    this.when = _when;
-    this.nazwa = "Powiadomienie: godz:" + when.hour.toString() + ":" + when.minute.toString() + "  " + when.day.toString() + "/" + when.month.toString() + "/" + when.year.toString() + "r.";
-  }
+  MyNotification({
+    this.id,
+    this.when,
+    this.nazwa = "",
+  });
 
 }
 
@@ -39,5 +39,6 @@ Future showScheduleNotification(FlutterLocalNotificationsPlugin notifications) a
       'scheduled title',
       'scheduled body',
       scheduledNotificationDateTime,
-      _ongoing);
+      _ongoing)
+      ;
 }

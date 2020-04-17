@@ -16,7 +16,7 @@ class AddGroup extends StatefulWidget {
 class _AddGroupState extends State<AddGroup> {
   final _text = TextEditingController();
 
-  Group newgroup = Group();
+ // Group newgroup = Group();
 
   @override
   void initState() {
@@ -24,15 +24,15 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   String _value;
-  String _group;
-  List<String> groups = ["Grupa A", "Grupa B"];
   List<Color> _colors = [Colors.grey, Colors.amber[400]];
-  int _currentIndex = 0;
+  List<Group> grouplist = [];
+  int currentIndex = 0;
+  int length = 0;
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj cykl"),
+        title: Text("Dodaj grupę"),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -40,7 +40,7 @@ class _AddGroupState extends State<AddGroup> {
             new TextFormField(
               controller: _text,
               decoration: new InputDecoration(
-                labelText: "Nowy Cykl",
+                labelText: "Nowa Grupa",
                 border: new OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(0.0),
                   borderSide: new BorderSide(),
@@ -53,7 +53,9 @@ class _AddGroupState extends State<AddGroup> {
             ),
             new RaisedButton(
               onPressed: () {
-                groups.add(_text.text);
+                grouplist.add(new Group(id: currentIndex, name:_text.text, isSelected: true));
+                currentIndex++;
+                 length = grouplist.length;
                 _text.clear();
                 setState(() {});
               },
@@ -64,7 +66,7 @@ class _AddGroupState extends State<AddGroup> {
             ),
             new ListView.builder(
                 shrinkWrap: true,
-                itemCount: groups.length,
+                itemCount: length,
                 itemBuilder: (context, index) {
                 
                   return RaisedButton(
@@ -83,7 +85,7 @@ class _AddGroupState extends State<AddGroup> {
                                       Icons.account_circle,
                                       size: 18.0,
                                     ),
-                                    Text(groups[index]),
+                                    Text(" " + grouplist[index].name),
                                   ],
                                 ),
                               )
@@ -92,9 +94,15 @@ class _AddGroupState extends State<AddGroup> {
                         ],
                       ),
                     ),
-                    onPressed: () => Scaffold
-                    .of(context)
-                    .showSnackBar(SnackBar(content: Text(groups[index]))),
+                    color: grouplist[index].isSelected ? Colors.amber[400] : Colors.grey,
+                    onPressed: () => setState(() { 
+                      if(grouplist[index].isSelected == false){
+                        for(int i = 0; i < grouplist.length; i++) grouplist[i].isSelected = false;
+                        grouplist[index].isSelected = true;
+                      }
+                      else
+                      grouplist[index].isSelected = false;
+                      })
               );
                     }),
                 
