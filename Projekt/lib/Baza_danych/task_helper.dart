@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:pageview/Classes/Task.dart';
 
 import 'database_helper.dart';
@@ -13,7 +14,7 @@ class TaskHelper {
       'ID_Task': IdTask + 1,
       'Nazwa': newTask.name,
       'Zrobione': newTask.done,
-      'Do_Kiedy': newTask.endTime,
+      'Do_Kiedy': DateFormat("yyyy-MM-dd hh:mm").format(newTask.endTime),
       'Opis': newTask.description,
       'Lokalizacja': newTask.idLocalizaton,
       'Powiadomienie': newTask.idNotification,
@@ -46,7 +47,7 @@ class TaskHelper {
         id: maps[i]['ID_Task'],
         done: maps[i]['Zrobione'],
         name: maps[i]['Nazwa'],
-        endTime: maps[i]['Do_Kiedy'],
+        endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
         description: maps[i]['Opis'],
         idLocalizaton: maps[i]['Lokalizacja'],
         idNotification: maps[i]['Powiadomienie'],
@@ -62,7 +63,7 @@ class TaskHelper {
         id: maps[i]['ID_Task'],
         done: maps[i]['Zrobione'],
         name: maps[i]['Nazwa'],
-        endTime: maps[i]['Do_Kiedy'],
+        endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
         description: maps[i]['Opis'],
         idLocalizaton: maps[i]['Lokalizacja'],
         idNotification: maps[i]['Powiadomienie'],
