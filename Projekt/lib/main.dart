@@ -49,14 +49,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
   int _counter;
   DateTime _date;
   @override
@@ -66,7 +64,6 @@ class _HomePageState extends State<HomePage> {
 
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -104,38 +101,43 @@ class _HomePageState extends State<HomePage> {
 //
 //                  EventHelper.add(e);
 //                  setState(() {});
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddEvent(),),);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddEvent(),
+                    ),
+                  );
                 }),
             SpeedDialChild(
                 child: Icon(Icons.check_box),
                 label: 'Zadanie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask(),),);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddTask(),
+                    ),
+                  );
 //                _counter++;
 //                Group g= Group(id:_counter,name:"lol",howMuchDone: 0);
 //                GroupHelper.add(g);
-                setState(() {});
-
+                  setState(() {});
                 }),
-//            SpeedDialChild(
-//              child: Icon(Icons.add_location),
-//              label: 'Lokalizacja',
-//              labelStyle:
-//              color: Theme.of(context).accentColor,
-//              TextStyle(
-//              color: Colors.grey[900],
-//              fontSize: 18.0),
-//              onTap: () {
-//                print('Dodaj Lokalizacje');
-//                Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                    builder: (context) => AddLocation(),
-//                  ),
-//                );
-//              },
-//            ),
+            SpeedDialChild(
+              child: Icon(Icons.add_location),
+              label: 'Lokalizacja',
+              labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
+              onTap: () {
+                print('Dodaj Lokalizacje');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddLocation(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
         body: PageView(

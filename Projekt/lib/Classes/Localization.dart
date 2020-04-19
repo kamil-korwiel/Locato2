@@ -1,20 +1,18 @@
-
-class Localizaton{
-
+class Localization {
   int id;
-  double N;
-  double E;
+  double latitude;
+  double longitude;
   String name;
   String city;
   String street;
 
-  Localizaton({
-    this.id,
-    this.N,
-    this.E,
-    this.name,
-    this.city,
-    this.street
-  });
+  //Localization();
 
-  }
+  Localization(
+      {this.id,
+      this.latitude,
+      this.longitude,
+      this.name,
+      this.city,
+      this.street});
+}

@@ -10,8 +10,8 @@ class LocalizationHelper {
 
     dbHelper.insert('Lokalizacja', {
       'ID_Lokalizacji': IdLocalization + 1,
-      'N': newLocalization.N,
-      'E': newLocalization.E,
+      'Latitude': newLocalization.latitude,
+      'Longitude': newLocalization.longitude,
       'Nazwa': newLocalization.name,
       'Miasto': newLocalization.city,
       'Ulica': newLocalization.street,
@@ -20,8 +20,8 @@ class LocalizationHelper {
 
   static Future<void> update(Localization updatedLocalization) async {
     dbHelper.update('Lokalizacja', 'ID_Lokalizacji', updatedLocalization.id, {
-      'N': updatedLocalization.N,
-      'E': updatedLocalization.E,
+      'Latitude': updatedLocalization.latitude,
+      'Longitude': updatedLocalization.longitude,
       'Nazwa': updatedLocalization.name,
       'Miasto': updatedLocalization.city,
       'Ulica': updatedLocalization.street,
@@ -38,8 +38,8 @@ class LocalizationHelper {
     return List.generate(maps.length, (i) {
       return Localization(
         id: maps[i]['ID_Lokalizacji'],
-        N: maps[i]['N'],
-        E: maps[i]['E'],
+        latitude: maps[i]['Latitude'],
+        longitude: maps[i]['Longitude'],
         name: maps[i]['Nazwa'],
         city: maps[i]['Miasto'],
         street: maps[i]['Ulica'],

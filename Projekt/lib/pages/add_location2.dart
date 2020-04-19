@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:throttling/throttling.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:pageview/Classes/Localization.dart';
 
 // Autosugestia adresow
 Future<List> fetchAddress(String query, LatLng position) async {
@@ -107,10 +109,12 @@ class _AddLocationState extends State<AddLocation> {
 
   //Zmienne: kontroler TextField, pozycji na mapie
   var adresController = TextEditingController();
+  var nazwaController = TextEditingController();
   final Throttling thrTxt =
       new Throttling(duration: Duration(milliseconds: 500));
   static LatLng _initialPosition;
   static LatLng _lastPosition = _initialPosition;
+  Localization dbLokalizacja = new Localization();
 
   final _formKey = new GlobalKey<FormState>();
 
@@ -168,6 +172,9 @@ class _AddLocationState extends State<AddLocation> {
     var adresKrotki = adres.first.addressLine.toString().split(",");
 
     adresController.text = adresKrotki[0];
+
+    // Zapis do zmiennej bazy danych kodu pocztwoego i najczesciej tez nazwe miasta
+    dbLokalizacja.city = adresKrotki[1];
   }
 
   // Zamiana wprowadzonego tekstu na lokalizacje
@@ -221,6 +228,7 @@ class _AddLocationState extends State<AddLocation> {
 // Elementy ekranu
   Widget _buildNazwaLokalizacji() {
     return TextFormField(
+      controller: nazwaController,
       validator: (value) =>
           value.isEmpty ? 'Nazwa lokalizacji nie może być pusta' : null,
       style: TextStyle(
@@ -228,18 +236,6 @@ class _AddLocationState extends State<AddLocation> {
       decoration: _buildInputDecoration("Nazwa lokalizacji", ''),
     );
   }
-
-  /*Widget _buildAdres() {
-    return TextFormField(
-        controller: adresController,
-        style: TextStyle(
-            color: Color.fromRGBO(252, 252, 252, 1),
-            fontFamily: 'RadikalLight'),
-        decoration: _buildInputDecoration("Adres", ''),
-        onFieldSubmitted: (String value) {
-          addressToLocation(value);
-        });
-  }*/
 
   Widget _buildAdres() {
     return Form(
@@ -301,7 +297,10 @@ class _AddLocationState extends State<AddLocation> {
                     }),
                 Align(
                   alignment: Alignment.center,
-                  child: Icon(Icons.flag),
+                  child: Icon(
+                    Icons.flag,
+                    color: Color.fromRGBO(0, 0, 0, 1),
+                  ),
                 ),
               ]));
   }
@@ -322,6 +321,14 @@ class _AddLocationState extends State<AddLocation> {
         elevation: 4.0,
         onPressed: () {
           if (_formKey.currentState.validate()) {
+            dbLokalizacja.id = 0;
+            dbLokalizacja.latitude = _lastPosition.latitude;
+            dbLokalizacja.longitude = _lastPosition.longitude;
+            dbLokalizacja.name = nazwaController.text;
+            dbLokalizacja.street = adresController.text;
+            // Miasto zapisane jest w funkcji LocationToAdress()
+            // Dodaj do bazy
+            LocalizationHelper.add(dbLokalizacja);
             // Powrot
             Navigator.pop(context);
           }

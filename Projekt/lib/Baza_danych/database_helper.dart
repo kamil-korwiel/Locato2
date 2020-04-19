@@ -4,16 +4,15 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class DatabaseHelper {
   static final _databaseName = "/Baza_danych";
   static final _databaseVersion = 1;
 
   DatabaseHelper._privateConstructor();
-  static DatabaseHelper instance ;
+  static DatabaseHelper instance;
 
-  factory DatabaseHelper(){
-    if(instance == null){
+  factory DatabaseHelper() {
+    if (instance == null) {
       instance = DatabaseHelper._privateConstructor();
     }
     return instance;
@@ -28,14 +27,14 @@ class DatabaseHelper {
 
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = documentsDirectory.path +  _databaseName;
+    String path = documentsDirectory.path + _databaseName;
     print("path: " + path);
     //deleteDatabase(path);
-    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    return await openDatabase(path,
+        version: _databaseVersion, onCreate: _onCreate);
   }
 
   Future _onCreate(Database db, int version) async {
-
     await db.execute('''
            CREATE TABLE Grupa (
      ID_Grupa     INTEGER   PRIMARY KEY,
@@ -59,8 +58,8 @@ class DatabaseHelper {
     await db.execute('''
            CREATE TABLE Lokalizacja (
      ID_Lokalizacji INTEGER   PRIMARY KEY,
-     N              DOUBLE    NOT NULL,
-     E              DOUBLE    NOT NULL,
+     Latitude       DOUBLE    NOT NULL,
+     Longitude      DOUBLE    NOT NULL,
      Nazwa          TEXT      DEFAULT NULL,
      Miasto         TEXT      DEFAULT NULL,
      Ulica          TEXT      DEFAULT NULL
@@ -109,19 +108,21 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
-   Future<List<Map<String, dynamic>>> queryIdRowsTask(int id) async {
-     Database db = await instance.database;
-     return await db.rawQuery('SELECT * FROM Task WHERE ID_Task=$id');
-   }
+  Future<List<Map<String, dynamic>>> queryIdRowsTask(int id) async {
+    Database db = await instance.database;
+    return await db.rawQuery('SELECT * FROM Task WHERE ID_Task=$id');
+  }
 
   Future<List<Map<String, dynamic>>> queryEventWeekend() async {
     Database db = await instance.database;
-    return await db.rawQuery("SELECT * FROM Wydarzenie WHERE date(Termin_od) >= date('now') AND date(Termin_od) <= date('now','+7 day')");
+    return await db.rawQuery(
+        "SELECT * FROM Wydarzenie WHERE date(Termin_od) >= date('now') AND date(Termin_od) <= date('now','+7 day')");
   }
 
   Future<List<Map<String, dynamic>>> queryEventDay(int day) async {
     Database db = await instance.database;
-    return await db.rawQuery("SELECT * FROM Wydarzenie WHERE date(Termin_od) = date('now','+$day day')");
+    return await db.rawQuery(
+        "SELECT * FROM Wydarzenie WHERE date(Termin_od) = date('now','+$day day')");
   }
 
   Future<int> query(String q) async {
@@ -129,8 +130,8 @@ class DatabaseHelper {
     return Sqflite.firstIntValue(await db.rawQuery(q));
   }
 
-
-  Future<int> update(String table, String columnId, int id, Map<String, dynamic> row) async {
+  Future<int> update(
+      String table, String columnId, int id, Map<String, dynamic> row) async {
     Database db = await instance.database;
 
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
