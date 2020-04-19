@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:pageview/Classes/Event.dart';
 
 import 'database_helper.dart';
@@ -10,12 +11,12 @@ class EventHelper {
     int IdEvent = await dbHelper.query("SELECT MAX(ID_Wydarzenie) FROM Wydarzenie");
     //pickedIdEvent = pickedIdEvent == null ? 0 : pickedIdEvent;
     //print("LOLLLLLLLL: $pickedIdEvent");
-
+    IdEvent = IdEvent == null ? 0 : IdEvent;
     dbHelper.insert('Wydarzenie', {
       'ID_Wydarzenie': IdEvent + 1,
       'Nazwa': newEvent.name,
-      'Termin_od': newEvent.beginTime,
-      'Termin_do': newEvent.endTime,
+      'Termin_od': DateFormat("yyyy-MM-dd hh:mm").format(newEvent.beginTime),
+      'Termin_do': DateFormat("yyyy-MM-dd hh:mm").format(newEvent.endTime),
       'Cykl': newEvent.cycle,
       'Powiadomienie':newEvent.idNotification,
       'Kolor': newEvent.color,
@@ -26,8 +27,8 @@ class EventHelper {
   static Future<void> update(Event updatedEvent) async {
     dbHelper.update('Wydarzenie', 'ID_Wydarzenie', updatedEvent.id, {
       'Nazwa': updatedEvent.name,
-      'Termin_od': updatedEvent.beginTime,
-      'Termin_do': updatedEvent.endTime,
+      'Termin_od': DateFormat("yyyy-MM-dd hh:mm").format(updatedEvent.beginTime),
+      'Termin_do': DateFormat("yyyy-MM-dd hh:mm").format(updatedEvent.endTime),
       'Cykl': updatedEvent.cycle,
       'Powiadomienie':updatedEvent.idNotification,
       'Kolor': updatedEvent.color,
@@ -46,8 +47,8 @@ class EventHelper {
       return Event(
         id: maps[i]['ID_Wydarzenie'],
         name: maps[i]['Nazwa'],
-        beginTime: maps[i]['Termin_od'],
-        endTime: maps[i]['Termin_do'],
+        beginTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Termin_od']),
+        endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Termin_do']),
         cycle: maps[i]['Cykl'],
         color: maps[i]['Kolor'],
         idNotification: maps[i]['Powiadomienie'],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/add_task.dart';
@@ -6,22 +7,23 @@ class ItemTask extends StatefulWidget {
   @override
   _ItemTaskState createState() => _ItemTaskState();
 
+  final Function onPressedEdit;
+  final Function onPressedDelete;
+
   Task task;
 
   String name;
   bool done;
   String where;
   String date;
-  //Color color;
 
   //ItemTask(String this.name,bool this.done,String this.date,String this.where);
-  ItemTask.classtask(Task task){
+  ItemTask(Task task,{this.onPressedEdit,this.onPressedDelete}){
     this.name = task.name;
     this.done = task.done;
-    this.date = task.endTime;
+    this.date =  DateFormat("yyyy-MM-dd hh:mm").format(task.endTime);
     this.where = "TO DO";
     this.task = task;
-    //this.color = color;
   }
 
 }
@@ -58,23 +60,14 @@ class _ItemTaskState extends State<ItemTask> {
                 child: FlatButton(
                   child: Icon(Icons.edit),
                   color: Colors.blueAccent,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddTask(task: widget.task)),
-                    );
-                  },
+                  onPressed: widget.onPressedEdit
                 )
             ),
             Expanded(
                 child:  FlatButton(
                   child: Icon(Icons.delete),
                   color: Colors.redAccent,
-                  onPressed: (){
-                    setState(() {
-                      TaskHelper.delete(widget.task.id);
-                    });
-                  },
+                  onPressed: widget.onPressedDelete
                 )
             ),
           ],

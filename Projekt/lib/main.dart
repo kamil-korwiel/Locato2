@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/pages/add_event.dart';
 import 'package:pageview/pages/add_task.dart';
 import 'package:pageview/pages/calendar.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/grouptaskpage.dart';
+import 'Baza_danych/event_helper.dart';
+import 'Classes/Event.dart';
+import 'Classes/Group.dart';
 import 'pages/add_location2.dart';
 
 import 'Baza_danych/database_helper.dart';
@@ -27,7 +31,7 @@ MaterialColor myGrey = const MaterialColor(0xFF333333, const {
 class MyApp extends StatelessWidget {
   final DatabaseHelper dbHelper = DatabaseHelper();
   //final dbHelper = DatabaseHelper.instance;
-  // This widget is the root of your application.ę
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,12 +49,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
+  int _counter;
+  DateTime _date;
+  @override
+  void initState() {
+    _date = DateTime.now();
+    _counter = 0;
+
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -71,24 +88,35 @@ class _HomePageState extends State<HomePage> {
                 label: 'Wydarzenie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddEvent(),
-                    ),
-                  );
+//                  _counter++;
+//                  _date = _date.add(Duration(days: 1));
+//
+//                  Event e = Event(
+//                    id:_counter,
+//                    name:"Name $_counter",
+//                    beginTime: _date,
+//                    endTime: _date,
+//                    cycle:"D6",
+//                    description:"bal bal bal",
+//                    idNotification: 1,
+//                  );
+//                  print(e.toString());
+//
+//                  EventHelper.add(e);
+//                  setState(() {});
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddEvent(),),);
                 }),
             SpeedDialChild(
                 child: Icon(Icons.check_box),
                 label: 'Zadanie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddTask(),
-                    ),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddTask(),),);
+//                _counter++;
+//                Group g= Group(id:_counter,name:"lol",howMuchDone: 0);
+//                GroupHelper.add(g);
+                setState(() {});
+
                 }),
 //            SpeedDialChild(
 //              child: Icon(Icons.add_location),
@@ -115,7 +143,7 @@ class _HomePageState extends State<HomePage> {
             initialPage: 1,
           ),
           children: <Widget>[
-            Calendar(),
+//            Calendar(),
             HomePageEvents(),
             GroupTaskPage(),
           ],

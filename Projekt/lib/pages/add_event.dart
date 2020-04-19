@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/pages/add_cycle.dart';
 import 'add_notification.dart';
@@ -11,31 +13,52 @@ class AddEvent extends StatefulWidget {
   @override
   _AddEventState createState() => _AddEventState();
 
-  Event event;
+  Event update;
 
-  AddEvent({this.event});
+  AddEvent({this.update});
 }
 
 class _AddEventState extends State<AddEvent> {
-  final controllerName = TextEditingController();
-  final controllerDec = TextEditingController();
+  TextEditingController controllerName;
+  TextEditingController controllerDec;
 
-  String _date = "Nie wybrano daty";
-  String _time1 = "Nie wybrano godziny rozpoczęcia";
-  String _time2 = "Nie wybrano godziny zakończenia";
-  String _notification = "Nie wybrano powiadomień";
-  String _cycle = "Wydarzenie nie jest cykliczne";
-  DateTime _start = new DateTime.now();
-  DateTime _end = new DateTime.now().add(new Duration(hours: 1));
+  String _name;
+  String _decription;
+  String _date;
+  String _time1;
+  String _time2;
+  String _notification;
+  String _cycle ;
+  DateTime _start ;
+  DateTime _end ;
+
+  int idNotification = 0;
+
 
   Event newevent = new Event();
 
   @override
   void initState() {
+    _name = (widget.update == null)? null : widget.update.name;
+    _decription = (widget.update == null)? null : widget.update.description;
+    _date = (widget.update == null)? "Nie wybrano daty" : DateFormat("yyyy-MM-dd").format(widget.update.beginTime);
+    _time1 = (widget.update == null)?"Nie wybrano godziny rozpoczęcia" : DateFormat("hh:mm").format(widget.update.beginTime);
+    _time2 = (widget.update == null)?"Nie wybrano godziny zakończenia" :  DateFormat("hh:mm").format(widget.update.endTime);
+    _notification =(widget.update == null)? "Nie wybrano powiadomień" : "ErrorUpdate";
+    _cycle = (widget.update == null)?"Wydarzenie nie jest cykliczne" : "ErrorUpdate";
+    _start = (widget.update == null)?new DateTime.now() : widget.update.beginTime;
+    _end = (widget.update == null)?new DateTime.now().add(new Duration(hours: 1)) : widget.update.endTime;
+
+    controllerName = TextEditingController();
+    controllerDec = TextEditingController();
+
+    if(widget.update != null){
+      controllerName = TextEditingController(text:_name);
+      controllerDec = TextEditingController(text:_decription);
+    }
     super.initState();
   }
 
-  String _value;
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +102,15 @@ class _AddEventState extends State<AddEvent> {
                       ),
                       showTitleActions: true,
                       minTime: DateTime(2000, 1, 1),
-                      maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
+                      maxTime: DateTime(2022, 12, 31),
+                      onConfirm: (date) {
                     /// tu jest  save data
                     print('confirm $date');
-                    _date = '${date.year}-${date.month}-${date.day}';
+                    String month = date.month < 10 ? '0${date.month}' : '${date.month}';
+                    String day = date.day < 10 ? '0${date.day}' : '${date.day}';
+                    _date = '${date.year}-$month-$day';
                     setState(() {});
-                  }, currentTime: DateTime.now(), locale: LocaleType.pl);
+                  }, currentTime: _start, locale: LocaleType.pl);
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -134,14 +160,14 @@ class _AddEventState extends State<AddEvent> {
                       showSecondsColumn: false,
                       showTitleActions: true, onConfirm: (time) {
                     print('confirm $time');
-                    _start = time;
+                    //_start = time;
                     String hour =
                         time.hour < 10 ? '0${time.hour}' : '${time.hour}';
                     String minute =
                         time.minute < 10 ? '0${time.minute}' : '${time.minute}';
                     _time1 = hour + ':' + minute;
                     setState(() {});
-                  }, currentTime: DateTime.now(), locale: LocaleType.pl);
+                  }, currentTime: _start, locale: LocaleType.pl);
                   setState(() {});
                 },
                 child: Container(
@@ -192,15 +218,18 @@ class _AddEventState extends State<AddEvent> {
                       showTitleActions: true,
                       showSecondsColumn: false, onConfirm: (time) {
                     print('confirm $time');
-                    _end = time;
+                   // _end = time;
+
                     String hour =
                         time.hour < 10 ? '0${time.hour}' : '${time.hour}';
                     String minute =
                         time.minute < 10 ? '0${time.minute}' : '${time.minute}';
+
                     _time2 = hour + ':' + minute;
+
                     setState(() {});
                   },
-                      currentTime: _start.add(Duration(minutes: 1)),
+                      currentTime: _end,
                       locale: LocaleType.pl);
                   setState(() {});
                 },
@@ -349,16 +378,36 @@ class _AddEventState extends State<AddEvent> {
                                 );
                               });
                         } else {
-                          newevent.name = controllerName.value.toString();
-                          newevent.description = controllerDec.value
-                              .toString(); //<- tu jest problem
-                          newevent.beginTime = _date + " " + _time1;
-                          newevent.endTime = _date + " " + _time2;
-                          print(newevent.name);
-                          print(newevent.beginTime);
-                          print(newevent.endTime);
-                          print(newevent.cycle);
-                          print(newevent.description);
+
+                          if(widget.update != null){
+
+                            widget.update.name = controllerName.value.text;
+                            widget.update.description = controllerDec.value.text;
+
+                            DateTime t1 = DateTime.parse("$_date $_time1");
+                            DateTime t2 = DateTime.parse("$_date $_time2");
+                            widget.update.beginTime = t1;
+                            widget.update.endTime = t2;
+
+                            EventHelper.update(widget.update);
+                            Navigator.of(context).pop();
+
+                          }else{
+                            newevent.name = controllerName.value.text;
+                            newevent.description = controllerDec.value.text;//<- tu jest problem
+                            DateTime t1 = DateTime.parse("$_date $_time1");
+                            DateTime t2 = DateTime.parse("$_date $_time2");
+                            newevent.beginTime = t1;
+                            newevent.endTime = t2;
+//                            print(newevent.name);
+//                            print(newevent.beginTime);
+//                            print(newevent.endTime);
+//                            print(newevent.cycle);
+//                            print(newevent.description);
+                            EventHelper.add(newevent);
+                            Navigator.of(context).pop();
+                          }
+
                         }
                       },
                     ),

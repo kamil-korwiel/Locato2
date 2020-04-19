@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/pages/add_event.dart';
@@ -7,7 +8,8 @@ class ItemEvent extends StatefulWidget {
   @override
   _ItemEventState createState() => _ItemEventState();
 
-  final Function function;
+  final Function onPressedEdit;
+  final Function onPressedDelete;
 
   String name;
   String eventStarts;
@@ -15,19 +17,18 @@ class ItemEvent extends StatefulWidget {
   String cycle;
   bool is_cyclic;
   String description;
-
   Event event;
-
   Color color;
+
   //ItemEvent(String this.name,String this.eventStarts ,String this.eventEnds,String this.description,bool this.is_cyclic, String this.cycle, Color this.color,{this.function});
-  ItemEvent.classevent(Event event, {this.function}){
+  ItemEvent(Event event, {this.onPressedEdit,this.onPressedDelete}){
     this.name = event.name;
-    this.eventStarts = event.beginTime;
-    this.eventEnds = event.endTime;
+    this.eventStarts = DateFormat("yyyy-MM-dd hh:mm").format(event.beginTime);
+    this.eventEnds = DateFormat("yyyy-MM-dd hh:mm").format(event.endTime);
     this.description = event.description;
-    this.is_cyclic = event.cycle.isEmpty ;
-    this.cycle = event.cycle;
-    this.color = color;//event.color;
+    this.is_cyclic = true;//event.cycle.isEmpty ;
+    this.cycle = "DERROR";//event.cycle;
+    this.color = Colors.blueAccent;//event.color;
     this.event = event;
   }
 
@@ -65,23 +66,16 @@ class _ItemEventState extends State<ItemEvent> {
           children: <Widget>[
             Expanded(
                 child: MaterialButton(
-                  child: Icon(Icons.edit),
-                  color: Theme.of(context).accentColor,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddEvent()),
-                    );
-                  },
+                    child: Icon(Icons.edit),
+                    color: Colors.blueAccent,
+                    onPressed: widget.onPressedEdit
                 )
             ),
             Expanded(
                 child:  MaterialButton(
-                  child: Icon(Icons.delete),
-                  color: Colors.redAccent,
-                  onPressed: (){
-                    EventHelper.delete(widget.event.id);
-                  },
+                    child: Icon(Icons.delete),
+                    color: Colors.redAccent,
+                    onPressed: widget.onPressedDelete
                 )
             ),
           ],
