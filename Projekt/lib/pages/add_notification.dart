@@ -138,7 +138,14 @@ DropdownButton<String>(
                 shrinkWrap: true,
                 itemCount: notificationlist.length,
                 itemBuilder: (context, index) {
-                  return RaisedButton(
+                  return Dismissible(
+                    key: Key(notificationlist[index].nazwa),
+                    onDismissed: (left) {
+                      setState(() {
+                        notificationlist.removeAt(index);
+                      });
+                    },
+                    child:  RaisedButton(
                     child: Container(
                       alignment: Alignment.center,
                       height: 50.0,
@@ -170,7 +177,8 @@ DropdownButton<String>(
                       else
                       notificationlist[index].isSelected = false;
                       })
-              );
+              ),
+                  );
                     }),
             SizedBox(
               height: 10.0,
