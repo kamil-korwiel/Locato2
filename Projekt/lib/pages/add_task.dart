@@ -11,6 +11,7 @@ import 'package:pageview/pages/add_group.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/add_notification.dart';
 import 'package:pageview/Classes/NotificationDescription.dart';
+import 'package:pageview/pages/add_localization.dart';
 
 import 'add_notification.dart';
 
@@ -34,6 +35,7 @@ class _AddTaskState extends State<AddTask> {
   String _time1 ;
   String _group ;
   String _notification;
+  String _localization;
 
   int _idNotification = 0;
   int _idLocalizaton = 0;
@@ -51,7 +53,7 @@ class _AddTaskState extends State<AddTask> {
     _time1 = (widget.update == null)?"Nie wybrano godziny rozpoczęcia" : DateFormat("hh:mm").format(widget.update.endTime);
     _group = (widget.update == null)? "Nie wybrano grupy": "ErrorUpdate";
     _notification = (widget.update == null)? "Nie wybrano powiadomień": "ErrorUpdate";
-
+    _localization = (widget.update ==null)?"Nie wybrano lokalizacji" : "ErrorUpdate";
     _end = (widget.update == null)?new DateTime.now(): widget.update.endTime;
 
     super.initState();
@@ -273,6 +275,45 @@ class _AddTaskState extends State<AddTask> {
               ),
               SizedBox(
                 height: 10.0,
+              ),
+                RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                elevation: 4.0,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddLocalization()));
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.edit_location,
+                                  size: 18.0,
+                                ),
+                                Text(" $_localization"),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                color: Colors.amber[400],
+              ),
+              SizedBox(
+                height: 20.0,
               ),
               new TextFormField(
                 controller: controllerDesc,

@@ -29,6 +29,7 @@ class _AddEventState extends State<AddEvent> {
   String _time2;
   String _notification;
   String _cycle ;
+  String _localization;
   DateTime _start ;
   DateTime _end ;
 
