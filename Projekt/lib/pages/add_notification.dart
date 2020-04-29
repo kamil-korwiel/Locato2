@@ -4,6 +4,8 @@ import 'package:pageview/pages/add_task.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pageview/Classes/Notification.dart';
 
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 class AddNotification extends StatefulWidget {
   @override
   _AddNotificationState createState() => _AddNotificationState();
@@ -32,7 +34,8 @@ class _AddNotificationState extends State<AddNotification> {
         onSelectNotification: onSelectNotification);*/
   }
 
-  Future onSelectNotification(String payload) async => await Navigator.pop(context);//Navigator.push(
+  Future onSelectNotification(String payload) async => await Navigator.pop(context);
+  //Navigator.push(
        // context,
         //co ma sie dziac po wcisnieciu powiadomienia
        // MaterialPageRoute(builder: (context) => SecondPage(payload: payload)),
@@ -88,17 +91,22 @@ DropdownButton<String>(
 	}).toList(),
   ),
       Flexible(
+        child: Form(
+        key: _formKey,
         child: TextFormField(
               controller: _text,
               decoration: new InputDecoration(
                 labelText: "Nowe powiadomienie",
-                border: new OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(0.0),
-                  borderSide: new BorderSide(),
-                ),
               ),
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.number,
+               validator: (val) {
+                if (val.isEmpty) {
+                  return 'Pole nie może być puste!';
+                }
+                return null;
+              },
             ),
+        ),
       ),
     ],
            ),
@@ -107,6 +115,9 @@ DropdownButton<String>(
             ),
             new RaisedButton(
               onPressed: () {
+
+                if(_formKey.currentState.validate()){
+
                 if(holder == "Minuty"){
                 czas = int.parse(_text.text);
                 duration = new Duration(minutes: czas);
@@ -127,7 +138,10 @@ DropdownButton<String>(
                 _text.clear();
                 _currentIndex++;
                 length = notificationlist.length;
+                
                 setState(() {});
+                }
+
               },
               child: Text('Dodaj'),
             ),

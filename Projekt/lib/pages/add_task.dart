@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -12,8 +11,9 @@ import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/add_notification.dart';
 import 'package:pageview/Classes/NotificationDescription.dart';
 import 'package:pageview/pages/add_localization.dart';
-
 import 'add_notification.dart';
+
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class AddTask extends StatefulWidget {
   @override
@@ -27,7 +27,6 @@ class AddTask extends StatefulWidget {
 class _AddTaskState extends State<AddTask> {
   final controllerName = TextEditingController();
   final controllerDesc = TextEditingController();
-
 
   String _name;
   String _decription;
@@ -44,6 +43,8 @@ class _AddTaskState extends State<AddTask> {
   Task newtask = Task();
 
   DateTime _end ;
+
+
 
   @override
   void initState() {
@@ -68,22 +69,24 @@ class _AddTaskState extends State<AddTask> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Container(
-          child: ListView(
-//            mainAxisSize: MainAxisSize.max,
-//            mainAxisAlignment: MainAxisAlignment.center,
+        child: new Form(
+          key: _formKey,
+            child: ListView(
             children: <Widget>[
               new TextFormField(
                 controller: controllerName,
-                decoration: new InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Nazwa",
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(0.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  hintText: "Podaj nazwę nowego zadania",
                 ),
                 keyboardType: TextInputType.text,
                 initialValue: _name,
+                validator: (val) {
+                if (val.isEmpty) {
+                  return 'Pole nie może być puste!';
+                }
+                return null;
+              },
               ),
               SizedBox(
                 height: 10.0,
@@ -319,13 +322,16 @@ class _AddTaskState extends State<AddTask> {
                 controller: controllerDesc,
                 decoration: new InputDecoration(
                   labelText: "Opis",
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(0.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  hintText: "Dodaj opis swojego zadania"
                 ),
                 keyboardType: TextInputType.text,
                 initialValue: _decription,
+                validator: (val) {
+                if (val.isEmpty) {
+                  return 'Pole nie może być puste!';
+                }
+                return null;
+              },
               ),
               SizedBox(
                 height: 10.0,
@@ -341,8 +347,7 @@ class _AddTaskState extends State<AddTask> {
                     RaisedButton(
                       child: Text("Dodaj"),
                       onPressed: () {
-
-                        if(widget.update != null){
+                        /*if(widget.update != null){
                           widget.update.name = controllerName.value.text;
                           DateTime t1 = DateTime.parse("$_date $_time1");
                           widget.update.endTime = t1;
@@ -366,10 +371,11 @@ class _AddTaskState extends State<AddTask> {
 //                          print(newtask.name);
 //                          print(newtask.endTime);
 //                          print(newtask.idGroup);
-//                          print(newtask.description);
-                          TaskHelper.add(newtask);
-                          Navigator.of(context).pop();
-                        }
+//                          print(newtask.description);*/
+                          _formKey.currentState.validate();
+                          //TaskHelper.add(newtask);
+                         // Navigator.of(context).pop();
+                        //}
 
                       },
                     ),
@@ -384,6 +390,6 @@ class _AddTaskState extends State<AddTask> {
       ),
     );
   }
+
+
 }
-
-
