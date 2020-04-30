@@ -9,7 +9,10 @@ class Notifi{
     this.idTask,
     this.idEvent,
     this.duration,
-  });
+  }){
+    idTask =-1;
+    idEvent=-1;
+  }
 
 
 

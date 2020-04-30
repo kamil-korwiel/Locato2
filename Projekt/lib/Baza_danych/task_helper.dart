@@ -1,8 +1,10 @@
 import 'package:intl/intl.dart';
+import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Notification.dart';
 import 'package:pageview/Classes/Task.dart';
 
 import 'database_helper.dart';
+import 'notification_helper.dart';
 
 class TaskHelper {
   static final dbHelper = DatabaseHelper.instance;
@@ -12,7 +14,7 @@ class TaskHelper {
     int IdTask = await dbHelper.query("SELECT max(ID_Task) FROM Task");
     IdTask = IdTask == null ? 0 : IdTask;
     dbHelper.insert('Task', {
-      'ID_Task': IdTask + 1,
+      'ID_Task': ++IdTask ,
       'Nazwa': newTask.name,
       'Zrobione': newTask.done ? 1 : 0,
       'Do_Kiedy': DateFormat("yyyy-MM-dd hh:mm").format(newTask.endTime),
@@ -20,6 +22,11 @@ class TaskHelper {
       'Lokalizacja': newTask.idLocalizaton,
       'Grupa': newTask.idGroup,
     });
+
+    for(Notifi n in newTask.listNotifi){
+      n.idTask = IdTask;
+      NotifiHelper.add(n);
+    }
 
 
   }
@@ -33,12 +40,18 @@ class TaskHelper {
       'Lokalizacja': updatedTask.idLocalizaton,
       'Grupa': updatedTask.idGroup,
     });
+    for(Notifi n in updatedTask.listNotifi){
+      n.idTask = updatedTask.id;
+      NotifiHelper.add(n);
+    }
+
   }
 
 
   static Future<void> delete(int pickedIdTask,) async {
     dbHelper.delete('Task', 'ID_Task', pickedIdTask);
-    dbHelper.delete('Powiadomienia_Taskow', 'ID_Task', pickedIdTask);
+    NotifiHelper.deleteTaskID(pickedIdTask);
+    //TODO notifi delete
   }
 
 

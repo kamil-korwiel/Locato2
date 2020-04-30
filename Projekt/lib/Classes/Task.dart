@@ -11,7 +11,6 @@ class Task {
   int idLocalizaton;
   int idGroup;
 
-  static int MAXidNOTIFI;
 
   List<Notifi> listNotifi;
 
@@ -25,10 +24,9 @@ class Task {
     this.idLocalizaton,
     this.idGroup,
     this.listNotifi,
-  });
-
-  void setMAXidNOTIFI(int id){
-    MAXidNOTIFI = id;
+  }){
+    listNotifi = List();
   }
+
 
 }

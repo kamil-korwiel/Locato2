@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Notifi.dart';
 
 class ListNotifi extends StatefulWidget {
@@ -49,19 +50,17 @@ class _ListNotifiState extends State<ListNotifi> {
                       ],
                     ),
                   ),
-//                  color: widget.lista[index].isSelected
-//                      ? Colors.amber[400]
-//                      : Colors.grey,
-                  onPressed: () => setState(() {
-//                        if (widget.lista[index].isSelected == false)
-//                          widget.lista[index].isSelected = true;
-//                        else
-//                          widget.lista[index].isSelected = false;
-                      })),
+                color: Colors.amber[400],
+
+              ),
               new IconButton(
-                icon: Icon(Icons.block),
+                icon: Icon(Icons.clear),
                 onPressed: () {
+                  if(widget.lista[index].id != null) {
+                    NotifiHelper.delete(widget.lista[index].id);
+                  }
                   widget.lista.removeAt(index);
+                  setState(() {});
                 },
               ),
             ],

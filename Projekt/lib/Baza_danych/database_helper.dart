@@ -47,11 +47,14 @@ class DatabaseHelper {
     ''');
 
 
+
+
+
     await db.execute('''
            CREATE TABLE Powiadomienia(
      ID_Powiadomienia     INTEGER   PRIMARY KEY,
      ID_Task              INTEGER NOT NULL,
-     ID_Event              INTEGER NOT NULL,
+     ID_Event             INTEGER NOT NULL,
      Czas                 TEXT    DEFAULT NULL
  )
            ''');

@@ -15,6 +15,8 @@ import 'package:pageview/pages/add_localization.dart';
 
 import 'add_notification.dart';
 
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 class AddTask extends StatefulWidget {
   @override
   _AddTaskState createState() => _AddTaskState();
@@ -31,46 +33,48 @@ class _AddTaskState extends State<AddTask> {
   int id;
   String _name;
   String _decription;
-  String _date ;
-  String _time1 ;
-  String _group ;
+  String _date;
+
+  String _time1;
+
+  String _group;
+
   String _notification;
   String _localization;
 
-
-
   Task newtask;
 
-  DateTime _end ;
+  DateTime _end;
 
   @override
   void initState() {
-
-    _name = (widget.update == null)? null : widget.update.name;
-    _decription = (widget.update == null)? null : widget.update.description;
-    _date = (widget.update == null)? "Nie wybrano daty" : DateFormat("yyyy-MM-dd").format(widget.update.endTime);
-    _time1 = (widget.update == null)?"Nie wybrano godziny rozpoczęcia" : DateFormat("hh:mm").format(widget.update.endTime);
-    _group = (widget.update == null)? "Nie wybrano grupy": "ErrorUpdate";
-    _notification = (widget.update == null)? "Nie wybrano powiadomień": "ErrorUpdate";
-    _localization = (widget.update ==null)?"Nie wybrano lokalizacji" : "ErrorUpdate";
-    _end = (widget.update == null)?new DateTime.now(): widget.update.endTime;
-
+    _name = (widget.update == null) ? null : widget.update.name;
+    _decription = (widget.update == null) ? null : widget.update.description;
+    _date = (widget.update == null)
+        ? "Nie wybrano daty"
+        : DateFormat("yyyy-MM-dd").format(widget.update.endTime);
+    _time1 = (widget.update == null)
+        ? "Nie wybrano godziny rozpoczęcia"
+        : DateFormat("hh:mm").format(widget.update.endTime);
+    _group = (widget.update == null) ? "Nie wybrano grupy" : "ErrorUpdate";
+    _notification =
+        (widget.update == null) ? "Nie wybrano powiadomień" : "ErrorUpdate";
+    _localization =
+        (widget.update == null) ? "Nie wybrano lokalizacji" : "ErrorUpdate";
+    _end = (widget.update == null) ? new DateTime.now() : widget.update.endTime;
 
     newtask = Task(
-      name: "",
-      idGroup: 0 ,
       idLocalizaton: 0,
-      description: "",
+      idGroup: 0,
       done: false,
     );
 
-    if(widget.update != null){
-      controllerName = TextEditingController(text:_name);
-      controllerDesc = TextEditingController(text:_decription);
+    if (widget.update != null) {
+      controllerName = TextEditingController(text: _name);
+      controllerDesc = TextEditingController(text: _decription);
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +84,8 @@ class _AddTaskState extends State<AddTask> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Container(
+        child: Form(
+          key: _formKey,
           child: ListView(
 //            mainAxisSize: MainAxisSize.max,
 //            mainAxisAlignment: MainAxisAlignment.center,
@@ -89,12 +94,15 @@ class _AddTaskState extends State<AddTask> {
                 controller: controllerName,
                 decoration: new InputDecoration(
                   labelText: "Nazwa",
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(0.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  hintText: "Podaj nazwę nowego zadania",
                 ),
                 keyboardType: TextInputType.text,
+                validator: (val) {
+                  if (val.isEmpty) {
+                    return 'Pole nie może być puste!';
+                  }
+                  return null;
+                },
               ),
               SizedBox(
                 height: 10.0,
@@ -116,7 +124,8 @@ class _AddTaskState extends State<AddTask> {
                       minTime: DateTime(2000, 1, 1),
                       maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
                     print('confirm $date');
-                    String month = date.month < 10 ? '0${date.month}' : '${date.month}';
+                    String month =
+                        date.month < 10 ? '0${date.month}' : '${date.month}';
                     String day = date.day < 10 ? '0${date.day}' : '${date.day}';
                     _date = '${date.year}-$month-$day';
                     setState(() {});
@@ -171,12 +180,12 @@ class _AddTaskState extends State<AddTask> {
                       showTitleActions: true, onConfirm: (time) {
                     print('confirm $time');
                     String hour =
-                    time.hour < 10 ? '0${time.hour}' : '${time.hour}';
+                        time.hour < 10 ? '0${time.hour}' : '${time.hour}';
                     String minute =
-                    time.minute < 10 ? '0${time.minute}' : '${time.minute}';
+                        time.minute < 10 ? '0${time.minute}' : '${time.minute}';
                     _time1 = hour + ':' + minute;
                     setState(() {});
-                  }, currentTime:_end, locale: LocaleType.pl);
+                  }, currentTime: _end, locale: LocaleType.pl);
                   setState(() {});
                 },
                 child: Container(
@@ -216,8 +225,14 @@ class _AddTaskState extends State<AddTask> {
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddGroup(task: widget.update == null ? newtask : widget.update,)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddGroup(
+                                task: widget.update == null
+                                    ? newtask
+                                    : widget.update,
+                              )));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -285,7 +300,7 @@ class _AddTaskState extends State<AddTask> {
               SizedBox(
                 height: 10.0,
               ),
-                RaisedButton(
+              RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
@@ -328,12 +343,15 @@ class _AddTaskState extends State<AddTask> {
                 controller: controllerDesc,
                 decoration: new InputDecoration(
                   labelText: "Opis",
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(0.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  hintText: "Dodaj opis swojego zadania",
                 ),
                 keyboardType: TextInputType.text,
+                validator: (val) {
+                  if (val.isEmpty) {
+                    return 'Pole nie może być puste!';
+                  }
+                  return null;
+                },
               ),
               SizedBox(
                 height: 10.0,
@@ -349,45 +367,35 @@ class _AddTaskState extends State<AddTask> {
                     RaisedButton(
                       child: Text("Dodaj"),
                       onPressed: () {
+                        if(_formKey.currentState.validate()) {
+                          if (widget.update != null) {
+                            widget.update.name = controllerName.value.text;
+                            widget.update.endTime =
+                                DateTime.parse("$_date $_time1");
 
-                        if(widget.update != null){
-                          widget.update.name = controllerName.value.text;
-                          DateTime t1 = DateTime.parse("$_date $_time1");
-                          widget.update.endTime = t1;
+                            TaskHelper.update(widget.update);
+                            Navigator.of(context).pop();
+                          } else {
+                            newtask.name = controllerName.text;
+                            newtask.description = controllerDesc.text;
+                            newtask.endTime = DateFormat("yyyy-MM-dd hh:mm")
+                                .parse(_date + " " + _time1);
+                            //print(newtask.name + " " + "Opis: " + newtask.description+ "Group: "+ newtask.idGroup.toString());
 
-//                          widget.update.idNotification = _idNotification;
-//                          widget.update.idGroup = _idGroup;
-//                          widget.update.idLocalizaton = _idLocalizaton;
-
-
-                          TaskHelper.update(widget.update);
-                          Navigator.of(context).pop();
-                        }else{
-                          newtask.name = controllerName.text;
-                          newtask.description = controllerDesc.text;
-                          newtask.endTime =  DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time1);
-
-                          print(newtask.name + " " + "Opis: " + newtask.description+ "Group: "+ newtask.idGroup.toString());
-
-//                          newtask.idNotification = _idNotification;
-//                          newtask.idGroup = _idGroup;
-//                          newtask.idLocalizaton = _idLocalizaton;
-                          //TODO: Dodać grupe
 //                          print(newtask.name);
 //                          print(newtask.endTime);
 //                          print(newtask.idGroup);
 //                          print(newtask.description);
-                          TaskHelper.add(newtask);
-                          Navigator.of(context).pop();
+                            TaskHelper.add(newtask);
+                            Navigator.of(context).pop();
+                          }
                         }
-
                       },
                     ),
                   ],
                   alignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
-                  buttonMinWidth: 150
-              ),
+                  buttonMinWidth: 150),
             ],
           ),
         ),
@@ -395,5 +403,3 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 }
-
-

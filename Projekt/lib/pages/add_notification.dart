@@ -8,8 +8,6 @@ import 'package:pageview/List/button_notification_list_builder_widget.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pageview/Classes/Notification.dart';
 
-//TODO: Problem z dodawanie do listy raz pobraś z future i nigdy już nie przebudowywać.
-
 class AddNotificationTask extends StatefulWidget {
   @override
   _AddNotificationTaskState createState() => _AddNotificationTaskState();
@@ -22,27 +20,37 @@ class AddNotificationTask extends StatefulWidget {
 class _AddNotificationTaskState extends State<AddNotificationTask> {
   final TextEditingController _text = new TextEditingController();
   final notifications = FlutterLocalNotificationsPlugin();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    NotifiHelper.getMaxID().then((onValue) {
-      _id = onValue;
-    }).catchError(() {
-      _id = 0;
-    });
+    if (widget.task.id != null) {
+      NotifiHelper.listsTaskID(widget.task.id).then((onList) {
+        if (onList == null) {
+          _notifilist = onList;
+          if (widget.task.listNotifi != null) {
+            _notifilist.addAll(widget.task.listNotifi);
+          }
+          setState(() {});
+        }
+      });
+    } else {
+
+      if (widget.task.listNotifi != null) {
+
+        _notifilist = widget.task.listNotifi;
+      }
+    }
 
     super.initState();
   }
 
-  int _id;
+  List<Notifi> _notifilist = [];
   List<String> unitlist = ["Minuty", "Godziny", "Dni"];
   String holder = "Minuty";
   String _value = "Minuty";
-  DateTime teraz = DateTime.now();
-  DateTime pom = DateTime.now();
   var duration;
   int czas;
-  int length = 0;
   String name;
 
   void getDropDownItem() {
@@ -81,16 +89,21 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
                   }).toList(),
                 ),
                 Flexible(
-                  child: TextFormField(
-                    controller: _text,
-                    decoration: new InputDecoration(
-                      labelText: "Nowe powiadomienie",
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(0.0),
-                        borderSide: new BorderSide(),
+                  child: Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _text,
+                      decoration: new InputDecoration(
+                        labelText: "Nowe powiadomienie",
                       ),
+                      keyboardType: TextInputType.number,
+                      validator: (val) {
+                        if (val.isEmpty) {
+                          return 'Pole nie może być puste!';
+                        }
+                        return null;
+                      },
                     ),
-                    keyboardType: TextInputType.text,
                   ),
                 ),
               ],
@@ -100,59 +113,43 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
             ),
             new RaisedButton(
               onPressed: () {
-                if (holder == "Minuty") {
-                  czas = int.parse(_text.text);
-                  duration = new Duration(minutes: czas);
-                  name = "$czas minut przed";
+                if (_formKey.currentState.validate()) {
+                  if (holder == "Minuty") {
+                    czas = int.parse(_text.text);
+                    duration = new Duration(minutes: czas);
+                    name = "$czas minut przed";
+                  }
+                  if (holder == "Godziny") {
+                    czas = int.parse(_text.text);
+                    duration = new Duration(hours: czas);
+                    name = "$czas godzin przed";
+                  }
+                  if (holder == "Dni") {
+                    czas = int.parse(_text.text);
+                    duration = new Duration(days: czas);
+                    name = "$czas dni przed";
+                  }
+                  _notifilist.add(Notifi(duration: duration));
+                  setState(() {});
                 }
-                if (holder == "Godziny") {
-                  czas = int.parse(_text.text);
-                  duration = new Duration(minutes: czas);
-                  name = "$czas godzin przed";
-                }
-                if (holder == "Dni") {
-                  czas = int.parse(_text.text);
-                  duration = new Duration(minutes: czas);
-                  name = "$czas dni przed";
-                }
-                pom = teraz.add(duration);
-                NotifiHelper.add(
-                    Notifi(id: _id, idTask: widget.task.id, duration: Duration()));
-                _id++;
-                setState(() {});
               },
               child: Text('Dodaj'),
             ),
             SizedBox(
               height: 10.0,
             ),
-            FutureBuilder(
-              future: NotifiHelper.listsTaskID(widget.task.id),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  // return Container();
-                  case ConnectionState.waiting:
-                  // return Container();
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                    {
-                      if (snapshot.hasData) {
-                        return ListNotifi(snapshot.data);
-                      }
-                    }
-                }
-                return Container();
-              },
-            ),
+            ListNotifi(_notifilist),
             SizedBox(
               height: 10.0,
             ),
             new RaisedButton(
               onPressed: () {
-                if (widget.task.id == null) {
-                } else {}
-
+                widget.task.listNotifi.clear();
+                for (Notifi n in _notifilist) {
+                  if (n.id == null) {
+                    widget.task.listNotifi.add(n);
+                  }
+                }
                 Navigator.pop(context);
               },
               child: Text('Potwierdź'),
@@ -177,29 +174,44 @@ class AddNotificationEvent extends StatefulWidget {
 
 class _AddNotificationEventState extends State<AddNotificationEvent> {
   final TextEditingController _text = new TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    NotifiHelper.listsEventID(widget.event.id)
-        .then((onList) {
-          if(onList == null) {
-            _notifilist = onList;
-            setState(() {});
-          }
-        });
+    if (widget.event.id != null) {
+      print ("jestm");
+      NotifiHelper.listsEventID(widget.event.id).then((onList) {
+        if (onList != null) {
+          print ("jestm2");
+          _notifilist = onList;
+          print(_notifilist);
+          print(onList);
+         if (widget.event.listNotifi.isNotEmpty) {
+           _notifilist.addAll(widget.event.listNotifi);
+         }
+         setState(() {});
+        }
+      });
+
+      //NotifiHelper.lists().then((onList) { print("to$onList");});
+
+
+    } else {
+      if (widget.event.listNotifi.isNotEmpty) {
+        _notifilist = widget.event.listNotifi;
+      }
+    }
+
     super.initState();
   }
 
   List<Notifi> _notifilist = [];
-  List<Notifi> _notifilistnew = [];
   List<String> unitlist = ["Minuty", "Godziny", "Dni"];
   String holder = "Minuty";
   String _value = "Minuty";
   var duration;
   int czas;
   String name;
-
-  DateTime _time = DateFormat("yyyy-MM-dd hh:mm").parse("0000-00-00 00:00");
 
   void getDropDownItem() {
     setState(() {
@@ -237,16 +249,21 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
                   }).toList(),
                 ),
                 Flexible(
-                  child: TextFormField(
-                    controller: _text,
-                    decoration: new InputDecoration(
-                      labelText: "Nowe powiadomienie",
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(0.0),
-                        borderSide: new BorderSide(),
+                  child: Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _text,
+                      decoration: new InputDecoration(
+                        labelText: "Nowe powiadomienie",
                       ),
+                      keyboardType: TextInputType.number,
+                      validator: (val) {
+                        if (val.isEmpty) {
+                          return 'Pole nie może być puste!';
+                        }
+                        return null;
+                      },
                     ),
-                    keyboardType: TextInputType.text,
                   ),
                 ),
               ],
@@ -256,29 +273,30 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
             ),
             new RaisedButton(
               onPressed: () {
-                if (holder == "Minuty") {
-                  czas = int.parse(_text.text);
-                  duration = new Duration(minutes: czas);
-                  name = "$czas minut przed";
-                }
-                if (holder == "Godziny") {
-                  czas = int.parse(_text.text);
-                  duration = new Duration(hours: czas);
-                  name = "$czas godzin przed";
-                }
-                if (holder == "Dni") {
-                  czas = int.parse(_text.text);
-                  duration = new Duration(days: czas);
-                  name = "$czas dni przed";
-                }
+                if (_formKey.currentState.validate()) {
+                  if (holder == "Minuty") {
+                    czas = int.parse(_text.text);
+                    duration = new Duration(minutes: czas);
+                    name = "$czas minut przed";
+                  }
+                  if (holder == "Godziny") {
+                    czas = int.parse(_text.text);
+                    duration = new Duration(hours: czas);
+                    name = "$czas godzin przed";
+                  }
+                  if (holder == "Dni") {
+                    czas = int.parse(_text.text);
+                    duration = new Duration(days: czas);
+                    name = "$czas dni przed";
+                  }
 
-                _notifilist.add(Notifi(duration: duration));
-                _notifilistnew.add(Notifi(duration: duration));
+                  _notifilist.add(Notifi(duration: duration));
 
-                print(
-                    "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
+                  print(
+                      "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
 
-                setState(() {});
+                  setState(() {});
+                }
               },
               child: Text('Dodaj'),
             ),
@@ -291,7 +309,17 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
             ),
             new RaisedButton(
               onPressed: () {
-                widget.event.listNotifi = _notifilistnew;
+                List<Notifi> noti = List();
+//                widget.event.listNotifi.clear();
+//
+                for (Notifi n in _notifilist) {
+                  if (n.id == null) {
+                    noti.add(n);
+                  }
+                }
+
+                widget.event.listNotifi = noti;
+
                 Navigator.pop(context);
               },
               child: Text('Potwierdź'),

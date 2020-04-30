@@ -11,7 +11,6 @@ class Event {
    String color;
    String description;
 
-   static int MAXidNOTIFI;
 
    List<Notifi> listNotifi;
 
@@ -24,11 +23,11 @@ class Event {
     this.color,
     this.description,
     this.listNotifi,
-  });
+  }){
+    listNotifi = List();
+  }
 
-   void setMAXidNOTIFI(int id){
-     MAXidNOTIFI = id;
-   }
+
 }
 
 

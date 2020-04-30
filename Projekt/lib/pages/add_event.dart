@@ -8,7 +8,6 @@ import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
-import 'package:pageview/pages/add_cycle.dart';
 import 'add_notification.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -32,21 +31,17 @@ class _AddEventState extends State<AddEvent> {
   String _time1;
   String _time2;
   String _notification;
-  String _cycle ;
   DateTime _start ;
   DateTime _end ;
 
   int idNotification = 0;
 
 
-  Event newevent;
+  Event newevent  = Event();
 
   @override
   void initState() {
 
-    newevent = Event(
-      id: 0,
-    );
 
     _name = (widget.update == null)? null : widget.update.name;
     _decription = (widget.update == null)? null : widget.update.description;
@@ -54,7 +49,6 @@ class _AddEventState extends State<AddEvent> {
     _time1 = (widget.update == null)?"Nie wybrano godziny rozpoczęcia" : DateFormat("hh:mm").format(widget.update.beginTime);
     _time2 = (widget.update == null)?"Nie wybrano godziny zakończenia" :  DateFormat("hh:mm").format(widget.update.endTime);
     _notification =(widget.update == null)? "Nie wybrano powiadomień" : "ErrorUpdate";
-    _cycle = (widget.update == null)?"Wydarzenie nie jest cykliczne" : "ErrorUpdate";
     _start = (widget.update == null)?new DateTime.now() : widget.update.beginTime;
     _end = (widget.update == null)?new DateTime.now().add(new Duration(hours: 1)) : widget.update.endTime;
 
@@ -315,40 +309,7 @@ class _AddEventState extends State<AddEvent> {
               SizedBox(
                 height: 20.0,
               ),
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                elevation: 4.0,
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddCycle()));
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.timelapse,
-                                  size: 18.0,
-                                ),
-                                Text(" $_cycle"),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                color: Colors.amber[400],
-              ),
+
               SizedBox(
                 height: 20.0,
               ),
@@ -393,12 +354,11 @@ class _AddEventState extends State<AddEvent> {
                                 );
                               });
                         
-                        } /*else {
-
-                          if(widget.update != null){
-
+                        }else {
+                          if (widget.update != null) {
                             widget.update.name = controllerName.value.text;
-                            widget.update.description = controllerDec.value.text;
+                            widget.update.description = controllerDec.value
+                                .text;
 
                             DateTime t1 = DateTime.parse("$_date $_time1");
                             DateTime t2 = DateTime.parse("$_date $_time2");
@@ -407,11 +367,10 @@ class _AddEventState extends State<AddEvent> {
 
                             EventHelper.update(widget.update);
                             Navigator.of(context).pop();
-
-                          }else
-                            {
+                          } else {
                             newevent.name = controllerName.value.text;
-                            newevent.description = controllerDec.value.text; //<- tu jest problem
+                            newevent.description = controllerDec.value
+                                .text; //<- tu jest problem
                             DateTime t1 = DateTime.parse("$_date $_time1");
                             DateTime t2 = DateTime.parse("$_date $_time2");
                             newevent.beginTime = t1;
@@ -425,10 +384,9 @@ class _AddEventState extends State<AddEvent> {
 //                            print(newevent.description)
                             EventHelper.add(newevent);
                             Navigator.of(context).pop();
-                         }
-
-                        }*/
-                        };
+                          }
+                        }
+                        }
                       },
                     ),
                   ],

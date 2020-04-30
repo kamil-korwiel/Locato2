@@ -15,7 +15,7 @@ class EventHelper {
     //print("LOLLLLLLLL: $pickedIdEvent");
     IdEvent = IdEvent == null ? 0 : IdEvent;
     dbHelper.insert('Wydarzenie', {
-      'ID_Wydarzenie': IdEvent + 1,
+      'ID_Wydarzenie': ++IdEvent ,
       'Nazwa': newEvent.name,
       'Termin_od': DateFormat("yyyy-MM-dd hh:mm").format(newEvent.beginTime),
       'Termin_do': DateFormat("yyyy-MM-dd hh:mm").format(newEvent.endTime),
@@ -24,10 +24,10 @@ class EventHelper {
       'Opis': newEvent.description,
     });
 
-    for(Notifi n in newEvent.listNotifi){
-      n.idEvent = IdEvent;
-      NotifiHelper.add(n);
-    }
+
+      newEvent.listNotifi.forEach((n) => n.idEvent = IdEvent);
+      NotifiHelper.addList(newEvent.listNotifi);
+
 
   }
 
@@ -41,15 +41,14 @@ class EventHelper {
       'Opis': updatedEvent.description,
     });
 
-    for(Notifi n in updatedEvent.listNotifi){
-      n.idEvent = updatedEvent.id;
-      NotifiHelper.add(n);
-    }
+    updatedEvent.listNotifi.forEach((n) => n.idEvent = updatedEvent.id);
+    NotifiHelper.addList(updatedEvent.listNotifi);
 
   }
 
   static Future<void> delete(int pickedIdEvent) async {
     dbHelper.delete('Wydarzenie', 'ID_Wydarzenie', pickedIdEvent);
+    NotifiHelper.deleteEventID(pickedIdEvent);
   }
 
   static Future<List<Event>> lists() async {
