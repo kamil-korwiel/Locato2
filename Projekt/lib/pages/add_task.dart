@@ -35,6 +35,8 @@ class _AddTaskState extends State<AddTask> {
   String _group ;
   String _notification;
   String _localization;
+  Color date_color;
+  Color time1_color;
 
   int _idNotification = 0;
   int _idLocalizaton = 0;
@@ -52,10 +54,14 @@ class _AddTaskState extends State<AddTask> {
     _decription = (widget.update == null)? null : widget.update.description;
     _date = (widget.update == null)? "Nie wybrano daty" : DateFormat("yyyy-MM-dd").format(widget.update.endTime);
     _time1 = (widget.update == null)?"Nie wybrano godziny rozpoczęcia" : DateFormat("hh:mm").format(widget.update.endTime);
-    _group = (widget.update == null)? "Nie wybrano grupy": "ErrorUpdate";
-    _notification = (widget.update == null)? "Nie wybrano powiadomień": "ErrorUpdate";
-    _localization = (widget.update ==null)?"Nie wybrano lokalizacji" : "ErrorUpdate";
+    _group = (widget.update == null)? "Grupa": "ErrorUpdate";
+    _notification = (widget.update == null)? "Powiadomienia": "ErrorUpdate";
+    _localization = (widget.update ==null)?"Lokalizacja" : "ErrorUpdate";
     _end = (widget.update == null)?new DateTime.now(): widget.update.endTime;
+
+
+    date_color = Colors.white;
+    time1_color = Colors.white;
 
     super.initState();
   }
@@ -128,10 +134,13 @@ class _AddTaskState extends State<AddTask> {
                                 Icon(
                                   Icons.date_range,
                                   size: 18.0,
+                                  color: date_color,
                                 ),
                                 Text(
                                   " $_date",
-                                  style: TextStyle(),
+                                  style: TextStyle(
+                                    color: date_color,
+                                  ),
                                 ),
                               ],
                             ),
@@ -185,10 +194,13 @@ class _AddTaskState extends State<AddTask> {
                                 Icon(
                                   Icons.access_time,
                                   size: 18.0,
+                                  color: time1_color,
                                 ),
                                 Text(
                                   " $_time1",
-                                  style: TextStyle(),
+                                  style: TextStyle(
+                                    color: time1_color,
+                                  ),
                                 ),
                               ],
                             ),
@@ -347,7 +359,12 @@ class _AddTaskState extends State<AddTask> {
                     RaisedButton(
                       child: Text("Dodaj"),
                       onPressed: () {
-                        /*if(widget.update != null){
+                        if(_formKey.currentState.validate()){
+                        if(_date != "Nie wybrano daty" && _time1 != "Nie wybrano godziny rozpoczęcia"){
+                          date_color = Colors.white;
+                          time1_color = Colors.white;
+                          setState(() {});
+                        if(widget.update != null){
                           widget.update.name = controllerName.value.text;
                           DateTime t1 = DateTime.parse("$_date $_time1");
                           widget.update.endTime = t1;
@@ -372,12 +389,27 @@ class _AddTaskState extends State<AddTask> {
 //                          print(newtask.endTime);
 //                          print(newtask.idGroup);
 //                          print(newtask.description);*/
-                          _formKey.currentState.validate();
+                          
                           //TaskHelper.add(newtask);
                          // Navigator.of(context).pop();
-                        //}
-
-                      },
+                        }
+                      }else{
+                        if(_date == "Nie wybrano daty") date_color = Colors.red;
+                            else date_color = Colors.white;
+                            if(_time1 == "Nie wybrano godziny rozpoczęcia") time1_color = Colors.red;
+                            else time1_color = Colors.white;                   
+                            setState(() { });
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Błędne dane"),
+                                  content: Text(
+                                      "Wprowadź niezbędne dane"),
+                                );
+                              }); 
+                      }
+                      }},
                     ),
                   ],
                   alignment: MainAxisAlignment.center,

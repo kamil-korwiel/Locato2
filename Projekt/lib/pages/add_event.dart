@@ -33,6 +33,9 @@ class _AddEventState extends State<AddEvent> {
   String _localization;
   DateTime _start ;
   DateTime _end ;
+  Color date_color;
+  Color time1_color;
+  Color time2_color;
 
   int idNotification = 0;
 
@@ -46,13 +49,16 @@ class _AddEventState extends State<AddEvent> {
     _date = (widget.update == null)? "Nie wybrano daty" : DateFormat("yyyy-MM-dd").format(widget.update.beginTime);
     _time1 = (widget.update == null)?"Nie wybrano godziny rozpoczęcia" : DateFormat("hh:mm").format(widget.update.beginTime);
     _time2 = (widget.update == null)?"Nie wybrano godziny zakończenia" :  DateFormat("hh:mm").format(widget.update.endTime);
-    _notification =(widget.update == null)? "Nie wybrano powiadomień" : "ErrorUpdate";
-    _cycle = (widget.update == null)?"Wydarzenie nie jest cykliczne" : "ErrorUpdate";
+    _notification =(widget.update == null)? "Powiadomienia" : "ErrorUpdate";
+    //_cycle = (widget.update == null)?"Wydarzenie nie jest cykliczne" : "ErrorUpdate";
     _start = (widget.update == null)?new DateTime.now() : widget.update.beginTime;
     _end = (widget.update == null)?new DateTime.now().add(new Duration(hours: 1)) : widget.update.endTime;
 
     controllerName = TextEditingController();
     controllerDec = TextEditingController();
+    date_color = Colors.white;
+    time1_color = Colors.white;
+    time2_color = Colors.white;
 
     if(widget.update != null){
       controllerName = TextEditingController(text:_name);
@@ -130,10 +136,14 @@ class _AddEventState extends State<AddEvent> {
                                 Icon(
                                   Icons.date_range,
                                   size: 18.0,
+                                  color: date_color,
                                 ),
                                 Text(
                                   "$_date",
-                                  style: TextStyle(),
+                                  style: TextStyle(
+                                    color: date_color,
+                                  ),
+                                  
                                 ),
                               ],
                             ),
@@ -188,10 +198,13 @@ class _AddEventState extends State<AddEvent> {
                                 Icon(
                                   Icons.access_time,
                                   size: 18.0,
+                                  color: time1_color,
                                 ),
                                 Text(
                                   " $_time1",
-                                  style: TextStyle(),
+                                  style: TextStyle(
+                                    color: time1_color,
+                                  ),
                                 ),
                               ],
                             ),
@@ -222,7 +235,7 @@ class _AddEventState extends State<AddEvent> {
                       showTitleActions: true,
                       showSecondsColumn: false, onConfirm: (time) {
                     print('confirm $time');
-                   // _end = time;
+                    _end = time;
 
                     String hour =
                         time.hour < 10 ? '0${time.hour}' : '${time.hour}';
@@ -251,10 +264,13 @@ class _AddEventState extends State<AddEvent> {
                                 Icon(
                                   Icons.access_time,
                                   size: 18.0,
+                                  color: time2_color,
                                 ),
                                 Text(
                                   " $_time2",
-                                  style: TextStyle(),
+                                  style: TextStyle(
+                                    color: time2_color,
+                                  ),
                                 ),
                               ],
                             ),
@@ -305,7 +321,7 @@ class _AddEventState extends State<AddEvent> {
                 ),
                 color: Colors.amber[400],
               ),
-              SizedBox(
+              /*SizedBox(
                 height: 20.0,
               ),
               RaisedButton(
@@ -341,7 +357,7 @@ class _AddEventState extends State<AddEvent> {
                   ),
                 ),
                 color: Colors.amber[400],
-              ),
+              ),*/
               SizedBox(
                 height: 20.0,
               ),
@@ -373,8 +389,8 @@ class _AddEventState extends State<AddEvent> {
                     RaisedButton(
                       child: Text("Dodaj"),
                       onPressed: () {
-                        if(_formKey.currentState.validate()){
-                        if (_end.isBefore(_start)) {
+                       
+                      if (_end.isBefore(_start)) {
                           print("ERROR");
                           showDialog(
                               context: context,
@@ -385,10 +401,16 @@ class _AddEventState extends State<AddEvent> {
                                       "Godzina zakończenia nie może być przed rozpoczęciem."),
                                 );
                               });
+                      }
+                      else {
+                        if(_formKey.currentState.validate()){
                         
-                        } /*else {
-
-                          if(widget.update != null){
+                          if(_date != "Nie wybrano daty" && _time1 != "Nie wybrano godziny rozpoczęcia" && _time2 != "Nie wybrano godziny zakończenia"){
+                          date_color = Colors.white;
+                          time1_color = Colors.white;
+                          time2_color = Colors.white;
+                          setState(() {});
+                          if(widget.update != null ){
 
                             widget.update.name = controllerName.value.text;
                             widget.update.description = controllerDec.value.text;
@@ -416,9 +438,27 @@ class _AddEventState extends State<AddEvent> {
                             EventHelper.add(newevent);
                             Navigator.of(context).pop();
                          }
-
-                        }*/
-                        };
+                          }
+                          else{
+                            if(_date == "Nie wybrano daty") date_color = Colors.red;
+                            else date_color = Colors.white;
+                            if(_time1 == "Nie wybrano godziny rozpoczęcia") time1_color = Colors.red;
+                            else time1_color = Colors.white;
+                            if(_time2 == "Nie wybrano godziny zakończenia") time2_color = Colors.red;
+                            else time2_color = Colors.white;
+                            setState(() { });
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Błędne dane"),
+                                  content: Text(
+                                      "Wprowadź niezbędne dane"),
+                                );
+                              }); 
+                          }
+                        }
+                        }
                       },
                     ),
                   ],
