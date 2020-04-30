@@ -1,33 +1,32 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Classes/Group.dart';
+import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/add_task.dart';
 
 class AddGroup extends StatefulWidget {
   @override
   _AddGroupState createState() => _AddGroupState();
 
-  Group group;
-  AddGroup({this.group});
+  Task task;
+
+  AddGroup({@required this.task});
 }
 
 
 class _AddGroupState extends State<AddGroup> {
   final _text = TextEditingController();
 
- // Group newgroup = Group();
+
 
   @override
   void initState() {
     super.initState();
+    print(widget.task.idGroup);
   }
 
-  String _value;
-  List<Color> _colors = [Colors.grey, Colors.amber[400]];
-  List<Group> grouplist = [];
-  int currentIndex = 0;
-  int length = 0;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,9 +52,7 @@ class _AddGroupState extends State<AddGroup> {
             ),
             new RaisedButton(
               onPressed: () {
-                grouplist.add(new Group(id: currentIndex, name:_text.text, isSelected: true));
-                currentIndex++;
-                 length = grouplist.length;
+                GroupHelper.add(new Group(name: _text.text));
                 _text.clear();
                 setState(() {});
               },
@@ -64,48 +61,61 @@ class _AddGroupState extends State<AddGroup> {
             SizedBox(
               height: 10.0,
             ),
-            new ListView.builder(
-                shrinkWrap: true,
-                itemCount: length,
-                itemBuilder: (context, index) {
-                
-                  return RaisedButton(
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 50.0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
+            FutureBuilder(
+                future: GroupHelper.lists(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    List<Group> list = List();
+
+                    if (snapshot.data != null) {
+                      list = snapshot.data;
+                    }
+                    return new ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          return RaisedButton(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 50.0,
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
                                   children: <Widget>[
-                                    Icon(
-                                      Icons.account_circle,
-                                      size: 18.0,
+                                    Row(
+                                      children: <Widget>[
+                                        Container(
+                                          child: Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.account_circle,
+                                                size: 18.0,
+                                              ),
+                                              Text(" " + list[index].name),
+                                            ],
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    Text(" " + grouplist[index].name),
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    color: grouplist[index].isSelected ? Colors.amber[400] : Colors.grey,
-                    onPressed: () => setState(() { 
-                      if(grouplist[index].isSelected == false){
-                        for(int i = 0; i < grouplist.length; i++) grouplist[i].isSelected = false;
-                        grouplist[index].isSelected = true;
-                      }
-                      else
-                      grouplist[index].isSelected = false;
-                      })
-              );
-                    }),
-                
+                              ),
+                              color: list[index].id == widget.task.idGroup ? Colors
+                                  .amber[400] : Colors.grey,
+
+                              onPressed: () =>
+                                  setState(() {
+                                    widget.task.idGroup = list[index].id;
+                                  })
+                          );
+                        });
+                  }
+                  else {
+                    return Container();
+                  }
+                }
+            ),
+
             SizedBox(
               height: 10.0,
             ),

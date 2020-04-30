@@ -1,19 +1,19 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/pages/add_event.dart';
 import 'package:pageview/pages/add_task.dart';
-import 'package:pageview/pages/calendar.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/grouptaskpage.dart';
-import 'Baza_danych/event_helper.dart';
-import 'Classes/Event.dart';
-import 'Classes/Group.dart';
 import 'pages/add_location2.dart';
-
 import 'Baza_danych/database_helper.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  // TestWidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
+  runApp(MyApp());
+}
 
 MaterialColor myGrey = const MaterialColor(0xFF333333, const {
   50: const Color(0xFF333333),

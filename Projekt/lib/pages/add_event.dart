@@ -4,8 +4,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pageview/Baza_danych/database_helper.dart';
 import 'package:pageview/Baza_danych/event_helper.dart';
+import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
+import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/pages/add_cycle.dart';
 import 'add_notification.dart';
 
@@ -29,17 +32,21 @@ class _AddEventState extends State<AddEvent> {
   String _time2;
   String _notification;
   String _cycle ;
-  String _localization;
   DateTime _start ;
   DateTime _end ;
 
   int idNotification = 0;
 
 
-  Event newevent = new Event();
+  Event newevent;
 
   @override
   void initState() {
+
+    newevent = Event(
+      id: 0,
+    );
+
     _name = (widget.update == null)? null : widget.update.name;
     _decription = (widget.update == null)? null : widget.update.description;
     _date = (widget.update == null)? "Nie wybrano daty" : DateFormat("yyyy-MM-dd").format(widget.update.beginTime);
@@ -274,7 +281,7 @@ class _AddEventState extends State<AddEvent> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AddNotification()));
+                          builder: (context) => AddNotificationEvent(widget.update == null ? newevent : widget.update)));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -393,18 +400,21 @@ class _AddEventState extends State<AddEvent> {
                             EventHelper.update(widget.update);
                             Navigator.of(context).pop();
 
-                          }else{
+                          }else
+                            {
                             newevent.name = controllerName.value.text;
-                            newevent.description = controllerDec.value.text;//<- tu jest problem
+                            newevent.description = controllerDec.value.text; //<- tu jest problem
                             DateTime t1 = DateTime.parse("$_date $_time1");
                             DateTime t2 = DateTime.parse("$_date $_time2");
                             newevent.beginTime = t1;
                             newevent.endTime = t2;
+
+
 //                            print(newevent.name);
 //                            print(newevent.beginTime);
 //                            print(newevent.endTime);
 //                            print(newevent.cycle);
-//                            print(newevent.description);
+//                            print(newevent.description)
                             EventHelper.add(newevent);
                             Navigator.of(context).pop();
                           }

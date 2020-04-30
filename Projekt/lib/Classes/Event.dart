@@ -1,3 +1,6 @@
+import 'package:pageview/Classes/Notifi.dart';
+
+import 'Notification.dart';
 
 class Event {
    int id;
@@ -7,7 +10,10 @@ class Event {
    String cycle;
    String color;
    String description;
-   int idNotification;
+
+   static int MAXidNOTIFI;
+
+   List<Notifi> listNotifi;
 
   Event({
     this.id,
@@ -17,8 +23,12 @@ class Event {
     this.cycle,
     this.color,
     this.description,
-    this.idNotification
+    this.listNotifi,
   });
+
+   void setMAXidNOTIFI(int id){
+     MAXidNOTIFI = id;
+   }
 }
 
 

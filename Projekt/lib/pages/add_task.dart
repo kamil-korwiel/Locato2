@@ -25,10 +25,10 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-  final controllerName = TextEditingController();
-  final controllerDesc = TextEditingController();
+  TextEditingController controllerName = TextEditingController();
+  TextEditingController controllerDesc = TextEditingController();
 
-
+  int id;
   String _name;
   String _decription;
   String _date ;
@@ -37,16 +37,15 @@ class _AddTaskState extends State<AddTask> {
   String _notification;
   String _localization;
 
-  int _idNotification = 0;
-  int _idLocalizaton = 0;
-  int _idGroup = 0;
 
-  Task newtask = Task();
+
+  Task newtask;
 
   DateTime _end ;
 
   @override
   void initState() {
+
     _name = (widget.update == null)? null : widget.update.name;
     _decription = (widget.update == null)? null : widget.update.description;
     _date = (widget.update == null)? "Nie wybrano daty" : DateFormat("yyyy-MM-dd").format(widget.update.endTime);
@@ -56,6 +55,19 @@ class _AddTaskState extends State<AddTask> {
     _localization = (widget.update ==null)?"Nie wybrano lokalizacji" : "ErrorUpdate";
     _end = (widget.update == null)?new DateTime.now(): widget.update.endTime;
 
+
+    newtask = Task(
+      name: "",
+      idGroup: 0 ,
+      idLocalizaton: 0,
+      description: "",
+      done: false,
+    );
+
+    if(widget.update != null){
+      controllerName = TextEditingController(text:_name);
+      controllerDesc = TextEditingController(text:_decription);
+    }
     super.initState();
   }
 
@@ -83,7 +95,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
                 keyboardType: TextInputType.text,
-                initialValue: _name,
               ),
               SizedBox(
                 height: 10.0,
@@ -206,7 +217,7 @@ class _AddTaskState extends State<AddTask> {
                 elevation: 4.0,
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddGroup()));
+                      MaterialPageRoute(builder: (context) => AddGroup(task: widget.update == null ? newtask : widget.update,)));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -223,7 +234,8 @@ class _AddTaskState extends State<AddTask> {
                                   Icons.account_circle,
                                   size: 18.0,
                                 ),
-                                Text(" $_group"),
+                                Text("$_group"),
+                                //TODO: Do Poprawki
                               ],
                             ),
                           )
@@ -242,10 +254,7 @@ class _AddTaskState extends State<AddTask> {
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddNotification()));
+//                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotificationEvent()));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -325,7 +334,6 @@ class _AddTaskState extends State<AddTask> {
                   ),
                 ),
                 keyboardType: TextInputType.text,
-                initialValue: _decription,
               ),
               SizedBox(
                 height: 10.0,
@@ -351,7 +359,7 @@ class _AddTaskState extends State<AddTask> {
 //                          widget.update.idGroup = _idGroup;
 //                          widget.update.idLocalizaton = _idLocalizaton;
 
-                          //TODO: Update grupe
+
                           TaskHelper.update(widget.update);
                           Navigator.of(context).pop();
                         }else{
@@ -359,9 +367,11 @@ class _AddTaskState extends State<AddTask> {
                           newtask.description = controllerDesc.text;
                           newtask.endTime =  DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time1);
 
-                          newtask.idNotification = _idNotification;
-                          newtask.idGroup = _idGroup;
-                          newtask.idLocalizaton = _idLocalizaton;
+                          print(newtask.name + " " + "Opis: " + newtask.description+ "Group: "+ newtask.idGroup.toString());
+
+//                          newtask.idNotification = _idNotification;
+//                          newtask.idGroup = _idGroup;
+//                          newtask.idLocalizaton = _idLocalizaton;
                           //TODO: Dodać grupe
 //                          print(newtask.name);
 //                          print(newtask.endTime);

@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:pageview/Classes/Notification.dart';
 import 'package:pageview/Classes/Task.dart';
 
 import 'database_helper.dart';
@@ -13,44 +14,57 @@ class TaskHelper {
     dbHelper.insert('Task', {
       'ID_Task': IdTask + 1,
       'Nazwa': newTask.name,
-      'Zrobione': newTask.done,
+      'Zrobione': newTask.done ? 1 : 0,
       'Do_Kiedy': DateFormat("yyyy-MM-dd hh:mm").format(newTask.endTime),
       'Opis': newTask.description,
       'Lokalizacja': newTask.idLocalizaton,
-      'Powiadomienie': newTask.idNotification,
       'Grupa': newTask.idGroup,
     });
+
+
   }
 
   static Future<void> update( updatedTask ) async {
-    dbHelper.update('Task', 'ID_Task', updatedTask.id,{
+    dbHelper.update('Task', 'ID_Task', updatedTask.id, {
       'Nazwa': updatedTask.name,
-      'Zrobione': updatedTask.done,
-      'Do_Kiedy': updatedTask.endTime,
+      'Zrobione': updatedTask.done ? 1 : 0,
+      'Do_Kiedy': DateFormat("yyyy-MM-dd hh:mm").format(updatedTask.endTime),
       'Opis': updatedTask.description,
-      'Powiadomienie': updatedTask.idNotification,
       'Lokalizacja': updatedTask.idLocalizaton,
       'Grupa': updatedTask.idGroup,
     });
   }
 
+
   static Future<void> delete(int pickedIdTask,) async {
     dbHelper.delete('Task', 'ID_Task', pickedIdTask);
+    dbHelper.delete('Powiadomienia_Taskow', 'ID_Task', pickedIdTask);
   }
 
 
 
+  List<MyNotification> listofNotifi(int idTask)  {
+    dbHelper.queryIdNotifi(idTask).then((maps) {
+      return List.generate(maps.length, (i) {
+        return MyNotification(
+          id: maps[i]['ID_Powiadomienia'],
+          when: new DateFormat("dd hh:mm").parse(maps[i]['Czas']),
+        );
+      });
+    });
+  }
+
   static Future<List<Task>> lists() async {
     final List<Map<String, dynamic>> maps = await dbHelper.queryAllRows('Task');
+
     return List.generate(maps.length, (i) {
       return Task(
         id: maps[i]['ID_Task'],
-        done: maps[i]['Zrobione'],
+        done: maps[i]['Zrobione']  == 1 ? true : false,
         name: maps[i]['Nazwa'],
         endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
         description: maps[i]['Opis'],
         idLocalizaton: maps[i]['Lokalizacja'],
-        idNotification: maps[i]['Powiadomienie'],
         idGroup: maps[i]['Grupa'],
       );
     });
@@ -61,12 +75,11 @@ class TaskHelper {
     return List.generate(maps.length, (i) {
       return Task(
         id: maps[i]['ID_Task'],
-        done: maps[i]['Zrobione'],
+        done: maps[i]['Zrobione']  == 1 ? true : false,
         name: maps[i]['Nazwa'],
         endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
         description: maps[i]['Opis'],
         idLocalizaton: maps[i]['Lokalizacja'],
-        idNotification: maps[i]['Powiadomienie'],
         idGroup: maps[i]['Grupa'],
       );
     });

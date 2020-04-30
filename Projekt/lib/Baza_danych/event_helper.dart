@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
+import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
+import 'package:pageview/Classes/Notifi.dart';
 
 import 'database_helper.dart';
 
@@ -18,10 +20,15 @@ class EventHelper {
       'Termin_od': DateFormat("yyyy-MM-dd hh:mm").format(newEvent.beginTime),
       'Termin_do': DateFormat("yyyy-MM-dd hh:mm").format(newEvent.endTime),
       'Cykl': newEvent.cycle,
-      'Powiadomienie':newEvent.idNotification,
       'Kolor': newEvent.color,
       'Opis': newEvent.description,
     });
+
+    for(Notifi n in newEvent.listNotifi){
+      n.idEvent = IdEvent;
+      NotifiHelper.add(n);
+    }
+
   }
 
   static Future<void> update(Event updatedEvent) async {
@@ -30,10 +37,15 @@ class EventHelper {
       'Termin_od': DateFormat("yyyy-MM-dd hh:mm").format(updatedEvent.beginTime),
       'Termin_do': DateFormat("yyyy-MM-dd hh:mm").format(updatedEvent.endTime),
       'Cykl': updatedEvent.cycle,
-      'Powiadomienie':updatedEvent.idNotification,
       'Kolor': updatedEvent.color,
       'Opis': updatedEvent.description,
     });
+
+    for(Notifi n in updatedEvent.listNotifi){
+      n.idEvent = updatedEvent.id;
+      NotifiHelper.add(n);
+    }
+
   }
 
   static Future<void> delete(int pickedIdEvent) async {
@@ -51,7 +63,6 @@ class EventHelper {
         endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Termin_do']),
         cycle: maps[i]['Cykl'],
         color: maps[i]['Kolor'],
-        idNotification: maps[i]['Powiadomienie'],
         description: maps[i]['Opis'],
       );
     });
@@ -67,7 +78,6 @@ class EventHelper {
         endTime: maps[i]['Termin_do'],
         cycle: maps[i]['Cykl'],
         color: maps[i]['Kolor'],
-        idNotification: maps[i]['Powiadomienie'],
         description: maps[i]['Opis'],
       );
     });

@@ -31,6 +31,7 @@ dependencies:
   flutter_datetime_picker: ^1.2.5
   date_range_picker: ^1.0.5
   flutter_local_notifications: ^0.6.0
+  android_alarm_manager: ^0.4.5+9
 
   flutter:
     sdk: flutter

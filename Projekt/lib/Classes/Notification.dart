@@ -5,12 +5,14 @@ class MyNotification {
    int id;
    String nazwa;
    DateTime when;
+   int idOwner;
    bool isSelected;
 
   MyNotification({
     this.id,
     this.when,
     this.nazwa = "",
+    this.idOwner,
     this.isSelected  = false,
   });
 

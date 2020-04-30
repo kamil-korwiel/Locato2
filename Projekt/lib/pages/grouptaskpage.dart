@@ -6,6 +6,8 @@ import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/Items/ItemTask.dart';
 import 'dart:async';
 
+import 'add_task.dart';
+
 class GroupTaskPage extends StatefulWidget {
 
   @override
@@ -107,6 +109,7 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
                     fontSize: 17),
               ),
               children: _buildListofTask(list),  //<=
+
             ),
           ],
         );
@@ -121,7 +124,14 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
     List<Widget> listOfWidget  = List();
 
     for (Task task in listOfTask) {
-        listOfWidget.add(ItemTask(task));
+        listOfWidget.add(ItemTask(task,
+        onPressedDelete: (){
+          TaskHelper.delete(task.id);
+          setState(() {});
+        },
+        onPressedEdit: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTask(update: task)));
+        },));
     }
 
     return listOfWidget;

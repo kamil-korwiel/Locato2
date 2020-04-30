@@ -1,12 +1,20 @@
+import 'package:pageview/Classes/Notification.dart';
+
+import 'Notifi.dart';
+
 class Task {
   int id;
   String name;
   bool done;
   DateTime endTime;
   String description;
-  int idNotification;
   int idLocalizaton;
   int idGroup;
+
+  static int MAXidNOTIFI;
+
+  List<Notifi> listNotifi;
+
 
   Task({
     this.id,
@@ -15,7 +23,12 @@ class Task {
     this.endTime,
     this.description,
     this.idLocalizaton,
-    this.idNotification,
     this.idGroup,
+    this.listNotifi,
   });
+
+  void setMAXidNOTIFI(int id){
+    MAXidNOTIFI = id;
+  }
+
 }

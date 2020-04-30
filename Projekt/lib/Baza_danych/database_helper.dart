@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -29,7 +27,7 @@ class DatabaseHelper {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = documentsDirectory.path + _databaseName;
     print("path: " + path);
-    //deleteDatabase(path);
+    deleteDatabase(path);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
@@ -45,15 +43,19 @@ class DatabaseHelper {
            ''');
     await db.execute('''
             INSERT INTO Grupa (ID_Grupa,Nazwa_grupa,Ile_wykonane)
-    VALUES (1,'Brak Grupy',0)
+    VALUES (0,'Brak Grupy',0)
     ''');
 
+
     await db.execute('''
-           CREATE TABLE Powiadomienia (
+           CREATE TABLE Powiadomienia(
      ID_Powiadomienia     INTEGER   PRIMARY KEY,
+     ID_Task              INTEGER NOT NULL,
+     ID_Event              INTEGER NOT NULL,
      Czas                 TEXT    DEFAULT NULL
  )
            ''');
+
 
     await db.execute('''
            CREATE TABLE Lokalizacja (
@@ -73,10 +75,7 @@ class DatabaseHelper {
      Do_Kiedy       TEXT        DEFAULT NULL,
      Opis           TEXT        DEFAULT NULL,
      Lokalizacja    INTEGER     DEFAULT NULL,
-     Powiadomienie  INTEGER     DEFAULT NULL,
-     Grupa          INTEGER     DEFAULT NULL,
-     FOREIGN KEY(Grupa) REFERENCES Grupa(ID_Grupa),
-     FOREIGN KEY(Lokalizacja) REFERENCES Lokalizacja(ID_Lokalizacji)
+     Grupa          INTEGER     DEFAULT NULL
  )
            ''');
 //    --FOREIGN KEY(Grupa) REFERENCES Grupa(ID_Grupa),
@@ -90,9 +89,7 @@ class DatabaseHelper {
      Termin_do     TEXT       DEFAULT NULL,
      Opis          TEXT       DEFAULT NULL,
      Cykl          VARCHAR(2) DEFAULT NULL,
-     Powiadomienie INTEGER    DEFAULT NULL,
-     Kolor         TEXT       DEFAULT NULL,
-     FOREIGN KEY(Powiadomienie) REFERENCES Powiadomienia(ID_Powiadomienia)
+     Kolor         TEXT       DEFAULT NULL
  )
            '''); //D, D2, ... , D7,W,M,Y
 //    FOREIGN KEY(Powiadomienie) REFERENCES Powiadomienia(ID_Powiadomienia),
@@ -108,9 +105,14 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
+  Future<List<Map<String, dynamic>>> queryIdNotifi(int id) async {
+    Database db = await instance.database;
+    return await db.rawQuery('SELECT * FROM Powiadomienia_Wydarzen WHERE $id');
+  }
+
   Future<List<Map<String, dynamic>>> queryIdRowsTask(int id) async {
     Database db = await instance.database;
-    return await db.rawQuery('SELECT * FROM Task WHERE ID_Task=$id');
+    return await db.rawQuery('SELECT * FROM Task WHERE Grupa=$id');
   }
 
   Future<List<Map<String, dynamic>>> queryEventWeekend() async {
@@ -124,6 +126,14 @@ class DatabaseHelper {
     return await db.rawQuery(
         "SELECT * FROM Wydarzenie WHERE date(Termin_od) = date('now','+$day day')");
   }
+
+  Future<List<Map<String, int>>> queryTaskNotifiId(int id) async {
+    Database db = await instance.database;
+    return await db.rawQuery(
+        "SELECT * FROM Powiadomienia WHERE ID_Task= $id");
+  }
+
+
 
   Future<int> query(String q) async {
     Database db = await instance.database;
