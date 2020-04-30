@@ -1,6 +1,5 @@
 //import 'dart:html';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +10,8 @@ import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/pages/add_cycle.dart';
 import 'add_notification.dart';
+
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 class AddEvent extends StatefulWidget {
   @override
@@ -76,21 +77,23 @@ class _AddEventState extends State<AddEvent> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Container(
+        child: Form(
+          key: _formKey,
           child: ListView(
-            //mainAxisSize: MainAxisSize.max,
-            //mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new TextFormField(
+                new TextFormField(
                 controller: controllerName,
                 decoration: new InputDecoration(
                   labelText: "Nazwa",
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(0.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  hintText: "Wpisz nazwę swojego wydarzenia"  
                 ),
                 keyboardType: TextInputType.text,
+                validator: (val) {
+                if (val.isEmpty) {
+                  return 'Pole nie może być puste!';
+                }
+                return null;
+              },
               ),
               SizedBox(
                 height: 20.0,
@@ -353,12 +356,15 @@ class _AddEventState extends State<AddEvent> {
                 controller: controllerDec,
                 decoration: new InputDecoration(
                   labelText: "Opis",
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(0.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  hintText: "Wpisz opis swojego wydarzenia"
                 ),
                 keyboardType: TextInputType.text,
+                validator: (val) {
+                if (val.isEmpty) {
+                  return 'Pole nie może być puste!';
+                }
+                return null;
+              },
               ),
               SizedBox(
                 height: 20.0,
@@ -374,6 +380,7 @@ class _AddEventState extends State<AddEvent> {
                     RaisedButton(
                       child: Text("Dodaj"),
                       onPressed: () {
+                        if(_formKey.currentState.validate()){
                         if (_end.isBefore(_start)) {
                           print("ERROR");
                           showDialog(
@@ -385,7 +392,8 @@ class _AddEventState extends State<AddEvent> {
                                       "Godzina zakończenia nie może być przed rozpoczęciem."),
                                 );
                               });
-                        } else {
+                        
+                        } /*else {
 
                           if(widget.update != null){
 
@@ -417,9 +425,10 @@ class _AddEventState extends State<AddEvent> {
 //                            print(newevent.description)
                             EventHelper.add(newevent);
                             Navigator.of(context).pop();
-                          }
+                         }
 
-                        }
+                        }*/
+                        };
                       },
                     ),
                   ],
