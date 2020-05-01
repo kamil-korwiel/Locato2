@@ -13,7 +13,6 @@ class AddNotificationTask extends StatefulWidget {
   _AddNotificationTaskState createState() => _AddNotificationTaskState();
 
   Task task;
-
   AddNotificationTask(this.task);
 }
 
@@ -35,13 +34,11 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
           setState(() {});
         }
       });
-
     } else {
       if (widget.task.listNotifi.isNotEmpty) {
         _notifilist = widget.task.listNotifi;
       }
     }
-
 
     super.initState();
   }
@@ -71,96 +68,137 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
             new Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                DropdownButton<String>(
-                  value: _value,
-                  icon: Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  onChanged: (String data) {
-                    setState(() {
-                      _value = data;
-                      getDropDownItem();
-                    });
-                  },
-                  items: unitlist.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                buildCustomDropdownButton(),
+                SizedBox(
+                  width: 20,
                 ),
                 Flexible(
                   child: Form(
                     key: _formKey,
-                    child: TextFormField(
-                      controller: _text,
-                      decoration: new InputDecoration(
-                        labelText: "Nowe powiadomienie",
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return 'Pole nie może być puste!';
-                        }
-                        return null;
-                      },
-                    ),
+                    child: buildCustomTextFieldwithValidation(
+                        holder, "Podaj wartość", _text),
                   ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 10.0,
-            ),
-            new RaisedButton(
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  if (holder == "Minuty") {
-                    czas = int.parse(_text.text);
-                    duration = new Duration(minutes: czas);
-                    name = "$czas minut przed";
-                  }
-                  if (holder == "Godziny") {
-                    czas = int.parse(_text.text);
-                    duration = new Duration(hours: czas);
-                    name = "$czas godzin przed";
-                  }
-                  if (holder == "Dni") {
-                    czas = int.parse(_text.text);
-                    duration = new Duration(days: czas);
-                    name = "$czas dni przed";
-                  }
-                  _notifilist.add(Notifi(duration: duration));
-                  setState(() {});
-                }
-              },
-              child: Text('Dodaj'),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
+            buildSpace(),
+            buildcustomButton("Dodaj", validateAndAdd),
+            buildSpace(),
             ListNotifi(_notifilist),
-            SizedBox(
-              height: 10.0,
-            ),
-            new RaisedButton(
-              onPressed: () {
-                List<Notifi> noti = List();
-
-                for (Notifi n in _notifilist) {
-                  if (n.id == null) {
-                    noti.add(n);
-                  }
-                }
-
-                widget.task.listNotifi = noti;
-
-                Navigator.pop(context);
-              },
-              child: Text('Potwierdź'),
-            ),
+            buildSpace(),
+            buildcustomButton("Potwierdź", confirm)
           ])),
     );
+  }
+
+  Widget buildcustomButton(String text, void action()) {
+    return RaisedButton(
+      onPressed: () {
+        action();
+      },
+      child: Text('$text'),
+    );
+  }
+
+  Widget buildSpace() {
+    return SizedBox(
+      height: 10.0,
+    );
+  }
+
+  Widget buildCustomDropdownButton() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: Colors.amber[400]),
+      ),
+      child: DropdownButton<String>(
+        value: _value,
+        icon: Icon(Icons.arrow_drop_down),
+        iconSize: 24,
+        elevation: 16,
+        onChanged: (String data) {
+          setState(() {
+            _value = data;
+            getDropDownItem();
+          });
+        },
+        items: unitlist.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget buildCustomTextFieldwithValidation(
+      String label, String hint, TextEditingController control) {
+    return TextFormField(
+        controller: control,
+        decoration: new InputDecoration(
+            enabledBorder: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.amberAccent),
+            ),
+            focusedBorder: new OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.amber[400])),
+            border: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            labelText: label,
+            labelStyle: TextStyle(color: Colors.amber[400]),
+            hintText: hint,
+            suffixIcon: IconButton(
+                icon: Icon(Icons.clear, color: Colors.amber[400]),
+                onPressed: () {
+                  control.clear();
+                })),
+        keyboardType: TextInputType.text,
+        validator: (val) {
+          if (val.isEmpty) {
+            return 'Pole nie może być puste!';
+          }
+          return null;
+        });
+  }
+
+  void validateAndAdd() {
+    if (_formKey.currentState.validate()) {
+      if (holder == "Minuty") {
+        czas = int.parse(_text.text);
+        duration = new Duration(minutes: czas);
+        name = "$czas minut przed";
+      }
+      if (holder == "Godziny") {
+        czas = int.parse(_text.text);
+        duration = new Duration(hours: czas);
+        name = "$czas godzin przed";
+      }
+      if (holder == "Dni") {
+        czas = int.parse(_text.text);
+        duration = new Duration(days: czas);
+        name = "$czas dni przed";
+      }
+      _notifilist.add(Notifi(duration: duration));
+      setState(() {});
+    }
+  }
+
+  void confirm() {
+    List<Notifi> noti = List();
+
+    for (Notifi n in _notifilist) {
+      if (n.id == null) {
+        noti.add(n);
+      }
+    }
+    widget.task.listNotifi = noti;
+    Navigator.pop(context);
   }
 }
 
@@ -189,13 +227,12 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
           _notifilist = onList;
           print(_notifilist);
           print(onList);
-         if (widget.event.listNotifi.isNotEmpty) {
-           _notifilist.addAll(widget.event.listNotifi);
-         }
-         setState(() {});
+          if (widget.event.listNotifi.isNotEmpty) {
+            _notifilist.addAll(widget.event.listNotifi);
+          }
+          setState(() {});
         }
       });
-
     } else {
       if (widget.event.listNotifi.isNotEmpty) {
         _notifilist = widget.event.listNotifi;
@@ -230,101 +267,143 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
             new Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                DropdownButton<String>(
-                  value: _value,
-                  icon: Icon(Icons.arrow_drop_down),
-                  iconSize: 24,
-                  elevation: 16,
-                  onChanged: (String data) {
-                    setState(() {
-                      _value = data;
-                      getDropDownItem();
-                    });
-                  },
-                  items: unitlist.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
+                buildCustomDropdownButton(),
                 Flexible(
                   child: Form(
                     key: _formKey,
-                    child: TextFormField(
-                      controller: _text,
-                      decoration: new InputDecoration(
-                        labelText: "Nowe powiadomienie",
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          return 'Pole nie może być puste!';
-                        }
-                        return null;
-                      },
-                    ),
+                    child: buildCustomTextFieldwithValidation(
+                        holder, "Wprowadź wartość", _text),
                   ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 10.0,
-            ),
-            new RaisedButton(
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  if (holder == "Minuty") {
-                    czas = int.parse(_text.text);
-                    duration = new Duration(minutes: czas);
-                    name = "$czas minut przed";
-                  }
-                  if (holder == "Godziny") {
-                    czas = int.parse(_text.text);
-                    duration = new Duration(hours: czas);
-                    name = "$czas godzin przed";
-                  }
-                  if (holder == "Dni") {
-                    czas = int.parse(_text.text);
-                    duration = new Duration(days: czas);
-                    name = "$czas dni przed";
-                  }
-
-                  _notifilist.add(Notifi(duration: duration));
-
-                  print(
-                      "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
-
-                  setState(() {});
-                }
-              },
-              child: Text('Dodaj'),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
+            buildSpace(),
+            buildcustomButton("Dodaj", validateAndAdd),
+            buildSpace(),
             ListNotifi(_notifilist),
-            SizedBox(
-              height: 10.0,
-            ),
-            new RaisedButton(
-              onPressed: () {
-                List<Notifi> noti = List();
-//                widget.event.listNotifi.clear();
-//
-                for (Notifi n in _notifilist) {
-                  if (n.id == null) {
-                    noti.add(n);
-                  }
-                }
-
-                widget.event.listNotifi = noti;
-
-                Navigator.pop(context);
-              },
-              child: Text('Potwierdź'),
-            ),
+            buildSpace(),
+            buildcustomButton("Potwierdz", confirm)
           ])),
     );
   }
+
+  Widget buildcustomButton(String text, void action()) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      elevation: 5.0,
+      onPressed: () {
+        action();
+      },
+      child: Text('$text'),
+    );
+  }
+
+  Widget buildSpace() {
+    return SizedBox(
+      height: 10.0,
+    );
+  }
+
+  Widget buildCustomDropdownButton() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 5.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: Colors.amber[400]),
+      ),
+      child: DropdownButton<String>(
+        value: _value,
+        icon: Icon(Icons.arrow_drop_down),
+        iconSize: 24,
+        elevation: 16,
+        onChanged: (String data) {
+          setState(() {
+            _value = data;
+            getDropDownItem();
+          });
+        },
+        items: unitlist.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget buildCustomTextFieldwithValidation(
+      String label, String hint, TextEditingController control) {
+    return TextFormField(
+        controller: control,
+        decoration: new InputDecoration(
+            enabledBorder: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.amberAccent),
+            ),
+            focusedBorder: new OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.amber[400])),
+            border: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            labelText: label,
+            labelStyle: TextStyle(color: Colors.amber[400]),
+            hintText: hint,
+            suffixIcon: IconButton(
+                icon: Icon(Icons.clear, color: Colors.amber[400]),
+                onPressed: () {
+                  control.clear();
+                })),
+        keyboardType: TextInputType.number,
+        validator: (val) {
+          if (val.isEmpty) {
+            return 'Pole nie może być puste!';
+          }
+          return null;
+        });
+  }
+
+  void validateAndAdd() {
+    if (_formKey.currentState.validate()) {
+      if (holder == "Minuty") {
+        czas = int.parse(_text.text);
+        duration = new Duration(minutes: czas);
+        name = "$czas minut przed";
+      }
+      if (holder == "Godziny") {
+        czas = int.parse(_text.text);
+        duration = new Duration(hours: czas);
+        name = "$czas godzin przed";
+      }
+      if (holder == "Dni") {
+        czas = int.parse(_text.text);
+        duration = new Duration(days: czas);
+        name = "$czas dni przed";
+      }
+
+      _notifilist.add(Notifi(duration: duration));
+
+      print(
+          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
+
+      setState(() {});
+    }
+  }
+
+  void confirm() {
+    List<Notifi> noti = List();
+//                widget.event.listNotifi.clear();
+    for (Notifi n in _notifilist) {
+      if (n.id == null) {
+        noti.add(n);
+      }
+    }
+
+    widget.event.listNotifi = noti;
+
+    Navigator.pop(context);
+  }
+
 }

@@ -8,6 +8,8 @@ import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
+import 'package:pageview/pages/add_group.dart';
+import 'package:pageview/pages/add_localization.dart';
 import 'add_notification.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -31,29 +33,36 @@ class _AddEventState extends State<AddEvent> {
   String _time1;
   String _time2;
   String _notification;
-  DateTime _start ;
-  DateTime _end ;
+  DateTime _start;
+  DateTime _end;
   Color date_color;
   Color time1_color;
   Color time2_color;
 
   int idNotification = 0;
 
-  Event newevent  = Event();
+  Event newevent = Event();
 
   @override
   void initState() {
-
-
-    _name = (widget.update == null)? null : widget.update.name;
-    _decription = (widget.update == null)? null : widget.update.description;
-    _date = (widget.update == null)? "Nie wybrano daty" : DateFormat("yyyy-MM-dd").format(widget.update.beginTime);
-    _time1 = (widget.update == null)?"Nie wybrano godziny rozpoczęcia" : DateFormat("hh:mm").format(widget.update.beginTime);
-    _time2 = (widget.update == null)?"Nie wybrano godziny zakończenia" :  DateFormat("hh:mm").format(widget.update.endTime);
-    _notification =(widget.update == null)? "Powiadomienia" : "ErrorUpdate";
+    _name = (widget.update == null) ? null : widget.update.name;
+    _decription = (widget.update == null) ? null : widget.update.description;
+    _date = (widget.update == null)
+        ? "Nie wybrano daty"
+        : DateFormat("yyyy-MM-dd").format(widget.update.beginTime);
+    _time1 = (widget.update == null)
+        ? "Nie wybrano godziny rozpoczęcia"
+        : DateFormat("HH:mm").format(widget.update.beginTime);
+    _time2 = (widget.update == null)
+        ? "Nie wybrano godziny zakończenia"
+        : DateFormat("HH:mm").format(widget.update.endTime);
+    _notification = (widget.update == null) ? "Powiadomienia" : "ErrorUpdate";
     //_cycle = (widget.update == null)?"Cykl" : "ErrorUpdate";
-    _start = (widget.update == null)?new DateTime.now() : widget.update.beginTime;
-    _end = (widget.update == null)?new DateTime.now().add(new Duration(hours: 1)) : widget.update.endTime;
+    _start =
+        (widget.update == null) ? new DateTime.now() : widget.update.beginTime;
+    _end = (widget.update == null)
+        ? new DateTime.now().add(new Duration(hours: 1))
+        : widget.update.endTime;
 
     controllerName = TextEditingController();
     controllerDec = TextEditingController();
@@ -61,13 +70,12 @@ class _AddEventState extends State<AddEvent> {
     time1_color = Colors.white;
     time2_color = Colors.white;
 
-    if(widget.update != null){
-      controllerName = TextEditingController(text:_name);
-      controllerDec = TextEditingController(text:_decription);
+    if (widget.update != null) {
+      controllerName = TextEditingController(text: _name);
+      controllerDec = TextEditingController(text: _decription);
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,354 +89,30 @@ class _AddEventState extends State<AddEvent> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
-                new TextFormField(
-                controller: controllerName,
-                decoration: new InputDecoration(
-                  labelText: "Nazwa",
-                  hintText: "Wpisz nazwę swojego wydarzenia"  
-                ),
-                keyboardType: TextInputType.text,
-                validator: (val) {
-                if (val.isEmpty) {
-                  return 'Pole nie może być puste!';
-                }
-                return null;
-              },
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                elevation: 4.0,
-                onPressed: () {
-                  DatePicker.showDatePicker(context,
-                      theme: DatePickerTheme(
-                        backgroundColor: Colors.black38,
-                        itemStyle: TextStyle(color: Colors.white),
-                        cancelStyle: TextStyle(color: Colors.amber[400]),
-                        doneStyle: TextStyle(color: Colors.green[400]),
-                        containerHeight: 210.0,
-                      ),
-                      showTitleActions: true,
-                      minTime: DateTime(2000, 1, 1),
-                      maxTime: DateTime(2022, 12, 31),
-                      onConfirm: (date) {
-                    /// tu jest  save data
-                    print('confirm $date');
-                    String month = date.month < 10 ? '0${date.month}' : '${date.month}';
-                    String day = date.day < 10 ? '0${date.day}' : '${date.day}';
-                    _date = '${date.year}-$month-$day';
-                    setState(() {});
-                  }, currentTime: _start, locale: LocaleType.pl);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.date_range,
-                                  size: 18.0,
-                                  color: date_color,
-                                ),
-                                Text(
-                                  "$_date",
-                                  style: TextStyle(
-                                    color: date_color,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                color: Colors.amber[400],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                elevation: 4.0,
-                onPressed: () {
-                  DatePicker.showTimePicker(context,
-                      theme: DatePickerTheme(
-                        backgroundColor: Colors.black38,
-                        itemStyle: TextStyle(color: Colors.white),
-                        cancelStyle: TextStyle(color: Colors.amber[400]),
-                        doneStyle: TextStyle(color: Colors.green[400]),
-                        containerHeight: 210.0,
-                      ),
-                      showSecondsColumn: false,
-                      showTitleActions: true, onConfirm: (time) {
-                    print('confirm $time');
-                    //_start = time;
-                    String hour =
-                        time.hour < 10 ? '0${time.hour}' : '${time.hour}';
-                    String minute =
-                        time.minute < 10 ? '0${time.minute}' : '${time.minute}';
-                    _time1 = hour + ':' + minute;
-                    setState(() {});
-                  }, currentTime: _start, locale: LocaleType.pl);
-                  setState(() {});
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.access_time,
-                                  size: 18.0,
-                                  color: time1_color,
-                                ),
-                                Text(
-                                  " $_time1",
-                                  style: TextStyle(
-                                    color: time1_color,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                color: Colors.amber[400],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                elevation: 4.0,
-                onPressed: () {
-                  DatePicker.showTimePicker(context,
-                      theme: DatePickerTheme(
-                        backgroundColor: Colors.black38,
-                        itemStyle: TextStyle(color: Colors.white),
-                        cancelStyle: TextStyle(color: Colors.amber[400]),
-                        doneStyle: TextStyle(color: Colors.green[400]),
-                        containerHeight: 210.0,
-                      ),
-                      showTitleActions: true,
-                      showSecondsColumn: false, onConfirm: (time) {
-                    print('confirm $time');
-                    _end = time;
-
-                    String hour =
-                        time.hour < 10 ? '0${time.hour}' : '${time.hour}';
-                    String minute =
-                        time.minute < 10 ? '0${time.minute}' : '${time.minute}';
-
-                    _time2 = hour + ':' + minute;
-
-                    setState(() {});
-                  },
-                      currentTime: _end,
-                      locale: LocaleType.pl);
-                  setState(() {});
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.access_time,
-                                  size: 18.0,
-                                  color: time2_color,
-                                ),
-                                Text(
-                                  " $_time2",
-                                  style: TextStyle(
-                                    color: time2_color,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                color: Colors.amber[400],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                elevation: 4.0,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddNotificationEvent(widget.update == null ? newevent : widget.update)));
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.notifications,
-                                  size: 18.0,
-                                ),
-                                Text(" $_notification"),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                color: Colors.amber[400],
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-
-              SizedBox(
-                height: 20.0,
-              ),
-              new TextFormField(
-                controller: controllerDec,
-                decoration: new InputDecoration(
-                  labelText: "Opis",
-                  hintText: "Wpisz opis swojego wydarzenia"
-                ),
-                keyboardType: TextInputType.text,
-                validator: (val) {
-                if (val.isEmpty) {
-                  return 'Pole nie może być puste!';
-                }
-                return null;
-              },
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
+              buildCustomTextFieldwithValidation(
+                  "Nazwa", "Wprowadź nazwę swojego wydarzenia", controllerName),
+              buildSpace(),
+              buildCustomButtonWithValidation(
+                  date_color, _date, Icons.date_range, datePick),
+              buildSpace(),
+              buildCustomButtonWithValidation(
+                  time1_color, _time1, Icons.access_time, startTimePick),
+              buildSpace(),
+              buildCustomButtonWithValidation(
+                  time2_color, _time2, Icons.access_time, endTimePick),
+              buildSpace(),
+              buildCustomButton(
+                  _notification, Icons.notifications, goToNotificationPickPage),
+              buildSpace(),
+              buildCustomTextField("Opis", "Wpisz opis swojego wydarzenia", "Pole jest opcjonalne", controllerDec),
+              buildSpace(),
               new ButtonBar(
                   children: [
-                    RaisedButton(
-                      child: Text("Anuluj"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                    buildButtonBarTile("Anuluj", Colors.red, goBack),
+                    SizedBox(
+                      width: 30,
                     ),
-                    RaisedButton(
-                      child: Text("Dodaj"),
-                      onPressed: () {
-                        
-                        if (_end.isBefore(_start)) {
-                          print("ERROR");
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Błędne dane"),
-                                  content: Text(
-                                      "Godzina zakończenia nie może być przed rozpoczęciem."),
-                                );
-                              });
-
-                              }
-                      else {
-                        if(_formKey.currentState.validate()){
-                        
-                          if(_date != "Nie wybrano daty" && _time1 != "Nie wybrano godziny rozpoczęcia" && _time2 != "Nie wybrano godziny zakończenia"){
-                          date_color = Colors.white;
-                          time1_color = Colors.white;
-                          time2_color = Colors.white;
-                          setState(() {});
-                          if(widget.update != null ){
-
-                            widget.update.name = controllerName.value.text;
-                            widget.update.description = controllerDec.value.text;
-
-                            DateTime t1 = DateTime.parse("$_date $_time1");
-                            DateTime t2 = DateTime.parse("$_date $_time2");
-                            widget.update.beginTime = t1;
-                            widget.update.endTime = t2;
-
-                            EventHelper.update(widget.update);
-                            Navigator.of(context).pop();
-
-                          }else{
-                            newevent.name = controllerName.value.text;
-                            newevent.description = controllerDec.value.text;//<- tu jest problem
-                            DateTime t1 = DateTime.parse("$_date $_time1");
-                            DateTime t2 = DateTime.parse("$_date $_time2");
-                            newevent.beginTime = t1;
-                            newevent.endTime = t2;
-//                            print(newevent.name);
-//                            print(newevent.beginTime);
-//                            print(newevent.endTime);
-//                            print(newevent.cycle);
-//                            print(newevent.description);
-                            EventHelper.add(newevent);
-                            Navigator.of(context).pop();
-                         }
-                          }
-                          else{
-                            if(_date == "Nie wybrano daty") date_color = Colors.red;
-                            else date_color = Colors.white;
-                            if(_time1 == "Nie wybrano godziny rozpoczęcia") time1_color = Colors.red;
-                            else time1_color = Colors.white;
-                            if(_time2 == "Nie wybrano godziny zakończenia") time2_color = Colors.red;
-                            else time2_color = Colors.white;
-                            setState(() { });
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text("Błędne dane"),
-                                  content: Text(
-                                      "Wprowadź niezbędne dane"),
-                                );
-                              }); 
-                          }
-                        }
-                        }
-                      },
-                    ),
+                    buildButtonBarTile("Dodaj", Colors.lightGreenAccent, acceptAndValidate),
                   ],
                   alignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
@@ -438,5 +122,293 @@ class _AddEventState extends State<AddEvent> {
         ),
       ),
     );
+  }
+
+  Widget buildCustomTextFieldwithValidation(
+      String label, String hint, TextEditingController control) {
+    return TextFormField(
+        controller: control,
+        decoration: new InputDecoration(
+            enabledBorder: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.amberAccent),
+            ),
+            focusedBorder: new OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.amber[400])),
+            border: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            labelText: label,
+            labelStyle: TextStyle(color: Colors.amber[400]),
+            hintText: hint,
+            suffixIcon: IconButton(
+                icon: Icon(Icons.clear, color: Colors.amber[400]),
+                onPressed: () {
+                  control.clear();
+                })),
+        keyboardType: TextInputType.text,
+        validator: (val) {
+          if (val.isEmpty) {
+            return 'Pole nie może być puste!';
+          }
+          return null;
+        });
+  }
+
+  Widget buildCustomTextField(
+      String label, String hint, String helper, TextEditingController control) {
+    return TextFormField(
+      controller: control,
+      decoration: new InputDecoration(
+          enabledBorder: new OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(color: Colors.amberAccent),
+          ),
+          focusedBorder: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.amber[400])),
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.amber[400]),
+          hintText: hint,
+          helperText: helper,
+          helperStyle: TextStyle(color: Colors.amber[400]),
+          suffixIcon: IconButton(
+              icon: Icon(Icons.clear, color: Colors.amber[400]),
+              onPressed: () {
+                control.clear();
+              })),
+      keyboardType: TextInputType.text,
+    );
+  }
+
+  Widget buildSpace() {
+    return SizedBox(
+      height: 10.0,
+    );
+  }
+
+  Widget buildCustomButtonWithValidation(Color textcolor, String text,
+      IconData icon, GestureTapCallback onPressed) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      elevation: 5.0,
+      onPressed: onPressed,
+      child: Container(
+        alignment: Alignment.center,
+        height: 50.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Icon(
+                  icon,
+                  size: 20.0,
+                  color: textcolor,
+                ),
+                Text(
+                  " $text",
+                  style: TextStyle(
+                    color: textcolor,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      color: Colors.amber[400],
+    );
+  }
+
+  Widget buildCustomButton(String text, IconData icon, void action()) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      elevation: 5.0,
+      onPressed: () {
+        action();
+      },
+      child: Container(
+        alignment: Alignment.center,
+        height: 50.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Icon(
+                  icon,
+                  size: 20.0,
+                ),
+                Text(
+                  " $text",
+                  style: TextStyle(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      color: Colors.amber[400],
+    );
+  }
+
+  Widget buildButtonBarTile(String text, Color color, void action()) {
+    return RaisedButton(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        elevation: 5.0,
+        highlightColor: color,
+        splashColor: color,
+        child: Text("$text"),
+        onPressed: () {
+          action();
+        });
+  }
+
+  void datePick() {
+    DatePicker.showDatePicker(context,
+        theme: DatePickerTheme(
+          backgroundColor: Colors.black38,
+          itemStyle: TextStyle(color: Colors.white),
+          cancelStyle: TextStyle(color: Colors.amber[400]),
+          doneStyle: TextStyle(color: Colors.green[400]),
+          containerHeight: 210.0,
+        ),
+        showTitleActions: true,
+        minTime: DateTime(2020, 1, 1),
+        maxTime: DateTime(2025, 12, 31), onConfirm: (date) {
+      /// tu jest  save data
+      _date = new DateFormat("yyyy-MM-dd").format(date);
+      setState(() {});
+    }, currentTime: _start, locale: LocaleType.pl);
+  }
+
+  void startTimePick() {
+    DatePicker.showTimePicker(context,
+        theme: DatePickerTheme(
+          backgroundColor: Colors.black38,
+          itemStyle: TextStyle(color: Colors.white),
+          cancelStyle: TextStyle(color: Colors.amber[400]),
+          doneStyle: TextStyle(color: Colors.green[400]),
+          containerHeight: 210.0,
+        ),
+        showSecondsColumn: false,
+        showTitleActions: true, onConfirm: (time) {
+      print('confirm $time');
+      _start = time;
+      _time1 = new DateFormat("HH:mm").format(time);
+      setState(() {});
+    }, currentTime: _start, locale: LocaleType.pl);
+    setState(() {});
+  }
+
+  void endTimePick() {
+    DatePicker.showTimePicker(context,
+        theme: DatePickerTheme(
+          backgroundColor: Colors.black38,
+          itemStyle: TextStyle(color: Colors.white),
+          cancelStyle: TextStyle(color: Colors.amber[400]),
+          doneStyle: TextStyle(color: Colors.green[400]),
+          containerHeight: 210.0,
+        ),
+        showTitleActions: true,
+        showSecondsColumn: false, onConfirm: (time) {
+      print('confirm $time');
+      _end = time;
+      _time2 = new DateFormat("HH:mm").format(time);
+      setState(() {});
+    }, currentTime: _end, locale: LocaleType.pl);
+    setState(() {});
+  }
+
+  void goBack() {
+    Navigator.pop(context);
+  }
+
+  void goToNotificationPickPage() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddNotificationEvent(
+                widget.update == null ? newevent : widget.update)));
+  }
+
+  void acceptAndValidate() {
+                            if (_end.isBefore(_start)) {
+                          print("ERROR");
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Błąd danych"),
+                                  content: Text(
+                                      "Godzina zakończenia nie może być przed rozpoczęciem."),
+                                );
+                              });
+                        } else {
+                          if (_formKey.currentState.validate()) {
+                            if (_date != "Nie wybrano daty" &&
+                                _time1 != "Nie wybrano godziny rozpoczęcia" &&
+                                _time2 != "Nie wybrano godziny zakończenia") {
+                              date_color = Colors.white;
+                              time1_color = Colors.white;
+                              time2_color = Colors.white;
+                              setState(() {});
+                              if (widget.update != null) {
+                                widget.update.name = controllerName.value.text;
+                                widget.update.description =
+                                    controllerDec.value.text;
+
+                                DateTime t1 = DateTime.parse("$_date $_time1");
+                                DateTime t2 = DateTime.parse("$_date $_time2");
+                                widget.update.beginTime = t1;
+                                widget.update.endTime = t2;
+
+                                EventHelper.update(widget.update);
+                                Navigator.of(context).pop();
+                              } else {
+                                newevent.name = controllerName.value.text;
+                                newevent.description = controllerDec
+                                    .value.text; //<- tu jest problem
+                                DateTime t1 = DateTime.parse("$_date $_time1");
+                                DateTime t2 = DateTime.parse("$_date $_time2");
+                                newevent.beginTime = t1;
+                                newevent.endTime = t2;
+//                            print(newevent.name);
+//                            print(newevent.beginTime);
+//                            print(newevent.endTime);
+//                            print(newevent.cycle);
+//                            print(newevent.description);
+                                EventHelper.add(newevent);
+                                Navigator.of(context).pop();
+                              }
+                            } else {
+                              if (_date == "Nie wybrano daty")
+                                date_color = Colors.red;
+                              else
+                                date_color = Colors.white;
+                              if (_time1 == "Nie wybrano godziny rozpoczęcia")
+                                time1_color = Colors.red;
+                              else
+                                time1_color = Colors.white;
+                              if (_time2 == "Nie wybrano godziny zakończenia")
+                                time2_color = Colors.red;
+                              else
+                                time2_color = Colors.white;
+                              setState(() {});
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Brak danych"),
+                                      content: Text("Wprowadź niezbędne dane"),
+                                    );
+                                  });
+                            }
+                          }
+                        }
   }
 }
