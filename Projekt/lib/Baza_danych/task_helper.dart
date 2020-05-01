@@ -23,10 +23,8 @@ class TaskHelper {
       'Grupa': newTask.idGroup,
     });
 
-    for(Notifi n in newTask.listNotifi){
-      n.idTask = IdTask;
-      NotifiHelper.add(n);
-    }
+    newTask.listNotifi.forEach((n) => n.idEvent = IdTask);
+    NotifiHelper.addList(newTask.listNotifi);
 
 
   }
@@ -40,10 +38,9 @@ class TaskHelper {
       'Lokalizacja': updatedTask.idLocalizaton,
       'Grupa': updatedTask.idGroup,
     });
-    for(Notifi n in updatedTask.listNotifi){
-      n.idTask = updatedTask.id;
-      NotifiHelper.add(n);
-    }
+
+    updatedTask.listNotifi.forEach((n) => n.idEvent = updatedTask.id);
+    NotifiHelper.addList(updatedTask.listNotifi);
 
   }
 

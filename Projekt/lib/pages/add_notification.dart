@@ -19,28 +19,29 @@ class AddNotificationTask extends StatefulWidget {
 
 class _AddNotificationTaskState extends State<AddNotificationTask> {
   final TextEditingController _text = new TextEditingController();
-  final notifications = FlutterLocalNotificationsPlugin();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     if (widget.task.id != null) {
       NotifiHelper.listsTaskID(widget.task.id).then((onList) {
-        if (onList == null) {
+        if (onList != null) {
           _notifilist = onList;
-          if (widget.task.listNotifi != null) {
+          print(_notifilist);
+          print(onList);
+          if (widget.task.listNotifi.isNotEmpty) {
             _notifilist.addAll(widget.task.listNotifi);
           }
           setState(() {});
         }
       });
+
     } else {
-
-      if (widget.task.listNotifi != null) {
-
+      if (widget.task.listNotifi.isNotEmpty) {
         _notifilist = widget.task.listNotifi;
       }
     }
+
 
     super.initState();
   }
@@ -144,12 +145,16 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
             ),
             new RaisedButton(
               onPressed: () {
-                widget.task.listNotifi.clear();
+                List<Notifi> noti = List();
+
                 for (Notifi n in _notifilist) {
                   if (n.id == null) {
-                    widget.task.listNotifi.add(n);
+                    noti.add(n);
                   }
                 }
+
+                widget.task.listNotifi = noti;
+
                 Navigator.pop(context);
               },
               child: Text('Potwierdź'),
@@ -179,10 +184,8 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   @override
   void initState() {
     if (widget.event.id != null) {
-      print ("jestm");
       NotifiHelper.listsEventID(widget.event.id).then((onList) {
         if (onList != null) {
-          print ("jestm2");
           _notifilist = onList;
           print(_notifilist);
           print(onList);
@@ -192,9 +195,6 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
          setState(() {});
         }
       });
-
-      //NotifiHelper.lists().then((onList) { print("to$onList");});
-
 
     } else {
       if (widget.event.listNotifi.isNotEmpty) {

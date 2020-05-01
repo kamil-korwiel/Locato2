@@ -39,7 +39,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
   @override
   void initState() {
     super.initState();
-    _date = DateTime.now().add(Duration(days: 1));
+    _date = DateTime.now().add(Duration(days: 3));
     list = List();
     day = DateTime.now().day;
   }

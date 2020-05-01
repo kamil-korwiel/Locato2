@@ -9,6 +9,7 @@ class ItemTask extends StatefulWidget {
 
   final Function onPressedEdit;
   final Function onPressedDelete;
+  final Function onPressedDone;
 
   Task task;
 
@@ -18,7 +19,7 @@ class ItemTask extends StatefulWidget {
   String date;
 
   //ItemTask(String this.name,bool this.done,String this.date,String this.where);
-  ItemTask(Task task,{this.onPressedEdit,this.onPressedDelete}){
+  ItemTask(Task task,{this.onPressedEdit,this.onPressedDelete,this.onPressedDone}){
     this.name = task.name;
     this.done = task.done;
     this.date =  DateFormat("yyyy-MM-dd hh:mm").format(task.endTime);
@@ -38,6 +39,7 @@ class _ItemTaskState extends State<ItemTask> {
         icon: widget.done ? Icon(Icons.check_box) : Icon(Icons.check_box_outline_blank),
         onPressed: () => setState(() {
           widget.done ? widget.done = false :  widget.done = true;
+          widget.onPressedDone;
         }),
       ),
       children: <Widget>[

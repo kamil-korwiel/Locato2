@@ -34,8 +34,6 @@ class ItemEvent extends StatefulWidget {
 
 }
 
-
-
 class _ItemEventState extends State<ItemEvent> {
   @override
   Widget build(BuildContext context) {

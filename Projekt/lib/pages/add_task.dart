@@ -269,7 +269,7 @@ class _AddTaskState extends State<AddTask> {
                     borderRadius: BorderRadius.circular(5.0)),
                 elevation: 4.0,
                 onPressed: () {
-//                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotificationEvent()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotificationTask( widget.update == null ? newtask : widget.update,)));
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -370,16 +370,14 @@ class _AddTaskState extends State<AddTask> {
                         if(_formKey.currentState.validate()) {
                           if (widget.update != null) {
                             widget.update.name = controllerName.value.text;
-                            widget.update.endTime =
-                                DateTime.parse("$_date $_time1");
+                            widget.update.endTime = DateTime.parse("$_date $_time1");
 
                             TaskHelper.update(widget.update);
                             Navigator.of(context).pop();
                           } else {
                             newtask.name = controllerName.text;
                             newtask.description = controllerDesc.text;
-                            newtask.endTime = DateFormat("yyyy-MM-dd hh:mm")
-                                .parse(_date + " " + _time1);
+                            newtask.endTime = DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time1);
                             //print(newtask.name + " " + "Opis: " + newtask.description+ "Group: "+ newtask.idGroup.toString());
 
 //                          print(newtask.name);

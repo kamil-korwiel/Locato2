@@ -24,6 +24,11 @@ class GroupTaskPage extends StatefulWidget {
 class _GroupTaskPageState extends State<GroupTaskPage> {
 
   List<Group> listOfGroup;
+  @override
+  void initState() {
+    listOfGroup = List();
+    super.initState();
+  }
 
 
   @override
@@ -31,8 +36,8 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
     return FutureBuilder(
       future: GroupHelper.lists(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          listOfGroup = snapshot.data;
+
+          listOfGroup = snapshot.connectionState == ConnectionState.done ? snapshot.data : listOfGroup;
 
 
           return CustomScrollView(
@@ -47,8 +52,8 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
 
           );
         }
-        return Container();
-      }
+
+
     );
   }
 
@@ -63,12 +68,19 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
       future: TaskHelper.listsID(listOfGroup[index].id),
       builder: (context, snapshot) {
 
-        if(snapshot.connectionState == ConnectionState.done){
+        int donePercent = 100;
+        int doneNumbers = 0;
 
         List<Task> list = List();
-        int donePercent = 100;
         if(snapshot.data != null) {
-          list = snapshot.data;
+          list =  snapshot.connectionState == ConnectionState.done ? snapshot.data : list;
+
+
+        }
+        if(list.isNotEmpty){
+          list.forEach((t) => doneNumbers = t.done ? doneNumbers+1 : doneNumbers );
+
+          donePercent = (100 * (doneNumbers/list.length)).round();
         }
 
 
@@ -113,8 +125,7 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
             ),
           ],
         );
-       }
-        return Container();
+
       }
     );
   }
@@ -131,7 +142,13 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
         },
         onPressedEdit: (){
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTask(update: task)));
-        },));
+        },
+        onPressedDone: () {
+          setState(() {});
+        },
+        )
+
+        );
     }
 
     return listOfWidget;

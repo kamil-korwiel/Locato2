@@ -24,12 +24,13 @@ class _AddGroupState extends State<AddGroup> {
 
   @override
   void initState() {
-    GroupHelper.lists().then((onList) {
-      if(onList == null) {
-        list = onList;
-        setState(() {});
-      }
-    });
+    list = List();
+//    GroupHelper.lists().then((onList) {
+//      if(onList != null) {
+//        list = onList;
+//        setState(() {});
+//      }
+//    });
 
     super.initState();
     print(widget.task.idGroup);
@@ -75,42 +76,54 @@ class _AddGroupState extends State<AddGroup> {
             SizedBox(
               height: 10.0,
             ),
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return RaisedButton(
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 50.0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Container(
-                                  child: Row(
+            FutureBuilder(
+              future: GroupHelper.lists(),
+              builder: (context, snapshot) {
+
+                  list = snapshot.connectionState == ConnectionState.done ? snapshot.data : list;
+                  return ListView.builder(
+
+                      shrinkWrap: true,
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        return RaisedButton(
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 50.0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: <Widget>[
+                                  Row(
                                     children: <Widget>[
-                                      Icon(
-                                        Icons.account_circle,
-                                        size: 18.0,
-                                      ),
-                                      Text(" " + list[index].name),
+                                      Container(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.account_circle,
+                                              size: 18.0,
+                                            ),
+                                            Text(" " + list[index].name),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                      color: list[index].id == widget.task.idGroup
-                          ? Colors.amber[400]
-                          : Colors.grey,
-                      onPressed: () => setState(() {
-                            widget.task.idGroup = list[index].id;
-                          }));
-                }),
+                            color: list[index].id == widget.task.idGroup
+                                ? Colors.amber[400]
+                                : Colors.grey,
+                            onPressed: () =>
+                                setState(() {
+                                  widget.task.idGroup = list[index].id;
+                                }));
+                      });
+
+
+              }
+            ),
             SizedBox(
               height: 10.0,
             ),
