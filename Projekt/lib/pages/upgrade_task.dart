@@ -1,45 +1,48 @@
-//import 'dart:html';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/Baza_danych/database_helper.dart';
-import 'package:pageview/Baza_danych/event_helper.dart';
-import 'package:pageview/Baza_danych/notification_helper.dart';
-import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Classes/Notifi.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
+import 'package:pageview/Baza_danych/task_helper.dart';
+import 'package:pageview/Classes/Group.dart';
+import 'package:pageview/Classes/NotificationDescription.dart';
 import 'package:pageview/pages/add_group.dart';
+import 'package:pageview/Classes/Task.dart';
+import 'package:pageview/pages/add_notification.dart';
+import 'package:pageview/Classes/NotificationDescription.dart';
 import 'package:pageview/pages/add_localization.dart';
+
 import 'add_notification.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+String _date;
 
-class AddEvent extends StatefulWidget {
+class UpgradeTask extends StatefulWidget {
   @override
-  _AddEventState createState() => _AddEventState();
+  _UpgradeTaskState createState() => _UpgradeTaskState();
 
-  Event update;
+  Task update;
 
-  AddEvent({this.update});
+  UpgradeTask({this.update});
 }
 
-class _AddEventState extends State<AddEvent> {
-  TextEditingController _controllerName;
-  TextEditingController _controllerDesc;
+class _UpgradeTaskState extends State<UpgradeTask> {
+  TextEditingController _controllerName = TextEditingController();
+  TextEditingController controllerDesc = TextEditingController();
 
+  int id;
   String _name;
   String _description;
-  String _date;
-  String _time1;
-  String _time2;
+  String _time;
+  String _group;
   String _notification;
-  DateTime _start;
-  DateTime _end;
-  Color _dateColor;
-  Color _time1Color;
-  Color _time2Color;
+  String _localization;
+  Color dateColor;
+  Color timeColor;
 
-  Event newevent = Event();
+  Task newtask;
+
+  DateTime _end;
 
   @override
   void initState() {
@@ -47,30 +50,27 @@ class _AddEventState extends State<AddEvent> {
     _description = (widget.update == null) ? null : widget.update.description;
     _date = (widget.update == null)
         ? "Nie wybrano daty"
-        : DateFormat("yyyy-MM-dd").format(widget.update.beginTime);
-    _time1 = (widget.update == null)
+        : DateFormat("yyyy-MM-dd").format(widget.update.endTime);
+    _time = (widget.update == null)
         ? "Nie wybrano godziny rozpoczęcia"
-        : DateFormat("HH:mm").format(widget.update.beginTime);
-    _time2 = (widget.update == null)
-        ? "Nie wybrano godziny zakończenia"
         : DateFormat("HH:mm").format(widget.update.endTime);
+    _group = (widget.update == null) ? "Grupa" : "ErrorUpdate";
     _notification = (widget.update == null) ? "Powiadomienia" : "ErrorUpdate";
-    //_cycle = (widget.update == null)?"Cykl" : "ErrorUpdate";
-    _start =
-        (widget.update == null) ? new DateTime.now() : widget.update.beginTime;
-    _end = (widget.update == null)
-        ? new DateTime.now().add(new Duration(hours: 1))
-        : widget.update.endTime;
+    _localization = (widget.update == null) ? "Lokalizacja" : "ErrorUpdate";
+    _end = (widget.update == null) ? new DateTime.now() : widget.update.endTime;
 
-    _controllerName = TextEditingController();
-    _controllerDesc = TextEditingController();
-    _dateColor = Colors.white;
-    _time1Color = Colors.white;
-    _time2Color = Colors.white;
+    newtask = Task(
+      idLocalizaton: 0,
+      idGroup: 0,
+      done: false,
+    );
+
+    dateColor = Colors.white;
+    timeColor = Colors.white;
 
     if (widget.update != null) {
       _controllerName = TextEditingController(text: _name);
-      _controllerDesc = TextEditingController(text: _description);
+      controllerDesc = TextEditingController(text: _description);
     }
     super.initState();
   }
@@ -79,7 +79,7 @@ class _AddEventState extends State<AddEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj wydarzenie'),
+        title: Text('Dodaj zadanie'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -87,32 +87,36 @@ class _AddEventState extends State<AddEvent> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
-              buildCustomTextFieldwithValidation("Nazwa",
-                  "Wprowadź nazwę swojego wydarzenia", _controllerName),
+              buildSpace(),
+              buildCustomTextFieldwithValidation(
+                  "Nazwa", "Podaj nazwę nowego zadania", _controllerName),
               buildSpace(),
               buildCustomButtonWithValidation(
-                  _dateColor, _date, Icons.date_range, datePick),
+                  dateColor, _date, Icons.date_range, datePick),
               buildSpace(),
               buildCustomButtonWithValidation(
-                  _time1Color, _time1, Icons.access_time, startTimePick),
+                  timeColor, _time, Icons.access_time, timePick),
               buildSpace(),
-              buildCustomButtonWithValidation(
-                  _time2Color, _time2, Icons.access_time, endTimePick),
+              buildCustomButton(
+                  _group, Icons.account_circle, goToGroupPickPage),
               buildSpace(),
               buildCustomButton(
                   _notification, Icons.notifications, goToNotificationPickPage),
               buildSpace(),
-              buildCustomTextField("Opis", "Wpisz opis swojego wydarzenia",
-                  "Pole jest opcjonalne", _controllerDesc),
+              buildCustomButton(
+                  _localization, Icons.edit_location, goToLocalizationPickPage),
               buildSpace(),
-              new ButtonBar(
+              buildCustomTextField("Opis", "Wprowadź opis swojego zadania",
+                  "Pole jest opcjonalne", controllerDesc),
+              buildSpace(),
+              ButtonBar(
                   children: [
                     buildButtonBarTile("Anuluj", Colors.red, goBack),
                     SizedBox(
                       width: 30,
                     ),
                     buildButtonBarTile(
-                        "Dodaj", Colors.lightGreenAccent, acceptAndValidate),
+                        "Dodaj", Colors.lightGreenAccent, acceptAndValidate)
                   ],
                   alignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
@@ -280,13 +284,12 @@ class _AddEventState extends State<AddEvent> {
         showTitleActions: true,
         minTime: DateTime(2020, 1, 1),
         maxTime: DateTime(2025, 12, 31), onConfirm: (date) {
-      /// tu jest  save data
       _date = new DateFormat("yyyy-MM-dd").format(date);
       setState(() {});
-    }, currentTime: _start, locale: LocaleType.pl);
+    }, currentTime: _end, locale: LocaleType.pl);
   }
 
-  void startTimePick() {
+  void timePick() {
     DatePicker.showTimePicker(context,
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
@@ -297,28 +300,7 @@ class _AddEventState extends State<AddEvent> {
         ),
         showSecondsColumn: false,
         showTitleActions: true, onConfirm: (time) {
-      print('confirm $time');
-      _start = time;
-      _time1 = new DateFormat("HH:mm").format(time);
-      setState(() {});
-    }, currentTime: _start, locale: LocaleType.pl);
-    setState(() {});
-  }
-
-  void endTimePick() {
-    DatePicker.showTimePicker(context,
-        theme: DatePickerTheme(
-          backgroundColor: Colors.black38,
-          itemStyle: TextStyle(color: Colors.white),
-          cancelStyle: TextStyle(color: Colors.amber[400]),
-          doneStyle: TextStyle(color: Colors.green[400]),
-          containerHeight: 210.0,
-        ),
-        showTitleActions: true,
-        showSecondsColumn: false, onConfirm: (time) {
-      print('confirm $time');
-      _end = time;
-      _time2 = new DateFormat("HH:mm").format(time);
+      _time = new DateFormat("HH:mm").format(time);
       setState(() {});
     }, currentTime: _end, locale: LocaleType.pl);
     setState(() {});
@@ -332,81 +314,70 @@ class _AddEventState extends State<AddEvent> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AddNotificationEvent(
-                widget.update == null ? newevent : widget.update)));
+            builder: (context) => AddNotificationTask(
+                  widget.update == null ? newtask : widget.update,
+                )));
   }
 
+  void goToLocalizationPickPage() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AddLocalization()));
+  }
+
+  void goToGroupPickPage() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddGroup(
+                  task: widget.update == null ? newtask : widget.update,
+                )));
+  }
+//TODO problem z dodawaniem tasku
   void acceptAndValidate() {
-    if (_end.isBefore(_start)) {
-      print("ERROR");
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Błąd danych"),
-              content:
-                  Text("Godzina zakończenia nie może być przed rozpoczęciem."),
-            );
-          });
-    } else {
-      if (_formKey.currentState.validate()) {
-        if (_date != "Nie wybrano daty" &&
-            _time1 != "Nie wybrano godziny rozpoczęcia" &&
-            _time2 != "Nie wybrano godziny zakończenia") {
-          _dateColor = Colors.white;
-          _time1Color = Colors.white;
-          _time2Color = Colors.white;
-          setState(() {});
-          if (widget.update != null) {
-            widget.update.name = _controllerName.value.text;
-            widget.update.description = _controllerDesc.value.text;
+    if (_formKey.currentState.validate()) {
+      if (_date != "Nie wybrano daty" &&
+          _time != "Nie wybrano godziny rozpoczęcia") {
+        dateColor = Colors.white;
+        timeColor = Colors.white;
+        setState(() {});
+        if (widget.update != null) {
+//                              widget.update.name = _controllerName.value.text;
+//                              widget.update.endTime =
+//                                  DateTime.parse("$_date $_time");
 
-            DateTime t1 = DateTime.parse("$_date $_time1");
-            DateTime t2 = DateTime.parse("$_date $_time2");
-            widget.update.beginTime = t1;
-            widget.update.endTime = t2;
-
-            EventHelper.update(widget.update);
-            Navigator.of(context).pop();
-          } else {
-            newevent.name = _controllerName.value.text;
-            newevent.description =
-                _controllerDesc.value.text; //<- tu jest problem
-            DateTime t1 = DateTime.parse("$_date $_time1");
-            DateTime t2 = DateTime.parse("$_date $_time2");
-            newevent.beginTime = t1;
-            newevent.endTime = t2;
-//                            print(newevent.name);
-//                            print(newevent.beginTime);
-//                            print(newevent.endTime);
-//                            print(newevent.cycle);
-//                            print(newevent.description);
-            EventHelper.add(newevent);
-            Navigator.of(context).pop();
-          }
+//                              TaskHelper.update(widget.update);
+//                              Navigator.of(context).pop();
         } else {
-          if (_date == "Nie wybrano daty")
-            _dateColor = Colors.red;
-          else
-            _dateColor = Colors.white;
-          if (_time1 == "Nie wybrano godziny rozpoczęcia")
-            _time1Color = Colors.red;
-          else
-            _time1Color = Colors.white;
-          if (_time2 == "Nie wybrano godziny zakończenia")
-            _time2Color = Colors.red;
-          else
-            _time2Color = Colors.white;
-          setState(() {});
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Brak danych"),
-                  content: Text("Wprowadź niezbędne dane"),
-                );
-              });
+//                              newtask.name = _controllerName.text;
+//                              newtask.description = controllerDesc.text;
+//                              newtask.endTime = DateFormat("yyyy-MM-dd hh:mm")
+//                                  .parse(_date + " " + _);
+//                          print(newtask.name + " " + "Opis: " + newtask.description+ "Group: "+ newtask.idGroup.toString());
+//                          print(newtask.name);
+//                          print(newtask.endTime);
+//                          print(newtask.idGroup);
+//                          print(newtask.description);
+//                              TaskHelper.add(newtask);
+//                              Navigator.of(context).pop();
         }
+      } else {
+        if (_date == "Nie wybrano daty")
+          dateColor = Colors.red;
+        else
+          dateColor = Colors.white;
+        if (_time == "Nie wybrano godziny rozpoczęcia")
+          timeColor = Colors.red;
+        else
+          timeColor = Colors.white;
+        setState(() {});
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Brak danych"),
+                content: Text("Wprowadź niezbędne dane"),
+              );
+            });
       }
     }
   }

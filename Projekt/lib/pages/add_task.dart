@@ -27,12 +27,12 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
-  TextEditingController controllerName = TextEditingController();
+  TextEditingController _controllerName = TextEditingController();
   TextEditingController controllerDesc = TextEditingController();
 
   int id;
   String _name;
-  String _decription;
+  String _description;
   String _time;
   String _group;
   String _notification;
@@ -47,7 +47,7 @@ class _AddTaskState extends State<AddTask> {
   @override
   void initState() {
     _name = (widget.update == null) ? null : widget.update.name;
-    _decription = (widget.update == null) ? null : widget.update.description;
+    _description = (widget.update == null) ? null : widget.update.description;
     _date = (widget.update == null)
         ? "Nie wybrano daty"
         : DateFormat("yyyy-MM-dd").format(widget.update.endTime);
@@ -69,8 +69,8 @@ class _AddTaskState extends State<AddTask> {
     timeColor = Colors.white;
 
     if (widget.update != null) {
-      controllerName = TextEditingController(text: _name);
-      controllerDesc = TextEditingController(text: _decription);
+      _controllerName = TextEditingController(text: _name);
+      controllerDesc = TextEditingController(text: _description);
     }
     super.initState();
   }
@@ -89,7 +89,7 @@ class _AddTaskState extends State<AddTask> {
             children: <Widget>[
               buildSpace(),
               buildCustomTextFieldwithValidation(
-                  "Nazwa", "Podaj nazwę nowego zadania", controllerName),
+                  "Nazwa", "Podaj nazwę nowego zadania", _controllerName),
               buildSpace(),
               buildCustomButtonWithValidation(
                   dateColor, _date, Icons.date_range, datePick),
@@ -332,7 +332,7 @@ class _AddTaskState extends State<AddTask> {
                   task: widget.update == null ? newtask : widget.update,
                 )));
   }
-
+//TODO problem z dodawaniem tasku
   void acceptAndValidate() {
     if (_formKey.currentState.validate()) {
       if (_date != "Nie wybrano daty" &&
@@ -341,14 +341,14 @@ class _AddTaskState extends State<AddTask> {
         timeColor = Colors.white;
         setState(() {});
         if (widget.update != null) {
-//                              widget.update.name = controllerName.value.text;
+//                              widget.update.name = _controllerName.value.text;
 //                              widget.update.endTime =
 //                                  DateTime.parse("$_date $_time");
 
 //                              TaskHelper.update(widget.update);
 //                              Navigator.of(context).pop();
         } else {
-//                              newtask.name = controllerName.text;
+//                              newtask.name = _controllerName.text;
 //                              newtask.description = controllerDesc.text;
 //                              newtask.endTime = DateFormat("yyyy-MM-dd hh:mm")
 //                                  .parse(_date + " " + _);

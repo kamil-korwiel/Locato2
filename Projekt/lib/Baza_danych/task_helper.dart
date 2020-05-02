@@ -105,7 +105,7 @@ class TaskHelper {
 //        endTime: maps[i]['Do_Kiedy'],
 //        description: maps[i]['Opis'],
 //        idLocalizaton: maps[i]['Lokalizacja'],
-//        idNotification: maps[i]['Powiadomienie'],
+//        _idNotification: maps[i]['Powiadomienie'],
 //        idGroup: maps[i]['Grupa'],
 //      );
 //    });

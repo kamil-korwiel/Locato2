@@ -8,16 +8,16 @@ import 'package:pageview/pages/add_task.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class AddGroup extends StatefulWidget {
+class UpgradeGroup extends StatefulWidget {
   @override
-  _AddGroupState createState() => _AddGroupState();
+  _UpgradeGroupState createState() => _UpgradeGroupState();
 
   Task task;
 
-  AddGroup({@required this.task});
+  UpgradeGroup({@required this.task});
 }
 
-class _AddGroupState extends State<AddGroup> {
+class _UpgradeGroupState extends State<UpgradeGroup> {
   final _text = TextEditingController();
 
   List<Group> list;

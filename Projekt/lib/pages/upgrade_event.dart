@@ -14,16 +14,16 @@ import 'add_notification.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class AddEvent extends StatefulWidget {
+class UpgradeEvent extends StatefulWidget {
   @override
-  _AddEventState createState() => _AddEventState();
+  _UpgradeEventState createState() => _UpgradeEventState();
 
   Event update;
 
-  AddEvent({this.update});
+  UpgradeEvent({this.update});
 }
 
-class _AddEventState extends State<AddEvent> {
+class _UpgradeEventState extends State<UpgradeEvent> {
   TextEditingController _controllerName;
   TextEditingController _controllerDesc;
 

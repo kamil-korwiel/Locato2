@@ -8,15 +8,15 @@ import 'package:pageview/List/button_notification_list_builder_widget.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pageview/Classes/Notification.dart';
 
-class AddNotificationTask extends StatefulWidget {
+class UpgradeNotificationTask extends StatefulWidget {
   @override
-  _AddNotificationTaskState createState() => _AddNotificationTaskState();
+  _UpgradeNotificationTaskState createState() => _UpgradeNotificationTaskState();
 
   Task task;
-  AddNotificationTask(this.task);
+  UpgradeNotificationTask(this.task);
 }
 
-class _AddNotificationTaskState extends State<AddNotificationTask> {
+class _UpgradeNotificationTaskState extends State<UpgradeNotificationTask> {
   final TextEditingController _text = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -215,20 +215,20 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   }
 }
 
-class AddNotificationEvent extends StatefulWidget {
+class UpgradeNotificationEvent extends StatefulWidget {
   @override
-  _AddNotificationEventState createState() => _AddNotificationEventState();
+  _UpgradeNotificationEventState createState() => _UpgradeNotificationEventState();
 
   Event event;
 
-  AddNotificationEvent(this.event);
+  UpgradeNotificationEvent(this.event);
 
 // Notification notification;
 // AddNotification({this.notification});
 
 }
 
-class _AddNotificationEventState extends State<AddNotificationEvent> {
+class _UpgradeNotificationEventState extends State<UpgradeNotificationEvent> {
   final TextEditingController _text = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

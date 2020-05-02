@@ -14,7 +14,6 @@ class ListNotifi extends StatefulWidget {
 }
 
 class _ListNotifiState extends State<ListNotifi> {
-
   List<Notifi> list;
 
   @override
@@ -30,72 +29,89 @@ class _ListNotifiState extends State<ListNotifi> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(color: Colors.amber[400]),
-                  ),
-                  height: 50.0,
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  width: 20,
-                                  child: Icon(
-                                    Icons.notifications,
-                                    size: 18.0,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 80,
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width - 300,
-                                  child: Text(printDuration(widget.lista[index].duration, abbreviated: true) + " przed"),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                                  width: 30,
-                                ),
-                          SizedBox(
-                            child: IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                if (widget.lista[index].id != null) {
-                                  NotifiHelper.delete(widget.lista[index].id);
-                                }
-                                widget.lista.removeAt(index);
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.amber[400]),
                 ),
-                buildSpace(),
+                height: 50.0,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              buildListIconTile(),
+                              buildSpaceBetween(80),
+                              buildListTextTile(index),
+                            ],
+                          ),
+                        ),
+                        buildSpaceBetween(30),
+                        buildRemoveButton(index),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              buildSpace(),
             ],
           );
         });
   }
-
 
   Widget buildSpace() {
     return SizedBox(
       height: 10.0,
     );
   }
- 
 
+  Widget buildSpaceBetween(double _width) {
+    return SizedBox(
+      width: _width,
+    );
+  }
+
+  Widget buildListTextTile(int _index) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 300,
+      child: Text(
+          printDuration(widget.lista[_index].duration, abbreviated: true) +
+              " przed"),
+    );
+  }
+
+  Widget buildRemoveButton(int _index) {
+    return SizedBox(
+      child: IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          removeFromList(_index);
+        },
+      ),
+    );
+  }
+
+  Widget buildListIconTile() {
+    return Container(
+      width: 20,
+      child: Icon(
+        Icons.notifications,
+        size: 18.0,
+      ),
+    );
+  }
+
+  void removeFromList(int _index) {
+    if (widget.lista[_index].id != null) {
+      NotifiHelper.delete(widget.lista[_index].id);
+    }
+    widget.lista.removeAt(_index);
+    setState(() {});
+  }
 }

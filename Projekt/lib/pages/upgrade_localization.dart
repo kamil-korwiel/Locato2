@@ -5,12 +5,12 @@ import 'package:pageview/Classes/Localization.dart';
 import 'package:pageview/pages/add_task.dart';
 import 'package:pageview/pages/add_location2.dart';
 
-class AddLocalization extends StatefulWidget {
+class UpgradeLocalization extends StatefulWidget {
   @override
-  _AddLocalizationState createState() => _AddLocalizationState();
+  _UpgradeLocalizationState createState() => _UpgradeLocalizationState();
 }
 
-class _AddLocalizationState extends State<AddLocalization> {
+class _UpgradeLocalizationState extends State<UpgradeLocalization> {
   @override
   void initState() {
     super.initState();

@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
 //                    endTime: _date,
 //                    cycle:"D6",
 //                    description:"bal bal bal",
-//                    idNotification: 1,
+//                    _idNotification: 1,
 //                  );
 //                  print(e.toString());
 //
