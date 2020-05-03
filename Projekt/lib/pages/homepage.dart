@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -5,6 +6,7 @@ import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Items/ItemsEvent.dart';
+import 'package:pageview/main.dart';
 import 'package:pageview/pages/add_event.dart';
 import 'add_location.dart';
 import 'add_task.dart';
@@ -50,53 +52,63 @@ class _HomePageEventsState extends State<HomePageEvents> {
     return listOfDays[val];
   }
 
+Widget buildAppBarMain(){
 
+}
 
   Widget buildAppBarExtended(String day){
-    return SliverAppBar(
-      //expandedHeight: heightExtededAppBar,
-      pinned: true,
-      title: Text(day),
-//      flexibleSpace: FlexibleSpaceBar (
-//        title: Text("Today"),
-//        centerTitle: true,
-//        background: Column(
-//          children: <Widget>[
-//            Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//              children: <Widget>[
-//                Container(
-//                  width: widthImportantEvent,
-//                  height: heightImportantEvent,
-//                  color: Colors.deepOrangeAccent,
-//                ),
-//                Container(
-//                  width: widthImportantEvent,
-//                  height: heightImportantEvent,
-//                  color: Colors.deepOrangeAccent,
-//                ),
-//                Container(
-//                  width: widthImportantEvent,
-//                  height: heightImportantEvent,
-//                  color: Colors.deepOrangeAccent,
-//                ),
-//              ],
-//            ),
-//          ],
-//        ),
-//      ),
+    return SliverList(
+    delegate: SliverChildBuilderDelegate(
+    (context,index){
+      return Container(
+        child: Card(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                title: Text(day,
+                    style: TextStyle(
+                      color: Colors.amber,
+                    )),
+
+                subtitle: Text(day),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+    childCount: 1,
+    ),
     );
   }
 
   Widget buildAppBar(String day){
-    return SliverAppBar(
-      //stretchTriggerOffset: 50,
-      pinned: false,
-      title: Text(day),
+    return SliverList(
+        delegate: SliverChildBuilderDelegate(
+    (context,index){
+      return Container(
+        child: Card(
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                 ListTile(
+                      title: Text(day,
+                          style: TextStyle(
+                            color: Colors.amber,
+                          )),
+
+                  subtitle: Text(day),
+                 ),
+            ],
+          ),
+        ),
+      );
+    },
+    childCount: 1,
+        ),
     );
   }
-
-
 
   Widget bulidListofEvents(List<Event> eventsList){
     return SliverList(
