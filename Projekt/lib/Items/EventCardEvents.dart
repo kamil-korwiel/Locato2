@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Items/ItemsEvent.dart';
 import 'package:pageview/Items/EventCardItem.dart';
 import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/pages/add_event.dart';
