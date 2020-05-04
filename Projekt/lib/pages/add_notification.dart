@@ -60,7 +60,10 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie"),
+        title: Text(
+          "Dodaj powiadomienie",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -97,7 +100,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       onPressed: () {
@@ -123,7 +126,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
       padding: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: Colors.amber[400]),
+        border: Border.all(color: Colors.white),
       ),
       child: DropdownButton<String>(
         value: _value,
@@ -153,7 +156,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
         decoration: new InputDecoration(
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400]),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -266,29 +269,30 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie"),
+        title: Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white),),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(children: <Widget>[
-          Container( 
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(color: Colors.amber[400],),), 
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                buildCustomDropdownButton(),
-                Flexible(
-                  child: Form(
-                    key: _formKey,
-                    child: buildCustomTextFieldwithValidation(
-                        holder, "Wprowadź wartość", _text),
+            Container(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  buildCustomDropdownButton(),
+                  buildSpaceBetween(),
+                  Flexible(
+                    child: Form(
+                      key: _formKey,
+                      child: buildCustomTextFieldwithValidation(
+                          holder, "Wprowadź wartość"),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
             buildSpace(),
             buildcustomButton("Dodaj", validateAndAdd),
             buildSpace(),
@@ -305,7 +309,7 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       elevation: 5.0,
@@ -327,8 +331,18 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     );
   }
 
+  Widget buildSpaceBetween() {
+    return SizedBox(
+      width: 10.0,
+    );
+  }
+
   Widget buildCustomDropdownButton() {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: Colors.white),
+      ),
       padding: EdgeInsets.symmetric(horizontal: 5.0),
       child: DropdownButton<String>(
         value: _value,
@@ -351,14 +365,13 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     );
   }
 
-  Widget buildCustomTextFieldwithValidation(
-      String label, String hint, TextEditingController control) {
+  Widget buildCustomTextFieldwithValidation(String label, String hint) {
     return TextFormField(
-        controller: control,
+        controller: _text,
         decoration: new InputDecoration(
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400]),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -374,7 +387,7 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
             suffixIcon: IconButton(
                 icon: Icon(Icons.clear, color: Colors.white),
                 onPressed: () {
-                  control.clear();
+                  _text.clear();
                 })),
         keyboardType: TextInputType.number,
         validator: (val) {
@@ -419,6 +432,7 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   }
 
   void confirm() {
+    _text.clear();
     List<Notifi> noti = List();
 //                widget.event.listNotifi.clear();
     for (Notifi n in _notifilist) {

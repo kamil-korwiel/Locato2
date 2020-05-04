@@ -31,8 +31,9 @@ class _ListNotifiState extends State<ListNotifi> {
             children: <Widget>[
               Container(
                 decoration: BoxDecoration(
+                  color: new Color(0xFF333366),
                   borderRadius: BorderRadius.circular(10.0),
-                  border: Border.all(color: Colors.amber[400]),
+                  border: Border.all(color: Colors.white),
                 ),
                 height: 50.0,
                 width: MediaQuery.of(context).size.width,

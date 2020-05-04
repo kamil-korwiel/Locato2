@@ -39,7 +39,7 @@ class _AddGroupState extends State<AddGroup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj grupę"),
+        title: Text("Dodaj grupę",style: TextStyle(color: Colors.white),),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -65,7 +65,7 @@ class _AddGroupState extends State<AddGroup> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side: BorderSide(
-                              color: Colors.amber[400],
+                              color: Colors.white,
                             ),
                           ),
                           elevation: 5.0,
@@ -85,7 +85,7 @@ class _AddGroupState extends State<AddGroup> {
                             ),
                           ),
                           color: list[index].id == widget.task.idGroup
-                              ? Colors.amber[400]
+                              ? Color(0xFF333366)
                               : Colors.transparent,
                           onPressed: () => select(index),
                         );
@@ -119,7 +119,7 @@ class _AddGroupState extends State<AddGroup> {
         decoration: new InputDecoration(
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400]),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -131,13 +131,13 @@ class _AddGroupState extends State<AddGroup> {
             labelText: label,
             labelStyle: TextStyle(color: Colors.white),
             hintText: hint,
-            hintStyle: TextStyle(color: Colors.white),
+            hintStyle: TextStyle(color: Colors.grey),
             suffixIcon: IconButton(
                 icon: Icon(Icons.clear, color: Colors.white),
                 onPressed: () {
                   control.clear();
                 })),
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.text,
         validator: (val) {
           if (val.isEmpty) {
             return 'Pole nie może być puste!';
@@ -163,7 +163,7 @@ class _AddGroupState extends State<AddGroup> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       onPressed: () {

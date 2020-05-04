@@ -79,7 +79,7 @@ class _AddEventState extends State<AddEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj wydarzenie'),
+        title: Text('Dodaj wydarzenie',style: TextStyle(color: Colors.white,), ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -87,6 +87,7 @@ class _AddEventState extends State<AddEvent> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
+              buildSpace(),
               buildCustomTextFieldwithValidation("Nazwa",
                   "Wprowadź nazwę swojego wydarzenia", _controllerName),
               buildSpace(),
@@ -129,22 +130,24 @@ class _AddEventState extends State<AddEvent> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
+          filled: true,
+          fillColor: new Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amberAccent),
+              borderSide: BorderSide(color: Colors.transparent),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.amber[400])),
+                borderSide: BorderSide(color: Colors.white)),
             border: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.red),
             ),
             labelText: label,
-            labelStyle: TextStyle(color: Colors.amber[400]),
+            labelStyle: TextStyle(color: Colors.white),
             hintText: hint,
             suffixIcon: IconButton(
-                icon: Icon(Icons.clear, color: Colors.amber[400]),
+                icon: Icon(Icons.clear, color: Colors.white),
                 onPressed: () {
                   control.clear();
                 })),
@@ -162,20 +165,22 @@ class _AddEventState extends State<AddEvent> {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
+        filled: true,
+          fillColor: new Color(0xFF333366),
           enabledBorder: new OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(color: Colors.amberAccent),
+            borderSide: BorderSide(color: Colors.transparent),
           ),
           focusedBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400])),
+              borderSide: BorderSide(color: Colors.white)),
           labelText: label,
-          labelStyle: TextStyle(color: Colors.amber[400]),
+          labelStyle: TextStyle(color: Colors.white),
           hintText: hint,
           helperText: helper,
-          helperStyle: TextStyle(color: Colors.amber[400]),
+          helperStyle: TextStyle(color: Colors.white),
           suffixIcon: IconButton(
-              icon: Icon(Icons.clear, color: Colors.amber[400]),
+              icon: Icon(Icons.clear, color: Colors.white),
               onPressed: () {
                 control.clear();
               })),
@@ -219,7 +224,7 @@ class _AddEventState extends State<AddEvent> {
           ],
         ),
       ),
-      color: Colors.amber[400],
+      color: new Color(0xFF333366),
     );
   }
 
@@ -251,7 +256,7 @@ class _AddEventState extends State<AddEvent> {
           ],
         ),
       ),
-      color: Colors.amber[400],
+      color: new Color(0xFF333366),
     );
   }
 
@@ -260,8 +265,8 @@ class _AddEventState extends State<AddEvent> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         elevation: 5.0,
-        highlightColor: color,
         splashColor: color,
+        color: new Color(0xFF333366),
         child: Text("$text"),
         onPressed: () {
           action();
@@ -273,7 +278,7 @@ class _AddEventState extends State<AddEvent> {
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
           itemStyle: TextStyle(color: Colors.white),
-          cancelStyle: TextStyle(color: Colors.amber[400]),
+          cancelStyle: TextStyle(color: Colors.red),
           doneStyle: TextStyle(color: Colors.green[400]),
           containerHeight: 210.0,
         ),
@@ -291,7 +296,7 @@ class _AddEventState extends State<AddEvent> {
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
           itemStyle: TextStyle(color: Colors.white),
-          cancelStyle: TextStyle(color: Colors.amber[400]),
+          cancelStyle: TextStyle(color: Colors.red),
           doneStyle: TextStyle(color: Colors.green[400]),
           containerHeight: 210.0,
         ),
