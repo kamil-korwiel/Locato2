@@ -43,6 +43,12 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           primaryTextTheme:
               TextTheme(title: TextStyle(color: Colors.amberAccent))),
+      /* theme: ThemeData(
+        primaryColor: Color(0xFF333366),
+        canvasColor: Colors.white,
+        accentColor: Color(0xffBB86FC),
+        backgroundColor: Colors.white,
+      ),*/
       home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
@@ -54,21 +60,58 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   int _counter;
   DateTime _date;
+
+  TabController _tabController;
+
   @override
   void initState() {
     _date = DateTime.now();
     _counter = 0;
 
+    // Definicja kontrolera tabbar
+    _tabController = new TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Zmienna szerokosci ekranu dla TabBaru
+    var screenWidthTabBar = MediaQuery.of(context).size.width * 0.6;
+
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+            //title: Text("Locato"),
+            leading: GestureDetector(
+              onTap: () {},
+              child: Icon(Icons.menu),
+            ),
+            elevation: 0.0,
+            bottom: PreferredSize(
+              preferredSize: Size(screenWidthTabBar, 40.0),
+              child: new Container(
+                width: screenWidthTabBar,
+                child: new TabBar(
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorColor: Color(0xff00c6ff),
+                  controller: _tabController,
+                  tabs: <Widget>[
+                    new Container(
+                      height: 40.0,
+                      child: new Tab(text: "Tydzień".toUpperCase()),
+                    ),
+                    new Container(
+                      height: 40.0,
+                      child: new Tab(text: "Grupy".toUpperCase()),
+                    ),
+                  ],
+                ),
+              ),
+            )),
         floatingActionButton: SpeedDial(
           elevation: 10.0,
           animatedIcon: AnimatedIcons.add_event,
@@ -95,7 +138,7 @@ class _HomePageState extends State<HomePage> {
 //                    endTime: _date,
 //                    cycle:"D6",
 //                    description:"bal bal bal",
-//                    _idNotification: 1,
+//                    idNotification: 1,
 //                  );
 //                  print(e.toString());
 //
@@ -142,8 +185,11 @@ class _HomePageState extends State<HomePage> {
         ),
         body: PageView(
           controller: PageController(
-            initialPage: 1,
+            initialPage: 0,
           ),
+          onPageChanged: (page) {
+            _tabController.animateTo(page);
+          },
           children: <Widget>[
             //Calendar(),
             HomePageEvents(),
