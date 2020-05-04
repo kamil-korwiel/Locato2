@@ -30,7 +30,7 @@ class _AddLocalizationState extends State<AddLocalization> {
           child: ListView(children: <Widget>[
             buildCustomButton("Nowa lokalizacja", goToLocationPickPage),
             buildSpace(),
-            buildList(),
+            SizedBox(height: 300, child: buildList()),
             buildSpace(),
             buildCustomButton("Potwierdź", goBack),
           ])),
@@ -39,6 +39,7 @@ class _AddLocalizationState extends State<AddLocalization> {
 
   Widget buildList() {
     return new ListView.builder(
+      physics: ScrollPhysics(),
         shrinkWrap: true,
         itemCount: length,
         itemBuilder: (context, index) {

@@ -51,46 +51,51 @@ class _AddGroupState extends State<AddGroup> {
             buildSpace(),
             buildCustomButton("Dodaj", add),
             buildSpace(),
-            FutureBuilder(
-                future: GroupHelper.lists(),
-                builder: (context, snapshot) {
-                  list = snapshot.connectionState == ConnectionState.done
-                      ? snapshot.data
-                      : list;
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: list.length,
-                      itemBuilder: (context, index) {
-                        return RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(
-                              color: Colors.white,
-                            ),
-                          ),
-                          elevation: 5.0,
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 50.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Row(
+            SizedBox(
+              height: 300,
+              child: FutureBuilder(
+                  future: GroupHelper.lists(),
+                  builder: (context, snapshot) {
+                    list = snapshot.connectionState == ConnectionState.done
+                        ? snapshot.data
+                        : list;
+                    return ListView.builder(
+                      physics: ScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            return RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: BorderSide(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              elevation: 5.0,
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 50.0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    buildListIconTileWithText(
-                                        Icons.account_circle, list[index].name)
+                                    Row(
+                                      children: <Widget>[
+                                        buildListIconTileWithText(
+                                            Icons.account_circle, list[index].name)
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          color: list[index].id == widget.task.idGroup
-                              ? Color(0xFF333366)
-                              : Colors.transparent,
-                          onPressed: () => select(index),
-                        );
-                      });
-                }),
+                              ),
+                              color: list[index].id == widget.task.idGroup
+                                  ? Color(0xFF333366)
+                                  : Colors.transparent,
+                              onPressed: () => select(index),
+                            );
+                          },
+                    );
+                  }),
+            ),
             buildSpace(),
             buildCustomButton("Potwierdź", goBack),
           ])),
