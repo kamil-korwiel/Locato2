@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
         ),
         body: PageView(
           controller: PageController(
-            initialPage: 1,
+            initialPage: 0,
           ),
           children: <Widget>[
             //Calendar(),
