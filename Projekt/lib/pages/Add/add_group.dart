@@ -61,55 +61,64 @@ class _AddGroupState extends State<AddGroup> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Dodaj grupę"),
-      ),
-      body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView(children: <Widget>[
-            Form(
-                key: _formKey,
-                child: buildCustomTextFieldwithValidation("Nowa Grupa", "Wprowadź nazwę nowej grupy", _text)),
-            buildSpace(),
-            buildCustomButton("Dodaj", add),
-            buildSpace(),
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return RaisedButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      side: BorderSide(
-                        color: Colors.amber[400],
-                      ),
+        appBar: AppBar(
+    title: Text("Dodaj grupę", style: TextStyle(color: Colors.white)),
+    // tu kontrolujesz przycisk wstecz
+    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        ),
+        body: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(children: <Widget>[
+        Form(
+            key: _formKey,
+            child: buildCustomTextFieldwithValidation("Nowa Grupa", "Wprowadź nazwę nowej grupy", _text)),
+        buildSpace(),
+        buildCustomButton("Dodaj", add),
+        buildSpace(),
+        SizedBox(
+          height: 300,
+            child: ListView.builder(
+            physics: ScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                return RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: Colors.white,
                     ),
-                    elevation: 5.0,
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 50.0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              buildListIconTileWithText(Icons.account_circle, list[index].name)
-                            ],
-                          ),
-                        ],
-                      ),
+                  ),
+                  elevation: 5.0,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50.0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            SizedBox(width: 30),
+                            buildListIconTileWithText(Icons.account_circle, list[index].name),
+                            SizedBox(width: 30),
+                            buildRemoveButton(index),
+                          ],
+                        ),
+                      ],
                     ),
-                    color: list[index].isSelected
-                        ? Colors.amber[400]
-                        : Colors.transparent,
-                    onPressed: () => select(index),
-                  );
-                }),
+                  ),
+                  color: list[index].isSelected
+                      ? Color(0xFF333366)
+                      : Colors.transparent,
+                  onPressed: () => select(index),
+                );
+              }),
+        ),
 
-            buildSpace(),
-            buildCustomButton("Potwierdź", goBack),
-          ])),
-    );
+        buildSpace(),
+        buildCustomButton("Potwierdź", goBack),
+      ])),
+      );
   }
 
   Widget buildListIconTileWithText(IconData _icon, String _text) {
@@ -121,6 +130,7 @@ class _AddGroupState extends State<AddGroup> {
             size: 18.0,
             color: Colors.white,
           ),
+          SizedBox(width: 30),
           Text(" $_text"),
         ],
       ),
@@ -131,9 +141,11 @@ class _AddGroupState extends State<AddGroup> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
+          filled: true,
+          fillColor: Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400]),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -163,6 +175,7 @@ class _AddGroupState extends State<AddGroup> {
   Widget buildRemoveButton(int _index) {
     return SizedBox(
       child: IconButton(
+        color: Colors.white,
         icon: Icon(Icons.clear),
         onPressed: () {
           removeFromList(_index);
@@ -171,13 +184,14 @@ class _AddGroupState extends State<AddGroup> {
     );
   }
 
+
   Widget buildCustomButton(String text, void action()) {
     return RaisedButton(
-      color: Colors.transparent,
+      color: new Color(0xFF333366),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       onPressed: () {
@@ -245,5 +259,9 @@ class _AddGroupState extends State<AddGroup> {
 
       setState(() {});
 
+  }
+
+  void onBackPressed() {
+    goBack();
   }
 }

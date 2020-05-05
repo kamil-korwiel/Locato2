@@ -292,14 +292,14 @@ class _UpgradeTaskState extends State<UpgradeTask> {
   }
 
   void goToLocalizationPickPage() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => UpgradeLocalization()));
+    //Navigator.push(
+      //  context, MaterialPageRoute(builder: (context) => UpgradeLocalization()));
   }
 
   void goToGroupPickPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AddGroup(widget.task)));
+   // Navigator.push(
+    //    context,
+     //   MaterialPageRoute(builder: (context) => AddGroup(widget.task)));
   }
 //TODO problem z dodawaniem tasku
   void acceptAndValidate() {

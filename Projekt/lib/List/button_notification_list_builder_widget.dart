@@ -34,7 +34,7 @@ class _ListNotifiState extends State<ListNotifi> {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    color: new Color(0xFF333366),
+                    color: Color(0xFF333366),
                     borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(color: Colors.white),
                   ),
@@ -96,7 +96,7 @@ class _ListNotifiState extends State<ListNotifi> {
       child: IconButton(
         icon: Icon(Icons.clear),
         onPressed: () {
-          //removeFromList(_index);
+          removeFromList(_index);
         },
       ),
     );

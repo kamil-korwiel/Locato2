@@ -46,7 +46,9 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie"),
+        title: Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
+                     // tu kontrolujesz przycisk wstecz
+    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -79,11 +81,11 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
 
   Widget buildcustomButton(String text, void action()) {
     return RaisedButton(
-      color: Colors.transparent,
+      color: Color(0xFF333366),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       onPressed: () {
@@ -108,8 +110,9 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
+        color: Color(0xFF333366),
         borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: Colors.amber[400]),
+        border: Border.all(color: Colors.white),
       ),
       child: DropdownButton<String>(
         value: _value,
@@ -137,9 +140,11 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
+          filled: true,
+          fillColor: Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400]),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -186,6 +191,14 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
       _notifilist.add(Notifi(duration: duration));
       setState(() {});
     }
+  }
+
+  void goBack() {
+    Navigator.pop(context);
+  }
+  
+  void onBackPressed() {
+    goBack();
   }
 
   void confirm() {
@@ -237,19 +250,19 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie"),
+        title: Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white),),
+         // tu kontrolujesz przycisk wstecz
+    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(children: <Widget>[
           Container( 
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(color: Colors.amber[400],),), 
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 buildCustomDropdownButton(),
+                SizedBox(width: 30),
                 Flexible(
                   child: Form(
                     key: _formKey,
@@ -272,11 +285,11 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
 
   Widget buildcustomButton(String text, void action()) {
     return RaisedButton(
-      color: Colors.transparent,
+      color: Color(0xFF333366),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       elevation: 5.0,
@@ -301,6 +314,11 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   Widget buildCustomDropdownButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.0),
+      decoration: BoxDecoration(
+        color: Color(0xFF333366),
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: Colors.white),
+      ),
       child: DropdownButton<String>(
         value: _value,
         icon: Icon(Icons.arrow_drop_down),
@@ -327,9 +345,11 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
+          filled: true,
+          fillColor: Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400]),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -389,14 +409,22 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     }
   }
 
+    void goBack() {
+    Navigator.pop(context);
+  }
+
+  void onBackPressed() {
+    goBack();
+  }
+
   void confirm() {
-//    List<Notifi> noti = List();
-////                widget.event.listNotifi.clear();
-//    for (Notifi n in _notifilist) {
-//      if (n.id == null) {
-//        noti.add(n);
-//      }
-//    }
+   List<Notifi> noti = List();
+                widget.event.listNotifi.clear();
+    for (Notifi n in _notifilist) {
+      if (n.id == null) {
+       noti.add(n);
+     }
+   }
 
     widget.event.listNotifi = _notifilist;
 

@@ -1,27 +1,66 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:pageview/Classes/Localization.dart';
+import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/Add/add_location2.dart';
 
-class UpgradeLocalization extends StatefulWidget {
+class AddLocalization extends StatefulWidget {
   @override
-  _UpgradeLocalizationState createState() => _UpgradeLocalizationState();
+  _AddLocalizationState createState() => _AddLocalizationState();
+
+  Task task;
+  List<Localization> listOfLocal;
+
+  AddLocalization(this.task,this.listOfLocal);
 }
 
-class _UpgradeLocalizationState extends State<UpgradeLocalization> {
+class _AddLocalizationState extends State<AddLocalization> {
+
+  List<Localization> localizationlist;
+  List<Localization> downloadlist;
+//  int currentIndex = 0;
+//  int length = 0;
+
   @override
   void initState() {
+    localizationlist = List();
+    downloadlist = List();
+    _downloadData();
+
     super.initState();
   }
 
-  List<Localization> localizationlist = [];
-  int currentIndex = 0;
-  int length = 0;
+
+  void _downloadData(){
+    LocalizationHelper.lists().then((onList) {
+      if(onList != null) {
+        downloadlist = onList;
+
+        downloadlist.removeAt(0);
+
+        localizationlist.addAll(downloadlist);
+
+        if(widget.task.localization.id != 0){
+          localizationlist.add(widget.task.localization);
+        }
+        if(widget.listOfLocal.isNotEmpty){
+          localizationlist.addAll(widget.listOfLocal);
+        }
+
+
+        setState(() {});
+      }
+    });
+  }
+
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj Lokalizację"),
+        title: Text("Dodaj Lokalizację", style: TextStyle(color: Colors.white),),
+                     // tu kontrolujesz przycisk wstecz
+    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -35,11 +74,14 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
     );
   }
 
+
+
+
   Widget buildList() {
     return new ListView.builder(
       physics: ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: length,
+        itemCount: localizationlist.length,
         itemBuilder: (context, index) {
           return RaisedButton(
             shape: RoundedRectangleBorder(
@@ -65,7 +107,7 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
                               size: 18.0,
                               color: Colors.white,
                             ),
-                            Text(" " + localizationlist[index].name),
+                            Text(" " + localizationlist[index].name.toString()),
                           ],
                         ),
                       )
@@ -75,7 +117,7 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
               ),
             ),
             color: localizationlist[index].isSelected
-                ? Colors.grey
+                ? Color(0xFF333366)
                 : Colors.transparent,
             onPressed: () => setState(() => checkifselected(index)),
           );
@@ -85,6 +127,7 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
   Widget buildRemoveButton(int _index) {
     return SizedBox(
       child: IconButton(
+        color: Colors.white,
         icon: Icon(Icons.clear),
         onPressed: () {
           removeFromList(_index);
@@ -95,11 +138,11 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
 
   Widget buildCustomButton(String text, void action()) {
     return RaisedButton(
-      color: Colors.transparent,
+      color: Color(0xFF333366),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       onPressed: () {
@@ -121,25 +164,43 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
   }
 
   void goBack() {
+
+    widget.listOfLocal.clear();
+    localizationlist.forEach((g){
+      if(g.id == null && g.isSelected == false){
+        widget.listOfLocal.add(g);
+      }
+    });
+
     Navigator.pop(context);
+
+  setState(() {});
+  }
+
+  void onBackPressed() {
+    goBack();
   }
 
   void goToLocationPickPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddLocation(widget.)));
+        context, MaterialPageRoute(builder: (context) => AddLocation(localizationlist)));
   }
 
   void removeFromList(int _index) {
+    //TODO sprawdz która jest z bazy i dopiero wtedy wywal
     localizationlist.removeAt(_index);
     setState(() {});
   }
 
   void checkifselected(_index) {
-    if (localizationlist[_index].isSelected == false) {
-      for (int i = 0; i < localizationlist.length; i++)
-        localizationlist[i].isSelected = false;
-      localizationlist[_index].isSelected = true;
-    } else
+
+    if(localizationlist[_index].isSelected  == true) {
       localizationlist[_index].isSelected = false;
+      widget.task.localization = Localization(id:0);
+    }else{
+      localizationlist.forEach((g) => g.isSelected = false);
+      localizationlist[_index].isSelected = true;
+      widget.task.localization = localizationlist[_index];
+    }
   }
 }

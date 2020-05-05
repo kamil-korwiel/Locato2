@@ -75,6 +75,8 @@ class _AddTaskState extends State<AddTask> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dodaj zadanie', style: TextStyle(color: Colors.white),),
+            // tu kontrolujesz przycisk wstecz
+    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -366,4 +368,9 @@ class _AddTaskState extends State<AddTask> {
       }
     }
   }
+
+  void onBackPressed() {
+    goBack();
+  }
+
 }

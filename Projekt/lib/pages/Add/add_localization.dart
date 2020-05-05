@@ -58,7 +58,9 @@ class _AddLocalizationState extends State<AddLocalization> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj Lokalizację"),
+        title: Text("Dodaj Lokalizację", style: TextStyle(color: Colors.white),),
+                     // tu kontrolujesz przycisk wstecz
+    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -115,7 +117,7 @@ class _AddLocalizationState extends State<AddLocalization> {
               ),
             ),
             color: localizationlist[index].isSelected
-                ? Colors.grey
+                ? Color(0xFF333366)
                 : Colors.transparent,
             onPressed: () => setState(() => checkifselected(index)),
           );
@@ -125,6 +127,7 @@ class _AddLocalizationState extends State<AddLocalization> {
   Widget buildRemoveButton(int _index) {
     return SizedBox(
       child: IconButton(
+        color: Colors.white,
         icon: Icon(Icons.clear),
         onPressed: () {
           removeFromList(_index);
@@ -135,11 +138,11 @@ class _AddLocalizationState extends State<AddLocalization> {
 
   Widget buildCustomButton(String text, void action()) {
     return RaisedButton(
-      color: Colors.transparent,
+      color: Color(0xFF333366),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       onPressed: () {
@@ -172,6 +175,10 @@ class _AddLocalizationState extends State<AddLocalization> {
     Navigator.pop(context);
 
   setState(() {});
+  }
+
+  void onBackPressed() {
+    goBack();
   }
 
   void goToLocationPickPage() {
