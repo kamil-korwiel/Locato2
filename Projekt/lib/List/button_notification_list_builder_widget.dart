@@ -96,7 +96,7 @@ class _ListNotifiState extends State<ListNotifi> {
       child: IconButton(
         icon: Icon(Icons.clear),
         onPressed: () {
-          removeFromList(_index);
+          //removeFromList(_index);
         },
       ),
     );

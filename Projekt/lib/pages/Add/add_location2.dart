@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:throttling/throttling.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:http/http.dart' as http;
@@ -81,11 +80,19 @@ final _addLocationKey = GlobalKey<FormState>();
 class AddLocation extends StatefulWidget {
   @override
   _AddLocationState createState() => _AddLocationState();
+
+  List<Localization> listofLocal;
+
+  AddLocation(this.listofLocal);
 }
 
 class _AddLocationState extends State<AddLocation> {
   Completer<GoogleMapController> mapController = Completer();
   Future<List<Adres>> futureAdresy;
+
+
+
+
 
   // Funkcja inicjujaca mape
   _onMapCreated(GoogleMapController controller) {
@@ -321,15 +328,16 @@ class _AddLocationState extends State<AddLocation> {
         elevation: 4.0,
         onPressed: () {
           if (_formKey.currentState.validate()) {
-            dbLokalizacja.id = 0;
             dbLokalizacja.latitude = _lastPosition.latitude;
             dbLokalizacja.longitude = _lastPosition.longitude;
             dbLokalizacja.name = nazwaController.text;
             dbLokalizacja.street = adresController.text;
             // Miasto zapisane jest w funkcji LocationToAdress()
             // Dodaj do bazy
-            LocalizationHelper.add(dbLokalizacja);
+            //LocalizationHelper.add(dbLokalizacja);
             // Powrot
+
+            widget.listofLocal.add(dbLokalizacja);
             Navigator.pop(context);
           }
         },

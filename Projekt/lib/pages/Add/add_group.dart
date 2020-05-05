@@ -1,39 +1,62 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/add_task.dart';
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class UpgradeGroup extends StatefulWidget {
+
+
+class AddGroup extends StatefulWidget {
   @override
-  _UpgradeGroupState createState() => _UpgradeGroupState();
+  _AddGroupState createState() => _AddGroupState();
 
   Task task;
+  List<Group> listOfGroup;
 
-  UpgradeGroup({@required this.task});
+  AddGroup(this.task,this.listOfGroup);
 }
 
-class _UpgradeGroupState extends State<UpgradeGroup> {
+class _AddGroupState extends State<AddGroup> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _text = TextEditingController();
 
+
+  List<Group> downloadlist;
   List<Group> list;
 
   @override
   void initState() {
+    downloadlist = List();
     list = List();
-//    GroupHelper.lists().then((onList) {
-//      if(onList != null) {
-//        list = onList;
-//        setState(() {});
-//      }
-//    });
+    _downloadData();
 
     super.initState();
-    print(widget.task.idGroup);
+    //print(widget.task.idGroup);
+  }
+
+  void _downloadData(){
+
+//    print("lenght of list before ${widget.listOfGroup.length}");
+    GroupHelper.lists().then((onList) {
+      if(onList != null) {
+        downloadlist = onList;
+
+        downloadlist.removeAt(0);
+
+        list.addAll(downloadlist);
+
+        if(widget.task.group.id != 0){
+          list.add(widget.task.group);
+        }
+        if(widget.listOfGroup.isNotEmpty){
+          //print("jestem");
+          list.addAll(widget.listOfGroup);
+        }
+
+        setState(() {});
+      }
+    });
   }
 
   Widget build(BuildContext context) {
@@ -46,55 +69,43 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
           child: ListView(children: <Widget>[
             Form(
                 key: _formKey,
-                child: buildCustomTextFieldwithValidation(
-                    "Nowa Grupa", "Wprowadź nazwę nowej grupy", _text)),
+                child: buildCustomTextFieldwithValidation("Nowa Grupa", "Wprowadź nazwę nowej grupy", _text)),
             buildSpace(),
             buildCustomButton("Dodaj", add),
             buildSpace(),
-            SizedBox(
-              height: 300,
-                          child: FutureBuilder(
-                  future: GroupHelper.lists(),
-                  builder: (context, snapshot) {
-                    list = snapshot.connectionState == ConnectionState.done
-                        ? snapshot.data
-                        : list;
-                    return ListView.builder(
-                      physics: ScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: list.length,
-                        itemBuilder: (context, index) {
-                          return RaisedButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(
-                                color: Colors.amber[400],
-                              ),
-                            ),
-                            elevation: 5.0,
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 50.0,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      buildListIconTileWithText(
-                                          Icons.account_circle, list[index].name)
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            color: list[index].id == widget.task.idGroup
-                                ? Colors.amber[400]
-                                : Colors.transparent,
-                            onPressed: () => select(index),
-                          );
-                        });
-                  }),
-            ),
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: BorderSide(
+                        color: Colors.amber[400],
+                      ),
+                    ),
+                    elevation: 5.0,
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              buildListIconTileWithText(Icons.account_circle, list[index].name)
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    color: list[index].isSelected
+                        ? Colors.amber[400]
+                        : Colors.transparent,
+                    onPressed: () => select(index),
+                  );
+                }),
+
             buildSpace(),
             buildCustomButton("Potwierdź", goBack),
           ])),
@@ -116,8 +127,7 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
     );
   }
 
-  Widget buildCustomTextFieldwithValidation(
-      String label, String hint, TextEditingController control) {
+  Widget buildCustomTextFieldwithValidation(String label, String hint, TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
@@ -141,7 +151,7 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
                 onPressed: () {
                   control.clear();
                 })),
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.text,
         validator: (val) {
           if (val.isEmpty) {
             return 'Pole nie może być puste!';
@@ -189,13 +199,28 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
   }
 
   void goBack() {
+
+    widget.listOfGroup.clear();
+    list.forEach((g){
+      //print("id: ${g.id} added: ${g.name} bool: ${g.isSelected}");
+      if(g.id == null && g.isSelected == false){
+        //print("added: ${g.name} bool: ${g.isSelected}");
+        widget.listOfGroup.add(g);
+      }
+    });
+
+
+//    print("lenght of list after ${widget.listOfGroup.length}");
+
     Navigator.pop(context);
   }
 
   void add() {
     if (_formKey.currentState.validate()) {
-      GroupHelper.add(new Group(name: _text.text));
-      _text.clear();
+//      GroupHelper.add(new Group(name: _text.text));
+//      _text.clear();
+//      setState(() {});
+      list.add(Group(name: _text.text));
       setState(() {});
     }
   }
@@ -206,8 +231,19 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
   }
 
   void select(int _index) {
-    setState(() {
-      widget.task.idGroup = list[_index].id;
-    });
+
+
+    if(list[_index].isSelected == true) {
+      list[_index].isSelected = false;
+       widget.task.group = Group(id: 0);
+    }else{
+      list.forEach((g) => g.isSelected = false);
+      list[_index].isSelected = true;
+      widget.task.group = list[_index];
+    }
+
+
+      setState(() {});
+
   }
 }

@@ -4,7 +4,7 @@ import 'database_helper.dart';
 class LocalizationHelper {
   static final dbHelper = DatabaseHelper.instance;
 
-  static Future<void> add(Localization newLocalization) async {
+  static Future<int> add(Localization newLocalization) async {
     int IdLocalization =
         await dbHelper.query("SELECT MAX(ID_Lokalizacji) FROM Lokalizacja");
 
@@ -16,6 +16,8 @@ class LocalizationHelper {
       'Miasto': newLocalization.city,
       'Ulica': newLocalization.street,
     });
+
+    return IdLocalization + 1;
   }
 
   static Future<void> update(Localization updatedLocalization) async {

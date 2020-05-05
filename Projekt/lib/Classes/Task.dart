@@ -1,5 +1,7 @@
 import 'package:pageview/Classes/Notification.dart';
 
+import 'Group.dart';
+import 'Localization.dart';
 import 'Notifi.dart';
 
 class Task {
@@ -8,12 +10,10 @@ class Task {
   bool done;
   DateTime endTime;
   String description;
-  int idLocalizaton;
-  int idGroup;
-
+  Localization localization;
+  Group group;
 
   List<Notifi> listNotifi;
-
 
   Task({
     this.id,
@@ -21,8 +21,8 @@ class Task {
     this.done,
     this.endTime,
     this.description,
-    this.idLocalizaton,
-    this.idGroup,
+    this.localization,
+    this.group,
     this.listNotifi,
   }){
     listNotifi = List();

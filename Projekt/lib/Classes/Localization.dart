@@ -5,7 +5,7 @@ class Localization {
   String name;
   String city;
   String street;
-  bool isSelected = false;
+  bool isSelected;
 
   Localization(
       {this.id,
@@ -14,5 +14,5 @@ class Localization {
       this.name,
       this.city,
       this.street,
-      this.isSelected,});
+      this.isSelected = false});
 }

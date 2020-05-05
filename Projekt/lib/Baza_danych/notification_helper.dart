@@ -22,19 +22,21 @@ class NotifiHelper {
   }
 
   static Future<void> addList(List<Notifi> list) async {
-    int IdNotifi =
-        await dbHelper.query("SELECT MAX(ID_Powiadomienia) FROM Powiadomienia");
+    if(list.isNotEmpty) {
+      int IdNotifi = await dbHelper.query(
+          "SELECT MAX(ID_Powiadomienia) FROM Powiadomienia");
 
-    print("ID Notifi:  $IdNotifi");
+      print("ID Notifi:  $IdNotifi");
 
-    IdNotifi = IdNotifi == null ? 0 : IdNotifi;
-    for (Notifi n in list) {
-      dbHelper.insert('Powiadomienia', {
-        'ID_Powiadomienia': ++IdNotifi,
-        'ID_Task': n.idTask,
-        'ID_Event': n.idEvent,
-        'Czas': n.duration.toString(),
-      });
+      IdNotifi = IdNotifi == null ? 0 : IdNotifi;
+      for (Notifi n in list) {
+        dbHelper.insert('Powiadomienia', {
+          'ID_Powiadomienia': ++IdNotifi,
+          'ID_Task': n.idTask,
+          'ID_Event': n.idEvent,
+          'Czas': n.duration.toString(),
+        });
+      }
     }
   }
 

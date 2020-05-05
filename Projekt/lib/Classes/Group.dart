@@ -2,7 +2,7 @@ class Group {
   int id;
   String name;
   int howMuchDone;
-  bool isSelected = false;
+  bool isSelected;
 
   Group({
     this.id,

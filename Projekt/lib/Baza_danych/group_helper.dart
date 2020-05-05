@@ -6,7 +6,7 @@ class GroupHelper {
   static final dbHelper = DatabaseHelper.instance;
 
 
-  static Future<void> add(Group newGroup) async {
+  static Future<int> add(Group newGroup) async {
     int IdGroup = await dbHelper.query("SELECT max(ID_Grupa) FROM Grupa");
     IdGroup = IdGroup == null ? 0: IdGroup;
     dbHelper.insert('Grupa', {
@@ -14,6 +14,7 @@ class GroupHelper {
       'Nazwa_grupa': newGroup.name,
       'Ile_wykonane': newGroup.howMuchDone,
     });
+    return IdGroup + 1;
   }
 
   static Future<void> update(Group updatedGroup) async {

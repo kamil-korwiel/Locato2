@@ -1,9 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:pageview/Classes/Localization.dart';
-import 'package:pageview/pages/add_task.dart';
-import 'package:pageview/pages/add_location2.dart';
+import 'package:pageview/pages/Add/add_location2.dart';
 
 class UpgradeLocalization extends StatefulWidget {
   @override
@@ -128,7 +126,7 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
 
   void goToLocationPickPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddLocation()));
+        context, MaterialPageRoute(builder: (context) => AddLocation(widget.)));
   }
 
   void removeFromList(int _index) {

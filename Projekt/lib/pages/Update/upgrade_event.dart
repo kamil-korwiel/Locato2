@@ -8,9 +8,9 @@ import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
-import 'package:pageview/pages/add_group.dart';
-import 'package:pageview/pages/add_localization.dart';
-import 'add_notification.dart';
+import 'package:pageview/pages/Add/add_group.dart';
+import 'package:pageview/pages/Add/add_localization.dart';
+import 'package:pageview/pages/Add/add_notification.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

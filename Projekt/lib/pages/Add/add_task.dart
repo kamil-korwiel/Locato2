@@ -2,76 +2,71 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
-import 'package:pageview/Classes/NotificationDescription.dart';
-import 'package:pageview/pages/add_group.dart';
+import 'package:pageview/Classes/Localization.dart';
 import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/add_notification.dart';
-import 'package:pageview/Classes/NotificationDescription.dart';
-import 'package:pageview/pages/add_localization.dart';
 
+
+import 'add_group.dart';
+import 'add_localization.dart';
 import 'add_notification.dart';
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-String _date;
 
-class UpgradeTask extends StatefulWidget {
+class AddTask extends StatefulWidget {
   @override
-  _UpgradeTaskState createState() => _UpgradeTaskState();
+  _AddTaskState createState() => _AddTaskState();
 
-  Task update;
-
-  UpgradeTask({this.update});
+  AddTask();
 }
 
-class _UpgradeTaskState extends State<UpgradeTask> {
+class _AddTaskState extends State<AddTask> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _controllerName = TextEditingController();
   TextEditingController controllerDesc = TextEditingController();
 
   int id;
-  String _name;
-  String _description;
   String _time;
   String _group;
   String _notification;
   String _localization;
   Color dateColor;
   Color timeColor;
+  String _date;
 
-  Task newtask;
+  Task _task;
+  List<Localization> listOfLocalization;
+  List<Group> listOfGroup;
 
   DateTime _end;
 
   @override
   void initState() {
-    _name = (widget.update == null) ? null : widget.update.name;
-    _description = (widget.update == null) ? null : widget.update.description;
-    _date = (widget.update == null)
-        ? "Nie wybrano daty"
-        : DateFormat("yyyy-MM-dd").format(widget.update.endTime);
-    _time = (widget.update == null)
-        ? "Nie wybrano godziny rozpoczęcia"
-        : DateFormat("HH:mm").format(widget.update.endTime);
-    _group = (widget.update == null) ? "Grupa" : "ErrorUpdate";
-    _notification = (widget.update == null) ? "Powiadomienia" : "ErrorUpdate";
-    _localization = (widget.update == null) ? "Lokalizacja" : "ErrorUpdate";
-    _end = (widget.update == null) ? new DateTime.now() : widget.update.endTime;
+    print("start");
+    listOfLocalization = List();
+    listOfGroup = List();
 
-    newtask = Task(
-      idLocalizaton: 0,
-      idGroup: 0,
+    _date = "Nie wybrano daty";
+    _time = "Nie wybrano godziny rozpoczęcia";
+    _group = "Grupa" ;
+    _notification = "Powiadomienia" ;
+    _localization =  "Lokalizacja" ;
+
+    _end =  new DateTime.now() ;
+
+    _task = Task(
+      group: Group(id: 0),
+      localization: Localization(id: 0),
       done: false,
     );
 
     dateColor = Colors.white;
     timeColor = Colors.white;
 
-    if (widget.update != null) {
-      _controllerName = TextEditingController(text: _name);
-      controllerDesc = TextEditingController(text: _description);
-    }
+//    if (widget.update != null) {
+//      _controllerName = TextEditingController(text: _name);
+//      controllerDesc = TextEditingController(text: _description);
+//    }
     super.initState();
   }
 
@@ -79,7 +74,7 @@ class _UpgradeTaskState extends State<UpgradeTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj zadanie'),
+        title: Text('Dodaj zadanie', style: TextStyle(color: Colors.white),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -88,26 +83,19 @@ class _UpgradeTaskState extends State<UpgradeTask> {
           child: ListView(
             children: <Widget>[
               buildSpace(),
-              buildCustomTextFieldwithValidation(
-                  "Nazwa", "Podaj nazwę nowego zadania", _controllerName),
+              buildCustomTextFieldwithValidation("Nazwa", "Podaj nazwę nowego zadania", _controllerName),
               buildSpace(),
-              buildCustomButtonWithValidation(
-                  dateColor, _date, Icons.date_range, datePick),
+              buildCustomButtonWithValidation(dateColor, _date, Icons.date_range, datePick),
               buildSpace(),
-              buildCustomButtonWithValidation(
-                  timeColor, _time, Icons.access_time, timePick),
+              buildCustomButtonWithValidation(timeColor, _time, Icons.access_time, timePick),
               buildSpace(),
-              buildCustomButton(
-                  _group, Icons.account_circle, goToGroupPickPage),
+              buildCustomButton(_group, Icons.account_circle, goToGroupPickPage),
               buildSpace(),
-              buildCustomButton(
-                  _notification, Icons.notifications, goToNotificationPickPage),
+              buildCustomButton(_notification, Icons.notifications, goToNotificationPickPage),
               buildSpace(),
-              buildCustomButton(
-                  _localization, Icons.edit_location, goToLocalizationPickPage),
+              buildCustomButton(_localization, Icons.edit_location, goToLocalizationPickPage),
               buildSpace(),
-              buildCustomTextField("Opis", "Wprowadź opis swojego zadania",
-                  "Pole jest opcjonalne", controllerDesc),
+              buildCustomTextField("Opis", "Wprowadź opis swojego zadania","Pole jest opcjonalne", controllerDesc),
               buildSpace(),
               ButtonBar(
                   children: [
@@ -128,27 +116,28 @@ class _UpgradeTaskState extends State<UpgradeTask> {
     );
   }
 
-  Widget buildCustomTextFieldwithValidation(
-      String label, String hint, TextEditingController control) {
+  Widget buildCustomTextFieldwithValidation(String label, String hint, TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
+          filled: true,
+          fillColor: new Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amberAccent),
+              borderSide: BorderSide(color: Colors.transparent),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.amber[400])),
+                borderSide: BorderSide(color: Colors.white)),
             border: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.red),
             ),
             labelText: label,
-            labelStyle: TextStyle(color: Colors.amber[400]),
+            labelStyle: TextStyle(color: Colors.white),
             hintText: hint,
             suffixIcon: IconButton(
-                icon: Icon(Icons.clear, color: Colors.amber[400]),
+                icon: Icon(Icons.clear, color: Colors.white),
                 onPressed: () {
                   control.clear();
                 })),
@@ -161,25 +150,26 @@ class _UpgradeTaskState extends State<UpgradeTask> {
         });
   }
 
-  Widget buildCustomTextField(
-      String label, String hint, String helper, TextEditingController control) {
+  Widget buildCustomTextField(String label, String hint, String helper, TextEditingController control) {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
+        filled: true,
+        fillColor: new Color(0xFF333366),
           enabledBorder: new OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(color: Colors.amberAccent),
+            borderSide: BorderSide(color: Colors.transparent),
           ),
           focusedBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400])),
+              borderSide: BorderSide(color: Colors.white)),
           labelText: label,
-          labelStyle: TextStyle(color: Colors.amber[400]),
+          labelStyle: TextStyle(color: Colors.white),
           hintText: hint,
           helperText: helper,
-          helperStyle: TextStyle(color: Colors.amber[400]),
+          helperStyle: TextStyle(color: Colors.white),
           suffixIcon: IconButton(
-              icon: Icon(Icons.clear, color: Colors.amber[400]),
+              icon: Icon(Icons.clear, color: Colors.white),
               onPressed: () {
                 control.clear();
               })),
@@ -193,8 +183,7 @@ class _UpgradeTaskState extends State<UpgradeTask> {
     );
   }
 
-  Widget buildCustomButtonWithValidation(Color textcolor, String text,
-      IconData icon, GestureTapCallback onPressed) {
+  Widget buildCustomButtonWithValidation(Color textcolor, String text,IconData icon, GestureTapCallback onPressed) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -223,7 +212,7 @@ class _UpgradeTaskState extends State<UpgradeTask> {
           ],
         ),
       ),
-      color: Colors.amber[400],
+      color: new Color(0xFF333366),
     );
   }
 
@@ -255,16 +244,15 @@ class _UpgradeTaskState extends State<UpgradeTask> {
           ],
         ),
       ),
-      color: Colors.amber[400],
+      color: new Color(0xFF333366),
     );
   }
 
   Widget buildButtonBarTile(String text, Color color, void action()) {
     return RaisedButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         elevation: 5.0,
-        highlightColor: color,
+        color: new Color(0xFF333366),
         splashColor: color,
         child: Text("$text"),
         onPressed: () {
@@ -277,7 +265,7 @@ class _UpgradeTaskState extends State<UpgradeTask> {
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
           itemStyle: TextStyle(color: Colors.white),
-          cancelStyle: TextStyle(color: Colors.amber[400]),
+          cancelStyle: TextStyle(color: Colors.red),
           doneStyle: TextStyle(color: Colors.green[400]),
           containerHeight: 210.0,
         ),
@@ -294,7 +282,7 @@ class _UpgradeTaskState extends State<UpgradeTask> {
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
           itemStyle: TextStyle(color: Colors.white),
-          cancelStyle: TextStyle(color: Colors.amber[400]),
+          cancelStyle: TextStyle(color: Colors.red),
           doneStyle: TextStyle(color: Colors.green[400]),
           containerHeight: 210.0,
         ),
@@ -314,52 +302,49 @@ class _UpgradeTaskState extends State<UpgradeTask> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AddNotificationTask(
-                  widget.update == null ? newtask : widget.update,
-                )));
+            builder: (context) => AddNotificationTask(_task)));
   }
 
   void goToLocalizationPickPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddLocalization()));
+        context, MaterialPageRoute(builder: (context) => AddLocalization(_task,listOfLocalization)));
   }
 
   void goToGroupPickPage() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AddGroup(
-                  task: widget.update == null ? newtask : widget.update,
-                )));
+            builder: (context) => AddGroup(_task,listOfGroup)));
   }
-//TODO problem z dodawaniem tasku
+
   void acceptAndValidate() {
     if (_formKey.currentState.validate()) {
-      if (_date != "Nie wybrano daty" &&
-          _time != "Nie wybrano godziny rozpoczęcia") {
+      if (_date != "Nie wybrano daty" && _time != "Nie wybrano godziny rozpoczęcia") {
         dateColor = Colors.white;
         timeColor = Colors.white;
         setState(() {});
-        if (widget.update != null) {
-//                              widget.update.name = _controllerName.value.text;
-//                              widget.update.endTime =
-//                                  DateTime.parse("$_date $_time");
 
-//                              TaskHelper.update(widget.update);
-//                              Navigator.of(context).pop();
-        } else {
-//                              newtask.name = _controllerName.text;
-//                              newtask.description = controllerDesc.text;
-//                              newtask.endTime = DateFormat("yyyy-MM-dd hh:mm")
-//                                  .parse(_date + " " + _);
-//                          print(newtask.name + " " + "Opis: " + newtask.description+ "Group: "+ newtask.idGroup.toString());
-//                          print(newtask.name);
-//                          print(newtask.endTime);
-//                          print(newtask.idGroup);
-//                          print(newtask.description);
-//                              TaskHelper.add(newtask);
-//                              Navigator.of(context).pop();
-        }
+        _task.name = _controllerName.text;
+        _task.description = controllerDesc.text;
+        _task.endTime = DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time);
+        //print(_task.name + " " + "Opis: " + _task.description+ "Group: "+ _task.idGroup.toString());
+         print("Name: "+_task.name);
+         print("EndTask: "+_task.endTime.toString());
+         print("Desc: ${_task.description}");
+         print("idGroup: ${_task.group.id}");
+         print("Grupa: ${_task.group.name}");
+         print("idLokalizacja: ${_task.localization.id}");
+         print("Localization: ${_task.localization.name}");
+         print("City: ${_task.localization.city}");
+         print("Latitude: ${_task.localization.latitude}");
+         print("Longitude: ${_task.localization.longitude}");
+
+        _task.listNotifi.forEach((t) => print(t.duration));
+
+        TaskHelper.add(_task);
+        //TaskHelper.add(task);
+        Navigator.of(context).pop();
+
       } else {
         if (_date == "Nie wybrano daty")
           dateColor = Colors.red;

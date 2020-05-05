@@ -1,11 +1,12 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:pageview/pages/add_event.dart';
-import 'package:pageview/pages/add_task.dart';
+import 'package:pageview/pages/Add/add_event.dart';
+import 'package:pageview/pages/Add/add_task.dart';
+import 'package:pageview/pages/GroupPage/GroupPage.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/grouptaskpage.dart';
-import 'pages/add_location2.dart';
+
 import 'Baza_danych/database_helper.dart';
 
 void main() async {
@@ -111,7 +112,8 @@ class _HomePageState extends State<HomePage>
                   ],
                 ),
               ),
-            )),
+            )
+        ),
         floatingActionButton: SpeedDial(
           elevation: 10.0,
           animatedIcon: AnimatedIcons.add_event,
@@ -167,20 +169,20 @@ class _HomePageState extends State<HomePage>
 //                GroupHelper.add(g);
                   setState(() {});
                 }),
-            SpeedDialChild(
-              child: Icon(Icons.add_location),
-              label: 'Lokalizacja',
-              labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
-              onTap: () {
-                print('Dodaj Lokalizacje');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddLocation(),
-                  ),
-                );
-              },
-            ),
+//            SpeedDialChild(
+//              child: Icon(Icons.add_location),
+//              label: 'Lokalizacja',
+//              labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
+//              onTap: () {
+//                print('Dodaj Lokalizacje');
+//                Navigator.push(
+//                  context,
+//                  MaterialPageRoute(
+//                  //  builder: (context) => AddLocation(),
+//                  ),
+//                );
+//              },
+//            ),
           ],
         ),
         body: PageView(

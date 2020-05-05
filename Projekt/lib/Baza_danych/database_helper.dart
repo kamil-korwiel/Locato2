@@ -50,6 +50,7 @@ class DatabaseHelper {
 
 
 
+
     await db.execute('''
            CREATE TABLE Powiadomienia(
      ID_Powiadomienia     INTEGER   PRIMARY KEY,
@@ -63,13 +64,18 @@ class DatabaseHelper {
     await db.execute('''
            CREATE TABLE Lokalizacja (
      ID_Lokalizacji INTEGER   PRIMARY KEY,
-     Latitude       DOUBLE    NOT NULL,
-     Longitude      DOUBLE    NOT NULL,
+     Latitude       DOUBLE    DEFAULT NULL,
+     Longitude      DOUBLE    DEFAULT NULL,
      Nazwa          TEXT      DEFAULT NULL,
      Miasto         TEXT      DEFAULT NULL,
      Ulica          TEXT      DEFAULT NULL
  )
            ''');
+
+    await db.execute('''
+            INSERT INTO Lokalizacja (ID_Lokalizacji,Nazwa,Miasto,Ulica)
+    VALUES (0,NULL,NULL,NULL)
+    ''');
     await db.execute('''
            CREATE TABLE Task (
      ID_Task        INTEGER     PRIMARY KEY,
@@ -78,7 +84,9 @@ class DatabaseHelper {
      Do_Kiedy       TEXT        DEFAULT NULL,
      Opis           TEXT        DEFAULT NULL,
      Lokalizacja    INTEGER     DEFAULT NULL,
-     Grupa          INTEGER     DEFAULT NULL
+     Grupa          INTEGER     DEFAULT NULL,
+     FOREIGN KEY(Grupa) REFERENCES Grupa(ID_Grupa),
+     FOREIGN KEY(Lokalizacja) REFERENCES Lokalizacja(ID_Lokalizacji)
  )
            ''');
 //    --FOREIGN KEY(Grupa) REFERENCES Grupa(ID_Grupa),
@@ -108,10 +116,10 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
-  Future<List<Map<String, dynamic>>> queryIdNotifi(int id) async {
-    Database db = await instance.database;
-    return await db.rawQuery('SELECT * FROM Powiadomienia_Wydarzen WHERE $id');
-  }
+//  Future<List<Map<String, dynamic>>> queryIdNotifi(int id) async {
+//    Database db = await instance.database;
+//    return await db.rawQuery('SELECT * FROM Powiadomienia_Wydarzen WHERE $id');
+//  }
 
   Future<List<Map<String, dynamic>>> queryIdRowsTask(int id) async {
     Database db = await instance.database;

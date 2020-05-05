@@ -1,6 +1,5 @@
 import 'package:pageview/Classes/Notifi.dart';
 
-import 'Notification.dart';
 
 class Event {
    int id;

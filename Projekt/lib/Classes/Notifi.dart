@@ -1,7 +1,7 @@
 class Notifi{
   int id;
-  int idTask =-1;
-  int idEvent=-1;
+  int idTask;
+  int idEvent;
   Duration duration;
 
   Notifi({

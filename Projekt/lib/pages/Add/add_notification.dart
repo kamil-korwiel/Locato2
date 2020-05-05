@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:pageview/Baza_danych/notification_helper.dart';
+import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/List/button_notification_list_builder_widget.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:pageview/Classes/Notification.dart';
 
 class AddNotificationTask extends StatefulWidget {
   @override
@@ -20,29 +17,6 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   final TextEditingController _text = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    if (widget.task.id != null) {
-      NotifiHelper.listsTaskID(widget.task.id).then((onList) {
-        if (onList != null) {
-          _notifilist = onList;
-          print(_notifilist);
-          print(onList);
-          if (widget.task.listNotifi.isNotEmpty) {
-            _notifilist.addAll(widget.task.listNotifi);
-          }
-          setState(() {});
-        }
-      });
-    } else {
-      if (widget.task.listNotifi.isNotEmpty) {
-        _notifilist = widget.task.listNotifi;
-      }
-    }
-
-    super.initState();
-  }
-
   List<Notifi> _notifilist = [];
   List<String> unitlist = ["Minuty", "Godziny", "Dni"];
   String holder = "Minuty";
@@ -50,6 +24,18 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   var duration;
   int czas;
   String name;
+
+
+
+  @override
+  void initState() {
+
+    _notifilist = widget.task.listNotifi;
+
+    super.initState();
+  }
+
+
 
   void getDropDownItem() {
     setState(() {
@@ -60,10 +46,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Dodaj powiadomienie",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: Text("Dodaj powiadomienie"),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -100,7 +83,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.white,
+          color: Colors.amber[400],
         ),
       ),
       onPressed: () {
@@ -126,7 +109,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
       padding: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: Colors.white),
+        border: Border.all(color: Colors.amber[400]),
       ),
       child: DropdownButton<String>(
         value: _value,
@@ -156,7 +139,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
         decoration: new InputDecoration(
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.white),
+              borderSide: BorderSide(color: Colors.amber[400]),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -206,14 +189,14 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   }
 
   void confirm() {
-    List<Notifi> noti = List();
+//    List<Notifi> noti = List();
+//    for (Notifi n in _notifilist) {
+//      if (n.id == null) {
+//        noti.add(n);
+//      }
+//    }
 
-    for (Notifi n in _notifilist) {
-      if (n.id == null) {
-        noti.add(n);
-      }
-    }
-    widget.task.listNotifi = noti;
+    widget.task.listNotifi = _notifilist;
     Navigator.pop(context);
   }
 }
@@ -237,23 +220,8 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
 
   @override
   void initState() {
-    if (widget.event.id != null) {
-      NotifiHelper.listsEventID(widget.event.id).then((onList) {
-        if (onList != null) {
-          _notifilist = onList;
-          print(_notifilist);
-          print(onList);
-          if (widget.event.listNotifi.isNotEmpty) {
-            _notifilist.addAll(widget.event.listNotifi);
-          }
-          setState(() {});
-        }
-      });
-    } else {
-      if (widget.event.listNotifi.isNotEmpty) {
-        _notifilist = widget.event.listNotifi;
-      }
-    }
+
+    _notifilist = widget.event.listNotifi;
 
     super.initState();
   }
@@ -269,30 +237,29 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white),),
+        title: Text("Dodaj powiadomienie"),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(children: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  buildCustomDropdownButton(),
-                  buildSpaceBetween(),
-                  Flexible(
-                    child: Form(
-                      key: _formKey,
-                      child: buildCustomTextFieldwithValidation(
-                          holder, "Wprowadź wartość"),
-                    ),
+          Container( 
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(color: Colors.amber[400],),), 
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                buildCustomDropdownButton(),
+                Flexible(
+                  child: Form(
+                    key: _formKey,
+                    child: buildCustomTextFieldwithValidation(
+                        holder, "Wprowadź wartość", _text),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
             buildSpace(),
             buildcustomButton("Dodaj", validateAndAdd),
             buildSpace(),
@@ -309,7 +276,7 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.white,
+          color: Colors.amber[400],
         ),
       ),
       elevation: 5.0,
@@ -331,18 +298,8 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     );
   }
 
-  Widget buildSpaceBetween() {
-    return SizedBox(
-      width: 10.0,
-    );
-  }
-
   Widget buildCustomDropdownButton() {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: Colors.white),
-      ),
       padding: EdgeInsets.symmetric(horizontal: 5.0),
       child: DropdownButton<String>(
         value: _value,
@@ -365,13 +322,14 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     );
   }
 
-  Widget buildCustomTextFieldwithValidation(String label, String hint) {
+  Widget buildCustomTextFieldwithValidation(
+      String label, String hint, TextEditingController control) {
     return TextFormField(
-        controller: _text,
+        controller: control,
         decoration: new InputDecoration(
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.white),
+              borderSide: BorderSide(color: Colors.amber[400]),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -387,7 +345,7 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
             suffixIcon: IconButton(
                 icon: Icon(Icons.clear, color: Colors.white),
                 onPressed: () {
-                  _text.clear();
+                  control.clear();
                 })),
         keyboardType: TextInputType.number,
         validator: (val) {
@@ -432,16 +390,15 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   }
 
   void confirm() {
-    _text.clear();
-    List<Notifi> noti = List();
-//                widget.event.listNotifi.clear();
-    for (Notifi n in _notifilist) {
-      if (n.id == null) {
-        noti.add(n);
-      }
-    }
+//    List<Notifi> noti = List();
+////                widget.event.listNotifi.clear();
+//    for (Notifi n in _notifilist) {
+//      if (n.id == null) {
+//        noti.add(n);
+//      }
+//    }
 
-    widget.event.listNotifi = noti;
+    widget.event.listNotifi = _notifilist;
 
     Navigator.pop(context);
   }

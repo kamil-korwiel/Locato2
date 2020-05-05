@@ -1,14 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
 import 'package:pageview/Baza_danych/event_helper.dart';
-import 'package:pageview/Baza_danych/task_helper.dart';
+
 import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/main.dart';
-import 'package:pageview/pages/add_event.dart';
-import 'add_location.dart';
-import 'add_task.dart';
+
 import 'package:pageview/Items/EventCard.dart';
 
 class HomePageEvents extends StatefulWidget {

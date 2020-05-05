@@ -4,20 +4,20 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/add_task.dart';
+import 'package:pageview/pages/Add/add_task.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class AddGroup extends StatefulWidget {
+class UpgradeGroup extends StatefulWidget {
   @override
-  _AddGroupState createState() => _AddGroupState();
+  _UpgradeGroupState createState() => _UpgradeGroupState();
 
   Task task;
 
-  AddGroup({@required this.task});
+  UpgradeGroup({@required this.task});
 }
 
-class _AddGroupState extends State<AddGroup> {
+class _UpgradeGroupState extends State<UpgradeGroup> {
   final _text = TextEditingController();
 
   List<Group> list;
@@ -33,13 +33,13 @@ class _AddGroupState extends State<AddGroup> {
 //    });
 
     super.initState();
-    print(widget.task.idGroup);
+   // print(widget.task.group.id);
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj grupę",style: TextStyle(color: Colors.white),),
+        title: Text("Dodaj grupę"),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -51,51 +51,46 @@ class _AddGroupState extends State<AddGroup> {
             buildSpace(),
             buildCustomButton("Dodaj", add),
             buildSpace(),
-            SizedBox(
-              height: 300,
-              child: FutureBuilder(
-                  future: GroupHelper.lists(),
-                  builder: (context, snapshot) {
-                    list = snapshot.connectionState == ConnectionState.done
-                        ? snapshot.data
-                        : list;
-                    return ListView.builder(
-                      physics: ScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: list.length,
-                          itemBuilder: (context, index) {
-                            return RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                side: BorderSide(
-                                  color: Colors.white,
-                                ),
-                              ),
-                              elevation: 5.0,
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 50.0,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            FutureBuilder(
+                future: GroupHelper.lists(),
+                builder: (context, snapshot) {
+                  list = snapshot.connectionState == ConnectionState.done
+                      ? snapshot.data
+                      : list;
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        return RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(
+                              color: Colors.amber[400],
+                            ),
+                          ),
+                          elevation: 5.0,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 50.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Row(
                                   children: <Widget>[
-                                    Row(
-                                      children: <Widget>[
-                                        buildListIconTileWithText(
-                                            Icons.account_circle, list[index].name)
-                                      ],
-                                    ),
+                                    buildListIconTileWithText(
+                                        Icons.account_circle, list[index].name)
                                   ],
                                 ),
-                              ),
-                              color: list[index].id == widget.task.idGroup
-                                  ? Color(0xFF333366)
-                                  : Colors.transparent,
-                              onPressed: () => select(index),
-                            );
-                          },
-                    );
-                  }),
-            ),
+                              ],
+                            ),
+                          ),
+                          color: list[index].id == widget.task.group.id
+                              ? Colors.amber[400]
+                              : Colors.transparent,
+                          onPressed: () => select(index),
+                        );
+                      });
+                }),
             buildSpace(),
             buildCustomButton("Potwierdź", goBack),
           ])),
@@ -124,7 +119,7 @@ class _AddGroupState extends State<AddGroup> {
         decoration: new InputDecoration(
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.white),
+              borderSide: BorderSide(color: Colors.amber[400]),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -136,13 +131,13 @@ class _AddGroupState extends State<AddGroup> {
             labelText: label,
             labelStyle: TextStyle(color: Colors.white),
             hintText: hint,
-            hintStyle: TextStyle(color: Colors.grey),
+            hintStyle: TextStyle(color: Colors.white),
             suffixIcon: IconButton(
                 icon: Icon(Icons.clear, color: Colors.white),
                 onPressed: () {
                   control.clear();
                 })),
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.number,
         validator: (val) {
           if (val.isEmpty) {
             return 'Pole nie może być puste!';
@@ -168,7 +163,7 @@ class _AddGroupState extends State<AddGroup> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.white,
+          color: Colors.amber[400],
         ),
       ),
       onPressed: () {
@@ -208,7 +203,7 @@ class _AddGroupState extends State<AddGroup> {
 
   void select(int _index) {
     setState(() {
-      widget.task.idGroup = list[_index].id;
+      widget.task.group.id = list[_index].id;
     });
   }
 }
