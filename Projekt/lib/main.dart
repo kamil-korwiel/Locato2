@@ -8,6 +8,7 @@ import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/grouptaskpage.dart';
 
 import 'Baza_danych/database_helper.dart';
+import 'pages/calendar.dart';
 
 void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
@@ -80,35 +81,35 @@ class _HomePageState extends State<HomePage>
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-            //title: Text("Locato"),
-            leading: GestureDetector(
-              onTap: () {},
-              child: Icon(Icons.menu),
-            ),
-            elevation: 0.0,
-            bottom: PreferredSize(
-              preferredSize: Size(screenWidthTabBar, 40.0),
-              child: new Container(
-                width: screenWidthTabBar,
-                child: new TabBar(
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorColor: Color(0xff00c6ff),
-                  controller: _tabController,
-                  tabs: <Widget>[
-                    new Container(
-                      height: 40.0,
-                      child: new Tab(text: "Tydzień".toUpperCase()),
-                    ),
-                    new Container(
-                      height: 40.0,
-                      child: new Tab(text: "Grupy".toUpperCase()),
-                    ),
-                  ],
-                ),
-              ),
-            )
-        ),
+//        appBar: AppBar(
+//            //title: Text("Locato"),
+//            leading: GestureDetector(
+//              onTap: () {},
+//              child: Icon(Icons.menu),
+//            ),
+//            elevation: 0.0,
+//            bottom: PreferredSize(
+//              preferredSize: Size(screenWidthTabBar, 40.0),
+//              child: new Container(
+//                width: screenWidthTabBar,
+//                child: new TabBar(
+//                  indicatorSize: TabBarIndicatorSize.label,
+//                  indicatorColor: Color(0xff00c6ff),
+//                  controller: _tabController,
+//                  tabs: <Widget>[
+//                    new Container(
+//                      height: 40.0,
+//                      child: new Tab(text: "Tydzień".toUpperCase()),
+//                    ),
+//                    new Container(
+//                      height: 40.0,
+//                      child: new Tab(text: "Grupy".toUpperCase()),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//            )
+//        ),
         floatingActionButton: SpeedDial(
           elevation: 10.0,
           animatedIcon: AnimatedIcons.add_event,
@@ -175,14 +176,14 @@ class _HomePageState extends State<HomePage>
           ],
         ),
         body: PageView(
-          controller: PageController(
-            initialPage: 0,
-          ),
-          onPageChanged: (page) {
-            _tabController.animateTo(page);
-          },
+//          controller: PageController(
+//            initialPage: 0,
+//          ),
+//          onPageChanged: (page) {
+//            _tabController.animateTo(page);
+//          },
           children: <Widget>[
-            //Calendar(),
+            Calendar(),
             HomePageEvents(),
             GroupTaskPage(),
           ],

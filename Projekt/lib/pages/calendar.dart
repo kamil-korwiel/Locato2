@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:pageview/Baza_danych/event_helper.dart';
+import 'package:pageview/Classes/Event.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -13,8 +14,10 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  List _selectedEvents;
-  Map<DateTime, List> _events;
+  List<Event> _selectedEvents;
+  Map<DateTime, List<Event>> _events;
+  //Map<DateTime, List> _events2;
+  List<Event> _downloadEvents;
 
   CalendarController _calendarController;
 
@@ -23,16 +26,58 @@ class _CalendarState extends State<Calendar> {
     initializeDateFormatting();
     super.initState();
     final _selectedDay = DateTime.now();
-
-    _events = {
-      DateTime(2020, 4, 30): ['Wydarzenie 1'],
-      DateTime(2020, 5, 1): ['Wydarzenie 2', 'Wydarzenie 3', 'Wydarzenie 4'],
-      DateTime(2020, 5, 3): ['Wydarzenie 5', 'Wydarzenie 6'],
-      DateTime(2020, 5, 10): ['Wydarzenie 7'],
-    };
+    _events = Map();
+    _downloadData();
+    //_downloadEvents = List();
+//    _events = {
+//      DateTime(2020, 4, 30): ['Wydarzenie 1'],
+//      DateTime(2020, 5, 1): ['Wydarzenie 2', 'Wydarzenie 3', 'Wydarzenie 4'],
+//      DateTime(2020, 5, 3): ['Wydarzenie 5', 'Wydarzenie 6'],
+//      DateTime(2020, 5, 10): ['Wydarzenie 7'],
+//    };
     _selectedEvents = _events[_selectedDay] ?? [];
     _calendarController = CalendarController();
   }
+
+  void _downloadData(){
+
+    EventHelper.lists().then((onList) {
+      if(onList != null) {
+        _downloadEvents = onList;
+        List<Event> tmpList = List();
+        Event e;
+        while(_downloadEvents.length != 0){
+          e = _downloadEvents[0];
+          tmpList.clear();
+          tmpList.addAll(_downloadEvents);
+          List<Event> newList = List();
+          print("TMPLIST: ${tmpList.length}");
+          for(int i=0; i<tmpList.length; i++){
+            if( e.beginTime.day == tmpList[i].beginTime.day &&
+                e.beginTime.month == tmpList[i].beginTime.month &&
+                e.beginTime.year == tmpList[i].beginTime.year
+            ){
+              newList.add(tmpList[i]);
+              print("Downloadlist: ${_downloadEvents.length}");
+              _downloadEvents.remove(tmpList[i]);
+              print(".");
+            }
+          }
+          tmpList.forEach((e) => print("Events: ${e.name}"));
+          _events.addAll({DateTime(e.beginTime.year,e.beginTime.month,e.beginTime.day) : newList});
+        }
+       _events.forEach((date,listString){
+         
+         print(date.toString());
+         listString.forEach((s) => print(s.name));
+         print("");
+         
+       });
+        setState(() {});
+      }
+    });
+  }
+
 
   @override
   void dispose() {
@@ -209,7 +254,7 @@ class _CalendarState extends State<Calendar> {
     );
   }
 
-  Widget _buildEventsMarker(DateTime date, List events){
+  Widget _buildEventsMarker(DateTime date, List<Event> events){
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
@@ -243,8 +288,27 @@ class _CalendarState extends State<Calendar> {
           ),
           margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           child: ListTile(
-            title: Text(event.toString()),
-            onTap: () => print('$event'),
+            title: Text(event.name),
+            onTap: () => print('${event.name}'),
+//            trailing: Row(
+//              children: <Widget>[
+//                IconButton(icon: Icon(Icons.edit),
+//                onPressed: () {
+//                  Navigator.push(
+//                    context,
+//                    MaterialPageRoute(
+//                      builder: (context) => UpgradeEvent(),
+//                    ),
+//                  );
+//                },
+//                ),
+//                IconButton(icon: Icon(Icons.delete),
+//                onPressed: () {
+//
+//                },
+//                ),
+//              ],
+//            ),
           ),
         ))
         .toList(),

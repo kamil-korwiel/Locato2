@@ -158,7 +158,7 @@ class DatabaseHelper {
 
     print("\nID_Wydarzenie\t""Nazwa\t""Termin_od\t""Termin_do\t""Opis\t");
     mapEvent.forEach((m){
-      print("${m['ID_Wydarzenie'].toString()}\t""${m['Termin_od'].toString()}\t""${m['Termin_do'].toString()}\t"
+      print("${m['ID_Wydarzenie'].toString()}\t\t\t""${m['Nazwa'].toString()}\t""${m['Termin_od'].toString()}\t""${m['Termin_do'].toString()}\t"
             "${m['Opis'].toString()}\t");
     });
 
