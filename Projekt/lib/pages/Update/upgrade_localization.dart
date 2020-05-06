@@ -88,7 +88,7 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
               side: BorderSide(
-                color: Colors.white,
+                color: Colors.amber[400],
               ),
             ),
             elevation: 5.0,
@@ -103,16 +103,12 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
                       Container(
                         child: Row(
                           children: <Widget>[
-                            SizedBox(width: 30),
                             Icon(
                               Icons.location_on,
                               size: 18.0,
                               color: Colors.white,
                             ),
-                            SizedBox(width: 30),
                             Text(" " + localizationlist[index].name.toString()),
-                            SizedBox(width: 30),
-                            buildRemoveButton(index),
                           ],
                         ),
                       )
