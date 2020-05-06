@@ -5,7 +5,6 @@ import 'package:pageview/Classes/Task.dart';
 
 import 'ItemTask.dart';
 
-
 class ItemGroup extends StatefulWidget {
   @override
   _ItemGroupState createState() => _ItemGroupState();
@@ -13,11 +12,9 @@ class ItemGroup extends StatefulWidget {
   Group group;
 
   ItemGroup(this.group);
-
 }
 
 class _ItemGroupState extends State<ItemGroup> {
-
   List<Task> _list;
   @override
   void initState() {
@@ -27,28 +24,31 @@ class _ItemGroupState extends State<ItemGroup> {
     super.initState();
   }
 
-  void _downloadData(){
- //   print("GroupID ${widget.group.id}");
+  void _downloadData() {
+    //   print("GroupID ${widget.group.id}");
 //    TaskHelper.listsID(widget.group.id).then((onList){
-      TaskHelper.listsID(widget.group.id).then((onList){
-      if(onList != null) {
- //       print("TaskID NotNUll ${onList.length}");
+    TaskHelper.listsID(widget.group.id).then((onList) {
+      if (onList != null) {
+        //       print("TaskID NotNUll ${onList.length}");
         _list.addAll(onList);
         setState(() {});
       }
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    int donePercent = 100;
+    int donePercent = 50;
 
-    if(_list.isNotEmpty){
+    if (_list.isNotEmpty) {
       int doneTask = 0;
-      _list.forEach((task) {if(task.done){doneTask++;}});
+      _list.forEach((task) {
+        if (task.done) {
+          doneTask++;
+        }
+      });
 
-      donePercent = (100 * doneTask/_list.length).round();
+      donePercent = (100 * doneTask / _list.length).round();
     }
 
     return Stack(
@@ -56,37 +56,30 @@ class _ItemGroupState extends State<ItemGroup> {
         Container(
           height: 56,
           decoration: BoxDecoration(
-              gradient:  _buildGradient(Colors.orange, Colors.black38, donePercent)
-          ),
+              gradient:
+                  _buildGradient(Colors.orange, Colors.black38, donePercent)),
         ),
-
         GestureDetector(
           onLongPress: () => print("onLongPress"),
           child: ExpansionTile(
               initiallyExpanded: true,
-              title: Text(widget.group.name,         //<=
+              title: Text(
+                widget.group.name, //<=
                 style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
-                    fontSize: 20
-                ),
+                    fontSize: 20),
               ),
-              trailing: Text(donePercent.toString()+"%",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17
-                ),
+              trailing: Text(
+                donePercent.toString() + "%",
+                style: TextStyle(color: Colors.white, fontSize: 17),
               ),
-              children:  _buildListofTask()//<=
-          ),
+              children: _buildListofTask() //<=
+              ),
         ),
       ],
     );
-
   }
-
-
-
 
 //  List<Widget> _buildListofTask (List<Task> listOfTask){
 //
@@ -114,24 +107,22 @@ class _ItemGroupState extends State<ItemGroup> {
 //    return listOfWidget;
 //  }
 
-  List<Widget> _buildListofTask (){
+  List<Widget> _buildListofTask() {
+    List<ItemTask> listOfWidget = List();
 
-    List<ItemTask> listOfWidget  = List();
+    // print("List of task ${_list.length}");
 
-   // print("List of task ${_list.length}");
-
-    for (int i=0; i< _list.length; i++) {
-
-      listOfWidget.add(ItemTask(_list[i],
-        onPressedDelete: (){
+    for (int i = 0; i < _list.length; i++) {
+      listOfWidget.add(ItemTask(
+        _list[i],
+        onPressedDelete: () {
           //TaskHelper.delete(task.id);
           setState(() {});
         },
-        onPressedEdit: (){
+        onPressedEdit: () {
           // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTask(update: task)));
         },
         onPressedDone: () {
-
           _list[i].done = !_list[i].done;
 //           if(_list[i].done) {
 //             _list.insert(_list.length, _list[i]);
@@ -140,50 +131,17 @@ class _ItemGroupState extends State<ItemGroup> {
           setState(() {});
           //_list.forEach((t) => print(t.done));
         },
-      )
-
-      );
+      ));
     }
     return listOfWidget;
   }
 
-  LinearGradient _buildGradient(Color first,Color second,int donePercent){
-
+  LinearGradient _buildGradient(Color first, Color second, int donePercent) {
     return LinearGradient(
       colors: [first, second],
       begin: Alignment.centerLeft,
-      stops: [donePercent/100 ,donePercent/100],
+      stops: [donePercent / 100, donePercent / 100],
       end: Alignment.centerRight,
     );
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

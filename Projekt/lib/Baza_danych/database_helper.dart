@@ -27,7 +27,7 @@ class DatabaseHelper {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = documentsDirectory.path + _databaseName;
     print("path: " + path);
-    //deleteDatabase(path);
+    deleteDatabase(path);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
@@ -46,11 +46,6 @@ class DatabaseHelper {
     VALUES (0,'Brak Grupy',0)
     ''');
 
-
-
-
-
-
     await db.execute('''
            CREATE TABLE Powiadomienia(
      ID_Powiadomienia     INTEGER   PRIMARY KEY,
@@ -59,7 +54,6 @@ class DatabaseHelper {
      Czas                 TEXT    DEFAULT NULL
  )
            ''');
-
 
     await db.execute('''
            CREATE TABLE Lokalizacja (
@@ -140,11 +134,8 @@ class DatabaseHelper {
 
   Future<List<Map<String, int>>> queryTaskNotifiId(int id) async {
     Database db = await instance.database;
-    return await db.rawQuery(
-        "SELECT * FROM Powiadomienia WHERE ID_Task= $id");
+    return await db.rawQuery("SELECT * FROM Powiadomienia WHERE ID_Task= $id");
   }
-
-
 
   Future<int> query(String q) async {
     Database db = await instance.database;

@@ -9,12 +9,9 @@ import 'package:pageview/Classes/Event.dart';
 
 import 'add_notification.dart';
 
-
-
 class AddEvent extends StatefulWidget {
   @override
   _AddEventState createState() => _AddEventState();
-
 
   AddEvent();
 }
@@ -23,7 +20,6 @@ class _AddEventState extends State<AddEvent> {
   TextEditingController _controllerName;
   TextEditingController _controllerDesc;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 
   String _date;
   String _time1;
@@ -39,10 +35,9 @@ class _AddEventState extends State<AddEvent> {
 
   @override
   void initState() {
-
-    _date =  "Nie wybrano daty";
-    _time1 =  "Nie wybrano godziny rozpoczęcia";
-    _time2 =  "Nie wybrano godziny zakończenia";
+    _date = "Nie wybrano daty";
+    _time1 = "Nie wybrano godziny rozpoczęcia";
+    _time2 = "Nie wybrano godziny zakończenia";
     _notification = "Powiadomienia";
     _start = new DateTime.now();
     _end = new DateTime.now().add(new Duration(hours: 1));
@@ -64,9 +59,13 @@ class _AddEventState extends State<AddEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj wydarzenie', style: TextStyle(color: Colors.white),),
-                 // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        title: Text(
+          'Dodaj wydarzenie',
+          style: TextStyle(color: Colors.white),
+        ),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(
+            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -75,15 +74,20 @@ class _AddEventState extends State<AddEvent> {
           child: ListView(
             children: <Widget>[
               buildSpace(),
-              buildCustomTextFieldwithValidation("Nazwa","Wprowadź nazwę swojego wydarzenia", _controllerName),
+              buildCustomTextFieldwithValidation("Nazwa",
+                  "Wprowadź nazwę swojego wydarzenia", _controllerName),
               buildSpace(),
-              buildCustomButtonWithValidation(_dateColor, _date, Icons.date_range, datePick),
+              buildCustomButtonWithValidation(
+                  _dateColor, _date, Icons.date_range, datePick),
               buildSpace(),
-              buildCustomButtonWithValidation(_time1Color, _time1, Icons.access_time, startTimePick),
+              buildCustomButtonWithValidation(
+                  _time1Color, _time1, Icons.access_time, startTimePick),
               buildSpace(),
-              buildCustomButtonWithValidation(_time2Color, _time2, Icons.access_time, endTimePick),
+              buildCustomButtonWithValidation(
+                  _time2Color, _time2, Icons.access_time, endTimePick),
               buildSpace(),
-              buildCustomButton(_notification, Icons.notifications, goToNotificationPickPage),
+              buildCustomButton(
+                  _notification, Icons.notifications, goToNotificationPickPage),
               buildSpace(),
               buildCustomTextField("Opis", "Wpisz opis swojego wydarzenia",
                   "Pole jest opcjonalne", _controllerDesc),
@@ -112,8 +116,8 @@ class _AddEventState extends State<AddEvent> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
-          filled: true,
-          fillColor: new Color(0xFF333366),
+            filled: true,
+            fillColor: new Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.transparent),
@@ -147,8 +151,8 @@ class _AddEventState extends State<AddEvent> {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
-        filled: true,
-        fillColor: new Color(0xFF333366),
+          filled: true,
+          fillColor: new Color(0xFF333366),
           enabledBorder: new OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(color: Colors.transparent),
@@ -316,10 +320,8 @@ class _AddEventState extends State<AddEvent> {
   }
 
   void goToNotificationPickPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddNotificationEvent(_event)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddNotificationEvent(_event)));
   }
 
   void onBackPressed() {
@@ -359,22 +361,21 @@ class _AddEventState extends State<AddEvent> {
 //            EventHelper.update(widget.update);
 //            Navigator.of(context).pop();
 //          } else {
-            _event.name = _controllerName.value.text;
-            _event.description =_controllerDesc.value.text; //<- tu jest problem
-            DateTime t1 = DateTime.parse("$_date $_time1");
-            DateTime t2 = DateTime.parse("$_date $_time2");
-            _event.beginTime = t1;
-            _event.endTime = t2;
-                            print("Name: "+_event.name);
-                            print("BeginTime: "+_event.beginTime.toString());
-                            print("EndTime: "+_event.endTime.toString());
-                          //  print("Name: "+_event.cycle);
-                            print("Desc: "+_event.description);
-                            print("Notifi: ");
-            _event.listNotifi.forEach((e) => print(e.duration));
-            // EventHelper.add(_event);
-            // Navigator.of(context).pop();
-
+          _event.name = _controllerName.value.text;
+          _event.description = _controllerDesc.value.text; //<- tu jest problem
+          DateTime t1 = DateTime.parse("$_date $_time1");
+          DateTime t2 = DateTime.parse("$_date $_time2");
+          _event.beginTime = t1;
+          _event.endTime = t2;
+          print("Name: " + _event.name);
+          print("BeginTime: " + _event.beginTime.toString());
+          print("EndTime: " + _event.endTime.toString());
+          //  print("Name: "+_event.cycle);
+          print("Desc: " + _event.description);
+          print("Notifi: ");
+          _event.listNotifi.forEach((e) => print(e.duration));
+          EventHelper.add(_event);
+          Navigator.of(context).pop();
         } else {
           if (_date == "Nie wybrano daty")
             _dateColor = Colors.red;

@@ -13,19 +13,21 @@ import 'notification_helper.dart';
 class TaskHelper {
   static final dbHelper = DatabaseHelper.instance;
 
-
-  static Future<void> add( Task newTask ) async {
+  static Future<void> add(Task newTask) async {
     int IdTask = await dbHelper.query("SELECT max(ID_Task) FROM Task");
     IdTask = IdTask == null ? 0 : IdTask;
 
-    int IdGroup = newTask.group.id == null ? await GroupHelper.add(newTask.group) : newTask.group.id;
-      //print("IDGROUP : $IdGroup");
+    int IdGroup = newTask.group.id == null
+        ? await GroupHelper.add(newTask.group)
+        : newTask.group.id;
+    //print("IDGROUP : $IdGroup");
 
-    int IdLocal =  newTask.localization.id == null ? await LocalizationHelper.add(newTask.localization) : newTask.localization.id;
-
+    int IdLocal = newTask.localization.id == null
+        ? await LocalizationHelper.add(newTask.localization)
+        : newTask.localization.id;
 
     dbHelper.insert('Task', {
-      'ID_Task': ++IdTask ,
+      'ID_Task': ++IdTask,
       'Nazwa': newTask.name,
       'Zrobione': newTask.done ? 1 : 0,
       'Do_Kiedy': DateFormat("yyyy-MM-dd hh:mm").format(newTask.endTime),
@@ -36,11 +38,9 @@ class TaskHelper {
 
     newTask.listNotifi.forEach((n) => n.idEvent = IdTask);
     NotifiHelper.addList(newTask.listNotifi);
-
-
   }
 
-  static Future<void> update( updatedTask ) async {
+  static Future<void> update(updatedTask) async {
     dbHelper.update('Task', 'ID_Task', updatedTask.id, {
       'Nazwa': updatedTask.name,
       'Zrobione': updatedTask.done ? 1 : 0,
@@ -52,16 +52,15 @@ class TaskHelper {
 
     updatedTask.listNotifi.forEach((n) => n.idEvent = updatedTask.id);
     NotifiHelper.addList(updatedTask.listNotifi);
-
   }
 
-  static Future<void> delete(int pickedIdTask,) async {
+  static Future<void> delete(
+    int pickedIdTask,
+  ) async {
     dbHelper.delete('Task', 'ID_Task', pickedIdTask);
     NotifiHelper.deleteTaskID(pickedIdTask);
     //TODO notifi delete
   }
-
-
 
 //  List<MyNotification> listofNotifi(int idTask)  {
 //    dbHelper.queryIdNotifi(idTask).then((maps) {
@@ -75,10 +74,10 @@ class TaskHelper {
 //  }
 
   static Future<List<Task>> lists() async {
-    final List<Map<String, dynamic>> maps2 = await dbHelper.queryAllRows('Task');
+    final List<Map<String, dynamic>> maps2 =
+        await dbHelper.queryAllRows('Task');
     Database db = await dbHelper.database;
-    final List<Map<String, dynamic>> maps = await db
-        .rawQuery('''
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
         SELECT t.ID_Task, t.Nazwa, t.Zrobione, t.Do_Kiedy, t.Opis, t.Lokalizacja, t.Grupa,
         l.Nazwa AS Nazwa_Lokalizacji, l.Miasto, l.Ulica,
         g.Nazwa_grupa
@@ -101,21 +100,21 @@ class TaskHelper {
     return List.generate(maps.length, (i) {
       return Task(
         id: maps[i]['ID_Task'],
-        done: maps[i]['Zrobione']  == 1 ? true : false,
+        done: maps[i]['Zrobione'] == 1 ? true : false,
         name: maps[i]['Nazwa'],
         endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
         description: maps[i]['Opis'],
         localization: Localization(
-            id: maps[i]['Lokalizacja'],
-            name: maps[i]['Nazwa_Lokalizacji'],
-            city: maps[i]['Miasto'],
-            street: maps[i]['Ulica'],
-            isSelected: true,
+          id: maps[i]['Lokalizacja'],
+          name: maps[i]['Nazwa_Lokalizacji'],
+          city: maps[i]['Miasto'],
+          street: maps[i]['Ulica'],
+          isSelected: true,
         ),
         group: Group(
-            id: maps[i]['Grupa'],
-            name: maps[i]['Nazwa_grupa'],
-            isSelected: true,
+          id: maps[i]['Grupa'],
+          name: maps[i]['Nazwa_grupa'],
+          isSelected: true,
         ),
       );
     });
@@ -123,8 +122,7 @@ class TaskHelper {
 
   static Future<List<Task>> listsID(int id) async {
     Database db = await dbHelper.database;
-    final List<Map<String, dynamic>> maps = await db
-        .rawQuery('''
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
         SELECT t.ID_Task, t.Nazwa, t.Zrobione, t.Do_Kiedy, t.Opis, t.Lokalizacja, t.Grupa,
         l.Nazwa AS Nazwa_Lokalizacji, l.Miasto, l.Ulica,
         g.Nazwa_grupa
@@ -133,11 +131,12 @@ class TaskHelper {
         INNER JOIN Grupa AS g ON (g.ID_Grupa = t.Grupa)
         WHERE Grupa=$id
         ''');
+    print("========================" + maps.length.toString());
 
     return List.generate(maps.length, (i) {
       return Task(
         id: maps[i]['ID_Task'],
-        done: maps[i]['Zrobione']  == 1 ? true : false,
+        done: maps[i]['Zrobione'] == 1 ? true : false,
         name: maps[i]['Nazwa'],
         endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
         description: maps[i]['Opis'],

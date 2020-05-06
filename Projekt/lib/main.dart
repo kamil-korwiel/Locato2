@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.grey,
           accentColor: Colors.amber,
-          canvasColor: Colors.grey[900],
+          canvasColor: Color.fromRGBO(51, 47, 83, 1),
           brightness: Brightness.dark,
           primaryTextTheme:
               TextTheme(title: TextStyle(color: Colors.amberAccent))),
@@ -92,6 +92,17 @@ class _HomePageState extends State<HomePage>
               child: Icon(Icons.menu),
             ),
             elevation: 0.0,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [const Color(0xFF534B83), const Color(0xFF332F53)],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(0.0, 1.0),
+                  stops: [0.0, 0.7],
+                  tileMode: TileMode.clamp,
+                ),
+              ),
+            ),
             bottom: PreferredSize(
               preferredSize: Size(screenWidthTabBar, 40.0),
               child: new Container(
@@ -112,8 +123,7 @@ class _HomePageState extends State<HomePage>
                   ],
                 ),
               ),
-            )
-        ),
+            )),
         floatingActionButton: SpeedDial(
           elevation: 10.0,
           animatedIcon: AnimatedIcons.add_event,
