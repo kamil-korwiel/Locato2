@@ -87,7 +87,7 @@ class _AddLocalizationState extends State<AddLocalization> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
               side: BorderSide(
-                color: Colors.amber[400],
+                color: Colors.white,
               ),
             ),
             elevation: 5.0,
@@ -102,12 +102,17 @@ class _AddLocalizationState extends State<AddLocalization> {
                       Container(
                         child: Row(
                           children: <Widget>[
+                            SizedBox(width: 30),
                             Icon(
                               Icons.location_on,
                               size: 18.0,
                               color: Colors.white,
                             ),
+                            SizedBox(width: 30),
                             Text(" " + localizationlist[index].name.toString()),
+                            SizedBox(width: 30),
+                            buildRemoveButton(index),
+                            SizedBox(width: 30),
                           ],
                         ),
                       )
