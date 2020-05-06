@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
+import 'package:pageview/pages/Update/upgrade_task.dart';
 
 import 'ItemTask.dart';
 
@@ -124,21 +125,15 @@ class _ItemGroupState extends State<ItemGroup> {
 
       listOfWidget.add(ItemTask(_list[i],
         onPressedDelete: (){
-          //TaskHelper.delete(task.id);
+          TaskHelper.delete(_list[i].id);
           setState(() {});
         },
         onPressedEdit: (){
-          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTask(update: task)));
+           Navigator.of(context).push(MaterialPageRoute(builder: (context) => UpgradeTask(_list[i])));
         },
         onPressedDone: () {
-
           _list[i].done = !_list[i].done;
-//           if(_list[i].done) {
-//             _list.insert(_list.length, _list[i]);
-//             _list.removeAt(i);
-//           }
           setState(() {});
-          //_list.forEach((t) => print(t.done));
         },
       )
 

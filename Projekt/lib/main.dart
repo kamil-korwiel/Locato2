@@ -63,16 +63,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  int _counter;
-  DateTime _date;
 
   TabController _tabController;
 
   @override
   void initState() {
-    _date = DateTime.now();
-    _counter = 0;
-
     // Definicja kontrolera tabbar
     _tabController = new TabController(length: 2, vsync: this);
     super.initState();
@@ -169,20 +164,14 @@ class _HomePageState extends State<HomePage>
 //                GroupHelper.add(g);
                   setState(() {});
                 }),
-//            SpeedDialChild(
-//              child: Icon(Icons.add_location),
-//              label: 'Lokalizacja',
-//              labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
-//              onTap: () {
-//                print('Dodaj Lokalizacje');
-//                Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                  //  builder: (context) => AddLocation(),
-//                  ),
-//                );
-//              },
-//            ),
+            SpeedDialChild(
+              child: Icon(Icons.add_location),
+              label: 'Lokalizacja',
+              labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
+              onTap: () {
+                DatabaseHelper.instance.showalltables();
+              },
+            ),
           ],
         ),
         body: PageView(

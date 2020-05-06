@@ -3,7 +3,6 @@ import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Localization.dart';
-import 'package:pageview/Classes/Notification.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -34,23 +33,28 @@ class TaskHelper {
       'Grupa': IdGroup,
     });
 
-    newTask.listNotifi.forEach((n) => n.idEvent = IdTask);
+    newTask.listNotifi.forEach((n) => n.idTask = IdTask);
     NotifiHelper.addList(newTask.listNotifi);
 
 
   }
 
   static Future<void> update( updatedTask ) async {
+
+    int IdGroup = updatedTask.group.id == null ? await GroupHelper.add(updatedTask.group) : updatedTask.group.id;
+
+    int IdLocal =  updatedTask.localization.id == null ? await LocalizationHelper.add(updatedTask.localization) : updatedTask.localization.id;
+
     dbHelper.update('Task', 'ID_Task', updatedTask.id, {
       'Nazwa': updatedTask.name,
       'Zrobione': updatedTask.done ? 1 : 0,
       'Do_Kiedy': DateFormat("yyyy-MM-dd hh:mm").format(updatedTask.endTime),
       'Opis': updatedTask.description,
-      'Lokalizacja': updatedTask.idLocalizaton,
-      'Grupa': updatedTask.idGroup,
+      'Lokalizacja': IdLocal,
+      'Grupa': IdGroup,
     });
 
-    updatedTask.listNotifi.forEach((n) => n.idEvent = updatedTask.id);
+    updatedTask.listNotifi.forEach((n) => n.idTask = updatedTask.id);
     NotifiHelper.addList(updatedTask.listNotifi);
 
   }
@@ -58,7 +62,6 @@ class TaskHelper {
   static Future<void> delete(int pickedIdTask,) async {
     dbHelper.delete('Task', 'ID_Task', pickedIdTask);
     NotifiHelper.deleteTaskID(pickedIdTask);
-    //TODO notifi delete
   }
 
 
@@ -75,7 +78,7 @@ class TaskHelper {
 //  }
 
   static Future<List<Task>> lists() async {
-    final List<Map<String, dynamic>> maps2 = await dbHelper.queryAllRows('Task');
+    //final List<Map<String, dynamic>> maps2 = await dbHelper.queryAllRows('Task');
     Database db = await dbHelper.database;
     final List<Map<String, dynamic>> maps = await db
         .rawQuery('''
@@ -131,8 +134,8 @@ class TaskHelper {
         FROM Task AS t 
         INNER JOIN Lokalizacja AS l ON (l.ID_Lokalizacji = t.Lokalizacja) 
         INNER JOIN Grupa AS g ON (g.ID_Grupa = t.Grupa)
-        WHERE Grupa=$id
-        ''');
+        WHERE Grupa = ?
+        ''', [id]);
 
     return List.generate(maps.length, (i) {
       return Task(

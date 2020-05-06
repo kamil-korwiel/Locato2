@@ -4,6 +4,7 @@ import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Items/EventCardItem.dart';
 import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/pages/Add/add_event.dart';
+import 'package:pageview/pages/Update/upgrade_event.dart';
 
 class EventCardEvents extends StatelessWidget {
   const EventCardEvents(this.events);
@@ -29,19 +30,15 @@ class EventCardEvents extends StatelessWidget {
           EventCardItem(
             event,
             onPressedEdit: () {
-//              Navigator.push(
-//                context,
-//                MaterialPageRoute(
-//                  builder: (context) => AddEvent(
-//                    update: event,
-//                  ),
-//                ),
-//              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UpgradeEvent(event: event),
+                ),
+              );
             },
             onPressedDelete: () {
               EventHelper.delete(event.id);
-              // setState musi byc?? - pyt do Kamila
-              //setState(() {});
             },
           ),
       ],

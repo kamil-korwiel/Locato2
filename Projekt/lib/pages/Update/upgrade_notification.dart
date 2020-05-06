@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/List/button_notification_list_builder_widget.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:pageview/Classes/Notification.dart';
 
 class UpgradeNotificationTask extends StatefulWidget {
   @override
@@ -20,36 +17,45 @@ class _UpgradeNotificationTaskState extends State<UpgradeNotificationTask> {
   final TextEditingController _text = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    if (widget.task.id != null) {
-      NotifiHelper.listsTaskID(widget.task.id).then((onList) {
-        if (onList != null) {
-          _notifilist = onList;
-          print(_notifilist);
-          print(onList);
-          if (widget.task.listNotifi.isNotEmpty) {
-            _notifilist.addAll(widget.task.listNotifi);
-          }
-          setState(() {});
-        }
-      });
-    } else {
-      if (widget.task.listNotifi.isNotEmpty) {
-        _notifilist = widget.task.listNotifi;
-      }
-    }
-
-    super.initState();
-  }
-
-  List<Notifi> _notifilist = [];
+  List<Notifi> _notifilist;
+  List<Notifi> downloadlist;
   List<String> unitlist = ["Minuty", "Godziny", "Dni"];
   String holder = "Minuty";
   String _value = "Minuty";
   var duration;
   int czas;
   String name;
+
+
+
+  @override
+  void initState() {
+    _notifilist = List();
+    downloadlist = List();
+    //_notifilist = widget.task.listNotifi;
+    _downloadData();
+    super.initState();
+  }
+
+
+  void _downloadData(){
+
+    NotifiHelper.listsTaskID(widget.task.id).then((onList) {
+      if(onList != null) {
+        downloadlist = onList;
+
+        _notifilist.addAll(downloadlist);
+
+        if(widget.task.listNotifi.isNotEmpty){
+          _notifilist.addAll(widget.task.listNotifi);
+        }
+        setState(() {});
+
+      }
+    });
+  }
+
+
 
   void getDropDownItem() {
     setState(() {
@@ -60,7 +66,9 @@ class _UpgradeNotificationTaskState extends State<UpgradeNotificationTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie"),
+        title: Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -93,11 +101,11 @@ class _UpgradeNotificationTaskState extends State<UpgradeNotificationTask> {
 
   Widget buildcustomButton(String text, void action()) {
     return RaisedButton(
-      color: Colors.transparent,
+      color: Color(0xFF333366),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       onPressed: () {
@@ -122,8 +130,9 @@ class _UpgradeNotificationTaskState extends State<UpgradeNotificationTask> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
+        color: Color(0xFF333366),
         borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: Colors.amber[400]),
+        border: Border.all(color: Colors.white),
       ),
       child: DropdownButton<String>(
         value: _value,
@@ -151,9 +160,11 @@ class _UpgradeNotificationTaskState extends State<UpgradeNotificationTask> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
+            filled: true,
+            fillColor: Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400]),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -202,15 +213,22 @@ class _UpgradeNotificationTaskState extends State<UpgradeNotificationTask> {
     }
   }
 
-  void confirm() {
-    List<Notifi> noti = List();
+  void goBack() {
+    Navigator.pop(context);
+  }
 
-    for (Notifi n in _notifilist) {
-      if (n.id == null) {
-        noti.add(n);
+  void onBackPressed() {
+    goBack();
+  }
+
+  void confirm() {
+    widget.task.listNotifi.clear();
+    _notifilist.forEach((t) {
+      if (t.id == null) {
+        widget.task.listNotifi.add(t);
       }
-    }
-    widget.task.listNotifi = noti;
+    });
+
     Navigator.pop(context);
   }
 }
@@ -232,30 +250,9 @@ class _UpgradeNotificationEventState extends State<UpgradeNotificationEvent> {
   final TextEditingController _text = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    if (widget.event.id != null) {
-      NotifiHelper.listsEventID(widget.event.id).then((onList) {
-        if (onList != null) {
-          _notifilist = onList;
-          print(_notifilist);
-          print(onList);
-          if (widget.event.listNotifi.isNotEmpty) {
-            _notifilist.addAll(widget.event.listNotifi);
-          }
-          setState(() {});
-        }
-      });
-    } else {
-      if (widget.event.listNotifi.isNotEmpty) {
-        _notifilist = widget.event.listNotifi;
-      }
-    }
 
-    super.initState();
-  }
-
-  List<Notifi> _notifilist = [];
+  List<Notifi> _notifilist;
+  List<Notifi> downloadlist;
   List<String> unitlist = ["Minuty", "Godziny", "Dni"];
   String holder = "Minuty";
   String _value = "Minuty";
@@ -263,32 +260,62 @@ class _UpgradeNotificationEventState extends State<UpgradeNotificationEvent> {
   int czas;
   String name;
 
+
+  @override
+  void initState() {
+    _notifilist = List();
+    downloadlist = List();
+    _downloadData();
+
+    super.initState();
+  }
+
+  void _downloadData(){
+
+    NotifiHelper.listsEventID(widget.event.id).then((onList) {
+      if(onList != null) {
+        downloadlist = onList;
+
+        _notifilist.addAll(downloadlist);
+
+        if(widget.event.listNotifi.isNotEmpty){
+          _notifilist.addAll(widget.event.listNotifi);
+        }
+        setState(() {});
+
+      }
+    });
+  }
+
+
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie"),
+        title: Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white),),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(children: <Widget>[
-          Container( 
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(color: Colors.amber[400],),), 
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                buildCustomDropdownButton(),
-                Flexible(
-                  child: Form(
-                    key: _formKey,
-                    child: buildCustomTextFieldwithValidation(
-                        holder, "Wprowadź wartość", _text),
+            Container(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  buildCustomDropdownButton(),
+                  SizedBox(width: 30),
+                  Flexible(
+                    child: Form(
+                      key: _formKey,
+                      child: buildCustomTextFieldwithValidation(
+                          holder, "Wprowadź wartość", _text),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
             buildSpace(),
             buildcustomButton("Dodaj", validateAndAdd),
             buildSpace(),
@@ -301,11 +328,11 @@ class _UpgradeNotificationEventState extends State<UpgradeNotificationEvent> {
 
   Widget buildcustomButton(String text, void action()) {
     return RaisedButton(
-      color: Colors.transparent,
+      color: Color(0xFF333366),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.amber[400],
+          color: Colors.white,
         ),
       ),
       elevation: 5.0,
@@ -330,6 +357,11 @@ class _UpgradeNotificationEventState extends State<UpgradeNotificationEvent> {
   Widget buildCustomDropdownButton() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.0),
+      decoration: BoxDecoration(
+        color: Color(0xFF333366),
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: Colors.white),
+      ),
       child: DropdownButton<String>(
         value: _value,
         icon: Icon(Icons.arrow_drop_down),
@@ -356,9 +388,11 @@ class _UpgradeNotificationEventState extends State<UpgradeNotificationEvent> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
+            filled: true,
+            fillColor: Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400]),
+              borderSide: BorderSide(color: Colors.white),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -411,23 +445,28 @@ class _UpgradeNotificationEventState extends State<UpgradeNotificationEvent> {
 
       _notifilist.add(Notifi(duration: duration));
 
-      print(
-          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
+//      print(
+//          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
 
       setState(() {});
     }
   }
 
-  void confirm() {
-    List<Notifi> noti = List();
-//                widget.event.listNotifi.clear();
-    for (Notifi n in _notifilist) {
-      if (n.id == null) {
-        noti.add(n);
-      }
-    }
+  void goBack() {
+    Navigator.pop(context);
+  }
 
-    widget.event.listNotifi = noti;
+  void onBackPressed() {
+    goBack();
+  }
+
+  void confirm() {
+    widget.event.listNotifi.clear();
+    _notifilist.forEach((t) {
+      if (t.id == null) {
+        widget.event.listNotifi.add(t);
+      }
+    });
 
     Navigator.pop(context);
   }

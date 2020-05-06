@@ -5,17 +5,17 @@ import 'package:pageview/Classes/Localization.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/Add/add_location2.dart';
 
-class AddLocalization extends StatefulWidget {
+class UpgradeLocalization extends StatefulWidget {
   @override
-  _AddLocalizationState createState() => _AddLocalizationState();
+  _UpgradeLocalizationState createState() => _UpgradeLocalizationState();
 
   Task task;
   List<Localization> listOfLocal;
 
-  AddLocalization(this.task,this.listOfLocal);
+  UpgradeLocalization(this.task,this.listOfLocal);
 }
 
-class _AddLocalizationState extends State<AddLocalization> {
+class _UpgradeLocalizationState extends State<UpgradeLocalization> {
 
   List<Localization> localizationlist;
   List<Localization> downloadlist;
@@ -38,16 +38,17 @@ class _AddLocalizationState extends State<AddLocalization> {
         downloadlist = onList;
 
         downloadlist.removeAt(0);
+        downloadlist.forEach((l){
+          if(l.id !=  widget.task.localization.id){
+            localizationlist.add(l);
+          }else{
+            localizationlist.add(widget.task.localization);
+          }
+        });
 
-        localizationlist.addAll(downloadlist);
-
-        if(widget.task.localization.id != 0){
-          localizationlist.add(widget.task.localization);
-        }
         if(widget.listOfLocal.isNotEmpty){
           localizationlist.addAll(widget.listOfLocal);
         }
-
 
         setState(() {});
       }
@@ -59,8 +60,8 @@ class _AddLocalizationState extends State<AddLocalization> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Dodaj Lokalizację", style: TextStyle(color: Colors.white),),
-                     // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -79,7 +80,7 @@ class _AddLocalizationState extends State<AddLocalization> {
 
   Widget buildList() {
     return new ListView.builder(
-      physics: ScrollPhysics(),
+        physics: ScrollPhysics(),
         shrinkWrap: true,
         itemCount: localizationlist.length,
         itemBuilder: (context, index) {
@@ -174,7 +175,7 @@ class _AddLocalizationState extends State<AddLocalization> {
 
     Navigator.pop(context);
 
-  setState(() {});
+    setState(() {});
   }
 
   void onBackPressed() {
