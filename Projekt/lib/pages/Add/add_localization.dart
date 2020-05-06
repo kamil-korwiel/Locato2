@@ -87,7 +87,7 @@ class _AddLocalizationState extends State<AddLocalization> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
               side: BorderSide(
-                color: Colors.amber[400],
+                color: Colors.white,
               ),
             ),
             elevation: 5.0,
@@ -100,14 +100,21 @@ class _AddLocalizationState extends State<AddLocalization> {
                   Row(
                     children: <Widget>[
                       Container(
+                        alignment: Alignment.center,
+                        height: 50,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
+                            SizedBox(width: 30),
                             Icon(
                               Icons.location_on,
                               size: 18.0,
                               color: Colors.white,
                             ),
+                            SizedBox(width: 30),
                             Text(" " + localizationlist[index].name.toString()),
+                            SizedBox(width: 30),
+                            buildRemoveButton(index),
                           ],
                         ),
                       )
@@ -134,6 +141,12 @@ class _AddLocalizationState extends State<AddLocalization> {
         },
       ),
     );
+  }
+
+  
+  void removeFromList(int _index) {
+    localizationlist.removeAt(_index);
+    setState(() {});
   }
 
   Widget buildCustomButton(String text, void action()) {
@@ -184,12 +197,6 @@ class _AddLocalizationState extends State<AddLocalization> {
   void goToLocationPickPage() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => AddLocation(localizationlist)));
-  }
-
-  void removeFromList(int _index) {
-    //TODO sprawdz która jest z bazy i dopiero wtedy wywal
-    localizationlist.removeAt(_index);
-    setState(() {});
   }
 
   void checkifselected(_index) {
