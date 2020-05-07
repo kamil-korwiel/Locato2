@@ -46,8 +46,8 @@ class TaskHelper {
       'Zrobione': updatedTask.done ? 1 : 0,
       'Do_Kiedy': DateFormat("yyyy-MM-dd hh:mm").format(updatedTask.endTime),
       'Opis': updatedTask.description,
-      'Lokalizacja': updatedTask.idLocalizaton,
-      'Grupa': updatedTask.idGroup,
+      //'Lokalizacja': updatedTask.localizaton,
+      //'Grupa': updatedTask.group,
     });
 
     updatedTask.listNotifi.forEach((n) => n.idEvent = updatedTask.id);

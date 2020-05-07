@@ -20,6 +20,8 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
   }
 
   void _downloadData() {
+    print(
+        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@GroupPage downloadData");
     GroupHelper.lists().then((onList) {
       if (onList != null) {
         listOfGroup = onList;
@@ -35,7 +37,7 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) => GroupCard(
-              group: listOfGroup[index],
+              listOfGroup[index],
             ),
             childCount: listOfGroup.length,
           ),

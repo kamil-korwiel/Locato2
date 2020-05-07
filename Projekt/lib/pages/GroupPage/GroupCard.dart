@@ -4,18 +4,25 @@ import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/GroupPage/GroupCardHeader.dart';
-import 'GroupCardTasks.dart';
+import 'package:pageview/pages/GroupPage/GroupCardTasks.dart';
+
+_GroupCardState groupCardState;
 
 class GroupCard extends StatefulWidget {
   @override
-  _GroupCardState createState() => _GroupCardState();
+  _GroupCardState createState() {
+    groupCardState = _GroupCardState();
+    return groupCardState;
+  }
 
-  GroupCard({Key key, this.group}) : super(key: key);
-  final Group group;
+  Group group;
+
+  GroupCard(this.group);
 }
 
 class _GroupCardState extends State<GroupCard> {
   List<Task> _list;
+  int doneTasks = 0;
 
   @override
   void initState() {
@@ -36,11 +43,17 @@ class _GroupCardState extends State<GroupCard> {
 
   @override
   Widget build(BuildContext context) {
+    if (_list.isNotEmpty) {
+      doneTasks = 0;
+      _list.forEach((task) {
+        if (task.done) doneTasks++;
+      });
+    }
     return Container(
       // Odstep miedzy grupami
       margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
       decoration: new BoxDecoration(
-        color: new Color(0xFF33366),
+        color: new Color(0xFF333366),
         shape: BoxShape.rectangle,
         borderRadius: new BorderRadius.circular(8.0),
         boxShadow: <BoxShadow>[
@@ -73,8 +86,8 @@ class _GroupCardState extends State<GroupCard> {
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            GroupCardHeader(group: widget.group, length: _list.length),
-            SizedBox(height: 5.0),
+            GroupCardHeader(widget.group, doneTasks, _list.length),
+            SizedBox(height: 3.0),
             Container(
               margin: new EdgeInsets.symmetric(vertical: 8.0),
               height: 2.0,
