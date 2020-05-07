@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pageview/Classes/Event.dart';
+import 'package:pageview/Items/EventCard.dart';
 import 'package:pageview/Items/EventCardItem.dart';
 import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/pages/Add/add_event.dart';
 import 'package:pageview/pages/Update/upgrade_event.dart';
+import 'package:pageview/pages/homepage.dart';
 
 class EventCardEvents extends StatelessWidget {
   const EventCardEvents(this.events);
@@ -40,6 +42,7 @@ class EventCardEvents extends StatelessWidget {
             onPressedDelete: () {
               //TODO: DELETE FROM LIST OR DB
               EventHelper.delete(event.id);
+              homePageEventsState.refresh();
             },
           ),
       ],

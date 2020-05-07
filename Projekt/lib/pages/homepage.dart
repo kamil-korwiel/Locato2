@@ -7,9 +7,14 @@ import 'package:pageview/Classes/Event.dart';
 
 import 'package:pageview/Items/EventCard.dart';
 
+_HomePageEventsState homePageEventsState;
+
 class HomePageEvents extends StatefulWidget {
   @override
-  _HomePageEventsState createState() => _HomePageEventsState();
+  _HomePageEventsState createState() {
+    homePageEventsState = _HomePageEventsState();
+    return homePageEventsState;
+  }
 }
 
 class _HomePageEventsState extends State<HomePageEvents> {
@@ -92,8 +97,8 @@ class _HomePageEventsState extends State<HomePageEvents> {
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                         (context, index) => EventCard(
-                              day: getDay(index),
-                              events: listaList[index],
+                              getDay(index),
+                              listaList[index],
                             ),
                         childCount: 7),
                   ),
@@ -110,4 +115,6 @@ class _HomePageEventsState extends State<HomePageEvents> {
       },
     );
   }
+
+  refresh() => setState(() {});
 }

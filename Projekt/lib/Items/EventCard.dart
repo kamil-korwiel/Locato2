@@ -5,9 +5,10 @@ import 'package:pageview/Items/EventCardHeader.dart';
 import 'package:pageview/Items/EventCardEvents.dart';
 
 class EventCard extends StatelessWidget {
-  const EventCard({Key key, this.day, this.events}) : super(key: key);
-  final List<Event> events;
-  final String day;
+  String day;
+  List<Event> events;
+
+  EventCard(this.day, this.events);
 
   @override
   Widget build(BuildContext context) {

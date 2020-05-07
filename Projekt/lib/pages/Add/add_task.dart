@@ -7,15 +7,18 @@ import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Localization.dart';
 import 'package:pageview/Classes/Task.dart';
 
-
 import 'add_group.dart';
 import 'add_localization.dart';
 import 'add_notification.dart';
 
+_AddTaskState addTaskState;
 
 class AddTask extends StatefulWidget {
   @override
-  _AddTaskState createState() => _AddTaskState();
+  _AddTaskState createState() {
+    addTaskState = _AddTaskState();
+    return addTaskState;
+  }
 
   AddTask();
 }
@@ -48,11 +51,11 @@ class _AddTaskState extends State<AddTask> {
 
     _date = "Nie wybrano daty";
     _time = "Nie wybrano godziny rozpoczęcia";
-    _group = "Grupa" ;
-    _notification = "Powiadomienia" ;
-    _localization =  "Lokalizacja" ;
+    _group = "Grupa";
+    _notification = "Powiadomienia";
+    _localization = "Lokalizacja";
 
-    _end =  new DateTime.now() ;
+    _end = new DateTime.now();
 
     _task = Task(
       group: Group(id: 0),
@@ -74,9 +77,13 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj zadanie', style: TextStyle(color: Colors.white),),
-            // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        title: Text(
+          'Dodaj zadanie',
+          style: TextStyle(color: Colors.white),
+        ),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(
+            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -85,19 +92,26 @@ class _AddTaskState extends State<AddTask> {
           child: ListView(
             children: <Widget>[
               buildSpace(),
-              buildCustomTextFieldwithValidation("Nazwa", "Podaj nazwę nowego zadania", _controllerName),
+              buildCustomTextFieldwithValidation(
+                  "Nazwa", "Podaj nazwę nowego zadania", _controllerName),
               buildSpace(),
-              buildCustomButtonWithValidation(dateColor, _date, Icons.date_range, datePick),
+              buildCustomButtonWithValidation(
+                  dateColor, _date, Icons.date_range, datePick),
               buildSpace(),
-              buildCustomButtonWithValidation(timeColor, _time, Icons.access_time, timePick),
+              buildCustomButtonWithValidation(
+                  timeColor, _time, Icons.access_time, timePick),
               buildSpace(),
-              buildCustomButton(_group, Icons.account_circle, goToGroupPickPage),
+              buildCustomButton(
+                  _group, Icons.account_circle, goToGroupPickPage),
               buildSpace(),
-              buildCustomButton(_notification, Icons.notifications, goToNotificationPickPage),
+              buildCustomButton(
+                  _notification, Icons.notifications, goToNotificationPickPage),
               buildSpace(),
-              buildCustomButton(_localization, Icons.edit_location, goToLocalizationPickPage),
+              buildCustomButton(
+                  _localization, Icons.edit_location, goToLocalizationPickPage),
               buildSpace(),
-              buildCustomTextField("Opis", "Wprowadź opis swojego zadania","Pole jest opcjonalne", controllerDesc),
+              buildCustomTextField("Opis", "Wprowadź opis swojego zadania",
+                  "Pole jest opcjonalne", controllerDesc),
               buildSpace(),
               ButtonBar(
                   children: [
@@ -118,12 +132,13 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomTextFieldwithValidation(String label, String hint, TextEditingController control) {
+  Widget buildCustomTextFieldwithValidation(
+      String label, String hint, TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
-          filled: true,
-          fillColor: new Color(0xFF333366),
+            filled: true,
+            fillColor: new Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.transparent),
@@ -152,12 +167,13 @@ class _AddTaskState extends State<AddTask> {
         });
   }
 
-  Widget buildCustomTextField(String label, String hint, String helper, TextEditingController control) {
+  Widget buildCustomTextField(
+      String label, String hint, String helper, TextEditingController control) {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
-        filled: true,
-        fillColor: new Color(0xFF333366),
+          filled: true,
+          fillColor: new Color(0xFF333366),
           enabledBorder: new OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(color: Colors.transparent),
@@ -185,7 +201,8 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomButtonWithValidation(Color textcolor, String text,IconData icon, GestureTapCallback onPressed) {
+  Widget buildCustomButtonWithValidation(Color textcolor, String text,
+      IconData icon, GestureTapCallback onPressed) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -252,7 +269,8 @@ class _AddTaskState extends State<AddTask> {
 
   Widget buildButtonBarTile(String text, Color color, void action()) {
     return RaisedButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         elevation: 5.0,
         color: new Color(0xFF333366),
         splashColor: color,
@@ -301,52 +319,51 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void goToNotificationPickPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddNotificationTask(_task)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddNotificationTask(_task)));
   }
 
   void goToLocalizationPickPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddLocalization(_task,listOfLocalization)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddLocalization(_task, listOfLocalization)));
   }
 
   void goToGroupPickPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddGroup(_task,listOfGroup)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddGroup(_task, listOfGroup)));
   }
 
   void acceptAndValidate() {
     if (_formKey.currentState.validate()) {
-      if (_date != "Nie wybrano daty" && _time != "Nie wybrano godziny rozpoczęcia") {
+      if (_date != "Nie wybrano daty" &&
+          _time != "Nie wybrano godziny rozpoczęcia") {
         dateColor = Colors.white;
         timeColor = Colors.white;
         setState(() {});
 
         _task.name = _controllerName.text;
         _task.description = controllerDesc.text;
-        _task.endTime = DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time);
+        _task.endTime =
+            DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time);
         //print(_task.name + " " + "Opis: " + _task.description+ "Group: "+ _task.idGroup.toString());
-         print("Name: "+_task.name);
-         print("EndTask: "+_task.endTime.toString());
-         print("Desc: ${_task.description}");
-         print("idGroup: ${_task.group.id}");
-         print("Grupa: ${_task.group.name}");
-         print("idLokalizacja: ${_task.localization.id}");
-         print("Localization: ${_task.localization.name}");
-         print("City: ${_task.localization.city}");
-         print("Latitude: ${_task.localization.latitude}");
-         print("Longitude: ${_task.localization.longitude}");
+        print("Name: " + _task.name);
+        print("EndTask: " + _task.endTime.toString());
+        print("Desc: ${_task.description}");
+        print("idGroup: ${_task.group.id}");
+        print("Grupa: ${_task.group.name}");
+        print("idLokalizacja: ${_task.localization.id}");
+        print("Localization: ${_task.localization.name}");
+        print("City: ${_task.localization.city}");
+        print("Latitude: ${_task.localization.latitude}");
+        print("Longitude: ${_task.localization.longitude}");
 
         _task.listNotifi.forEach((t) => print(t.duration));
 
         TaskHelper.add(_task);
         //TaskHelper.add(task);
         Navigator.of(context).pop();
-
       } else {
         if (_date == "Nie wybrano daty")
           dateColor = Colors.red;
@@ -373,4 +390,8 @@ class _AddTaskState extends State<AddTask> {
     goBack();
   }
 
+  void selectedGroup(String selectedGroup) {
+    _group = "Grupa: " + selectedGroup;
+    addTaskState.setState(() {});
+  }
 }
