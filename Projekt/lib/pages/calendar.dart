@@ -14,7 +14,7 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  List<Event> _selectedEvents;
+  List<dynamic> _selectedEvents;
   Map<DateTime, List<Event>> _events;
   //Map<DateTime, List> _events2;
   List<Event> _downloadEvents;
@@ -51,26 +51,26 @@ class _CalendarState extends State<Calendar> {
           tmpList.clear();
           tmpList.addAll(_downloadEvents);
           List<Event> newList = List();
-          print("TMPLIST: ${tmpList.length}");
+         // print("TMPLIST: ${tmpList.length}");
           for(int i=0; i<tmpList.length; i++){
             if( e.beginTime.day == tmpList[i].beginTime.day &&
                 e.beginTime.month == tmpList[i].beginTime.month &&
                 e.beginTime.year == tmpList[i].beginTime.year
             ){
               newList.add(tmpList[i]);
-              print("Downloadlist: ${_downloadEvents.length}");
+           //   print("Downloadlist: ${_downloadEvents.length}");
               _downloadEvents.remove(tmpList[i]);
-              print(".");
+          //    print(".");
             }
           }
-          tmpList.forEach((e) => print("Events: ${e.name}"));
+         // tmpList.forEach((e) => print("Events: ${e.name}"));
           _events.addAll({DateTime(e.beginTime.year,e.beginTime.month,e.beginTime.day) : newList});
         }
        _events.forEach((date,listString){
          
-         print(date.toString());
-         listString.forEach((s) => print(s.name));
-         print("");
+//         print(date.toString());
+//         listString.forEach((s) => print(s.name));
+//         print("");
          
        });
         setState(() {});

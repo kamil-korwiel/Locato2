@@ -37,12 +37,13 @@ class _AddGroupState extends State<AddGroup> {
       if (onList != null) {
         downloadlist = onList;
 
+        if(0 != widget.task.group.id){
+          list.add(widget.task.group);
+        }
         downloadlist.removeAt(0);
         downloadlist.forEach((g) {
           if (g.id != widget.task.group.id) {
             list.add(g);
-          } else {
-            list.add(widget.task.group);
           }
         });
 
@@ -163,7 +164,7 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   Widget buildRemoveButton(int _index) {
-    if (list[_index].id == null) {
+//    if (list[_index].id == null) {
       return SizedBox(
         width: 30,
         child: IconButton(
@@ -172,13 +173,37 @@ class _AddGroupState extends State<AddGroup> {
           onPressed: () {
             //TODO: DELETE FROM LIST OR DB ???
             //TODO chyba z bazy lepiej !
-            removeFromList(_index);
+            if (list[_index].id != null){
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Uwaga"),
+                      content: Text("Usuniecie tego rekordu doprowadzi do przeniesienia innych zadan do 'Brak Grupy'"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("OK"),
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                            removeFromList(_index);
+                          },
+                        ),
+                        FlatButton(
+                          child: Text("Anuluj"),
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  });
+            }
           },
         ),
       );
-    } else {
-      return Container();
-    }
+//    } else {
+//      return Container();
+//    }
   }
 
   Widget buildCustomButton(String text, void action()) {

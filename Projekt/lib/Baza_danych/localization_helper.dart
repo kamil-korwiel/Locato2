@@ -20,6 +20,24 @@ class LocalizationHelper {
     return IdLocalization + 1;
   }
 
+
+  static Future<void> addlist(List<Localization> list) async {
+    //await Future.delayed(Duration(seconds: 1));
+    int IdLocalization = await dbHelper.query("SELECT MAX(ID_Lokalizacji) FROM Lokalizacja");
+    list.forEach((l){
+      dbHelper.insert('Lokalizacja', {
+        'ID_Lokalizacji': IdLocalization + 1,
+        'Latitude': l.latitude,
+        'Longitude': l.longitude,
+        'Nazwa': l.name,
+        'Miasto': l.city,
+        'Ulica': l.street,
+      });
+      IdLocalization++;
+    });
+  }
+
+
   static Future<void> update(Localization updatedLocalization) async {
     dbHelper.update('Lokalizacja', 'ID_Lokalizacji', updatedLocalization.id, {
       'Latitude': updatedLocalization.latitude,

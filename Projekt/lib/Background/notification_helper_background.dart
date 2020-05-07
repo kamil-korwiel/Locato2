@@ -7,12 +7,12 @@ import 'package:pageview/Classes/Task.dart';
 
 class Notifications_helper_background{
   static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  var initSettingsAndroid;
-  var initSettingsIOS;
-  var initSettings;
+  static var initSettingsAndroid;
+  static var initSettingsIOS;
+  static  var initSettings;
 
-  var androidPlatformChannelSpecifics ;
-  var iOSChannelSpecifics ;
+  static  var androidPlatformChannelSpecifics ;
+  static var iOSChannelSpecifics ;
   static NotificationDetails platformChannelSpecifics;
 
   Notifications_helper_background.initialize(){
@@ -30,6 +30,7 @@ class Notifications_helper_background{
       flutterLocalNotificationsPlugin.initialize(initSettings,
           onSelectNotification: onSelectNotification
       );
+
     }
   }
 

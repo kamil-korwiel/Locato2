@@ -1,11 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
+import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Localization.dart';
 import 'package:pageview/Classes/Task.dart';
+import 'package:pageview/pages/Add/add_group.dart';
+import 'package:pageview/pages/Add/add_localization.dart';
 import 'package:pageview/pages/Update/upgrade_group.dart';
 import 'package:pageview/pages/Update/upgrade_localization.dart';
 import 'package:pageview/pages/Update/upgrade_notification.dart';
@@ -305,14 +310,14 @@ class _UpgradeTaskState extends State<UpgradeTask> {
 
   void goToLocalizationPickPage() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) =>  UpgradeLocalization(widget.task,listOfLocalization)));
+        context, MaterialPageRoute(builder: (context) =>  AddLocalization(widget.task,listOfLocalization)));
   }
 
   void goToGroupPickPage() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>  UpgradeGroup(widget.task,listOfGroup)));
+            builder: (context) =>  AddGroup(widget.task,listOfGroup)));
   }
 
   void acceptAndValidate() {
@@ -337,6 +342,8 @@ class _UpgradeTaskState extends State<UpgradeTask> {
         widget.task.listNotifi.forEach((t) => print(t.duration));
 
         TaskHelper.update(widget.task);
+        GroupHelper.addlist(listOfGroup);
+        LocalizationHelper.addlist(listOfLocalization);
         Navigator.of(context).pop();
 
     }

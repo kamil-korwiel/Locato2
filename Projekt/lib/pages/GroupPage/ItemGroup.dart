@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
@@ -79,8 +80,15 @@ class _ItemGroupState extends State<ItemGroup> {
 
                   GestureDetector(
                     onLongPress: () {
-                      // TODO: DAREK TUTAJ Pownno wyświetlić czy chcesz usunąć Grupę
-                      print("onLongPress");
+//                      // TODO: DAREK TUTAJ Pownno wyświetlić czy chcesz usunąć Grupę
+//
+//                      if(widget.group.id != 0) {
+//                        GroupHelper.deleteAndChangeIdInTask(
+//                            widget.group.id, _list);
+//
+//                        print("onLongPress");
+//                        Scaffold.of(context).setState((){});
+//                      }
                     },
                     child: ExpansionTile(
                         initiallyExpanded: true,

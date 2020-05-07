@@ -39,26 +39,23 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
 
 //    print("lenght of list before ${widget.listOfGroup.length}");
     GroupHelper.lists().then((onList) {
-      if(onList != null) {
+      if (onList != null) {
         downloadlist = onList;
 
-
-
+        if(0 != widget.task.group.id){
+          list.add(widget.task.group);
+        }
         downloadlist.removeAt(0);
-        downloadlist.forEach((g){
-          if(g.id !=  widget.task.group.id){
+        downloadlist.forEach((g) {
+          if (g.id != widget.task.group.id) {
             list.add(g);
-          }else{
-            list.add(widget.task.group);
           }
         });
 
+        if (widget.listOfGroup.isNotEmpty) {
 
-        if(widget.listOfGroup.isNotEmpty){
-          //print("jestem");
           list.addAll(widget.listOfGroup);
         }
-
         setState(() {});
       }
     });

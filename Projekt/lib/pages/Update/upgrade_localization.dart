@@ -34,22 +34,21 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
 
   void _downloadData(){
     LocalizationHelper.lists().then((onList) {
-      if(onList != null) {
+      if (onList != null) {
         downloadlist = onList;
 
+        if(0 != widget.task.localization.id){
+          localizationlist.add(widget.task.localization);
+        }
         downloadlist.removeAt(0);
-        downloadlist.forEach((l){
-          if(l.id !=  widget.task.localization.id){
+        downloadlist.forEach((l) {
+          if (l.id != widget.task.localization.id) {
             localizationlist.add(l);
-          }else{
-            localizationlist.add(widget.task.localization);
           }
         });
-
-        if(widget.listOfLocal.isNotEmpty){
+        if (widget.listOfLocal.isNotEmpty) {
           localizationlist.addAll(widget.listOfLocal);
         }
-
         setState(() {});
       }
     });

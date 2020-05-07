@@ -35,12 +35,13 @@ class _AddLocalizationState extends State<AddLocalization> {
       if (onList != null) {
         downloadlist = onList;
 
+        if(0 != widget.task.localization.id){
+          localizationlist.add(widget.task.localization);
+        }
         downloadlist.removeAt(0);
         downloadlist.forEach((l) {
           if (l.id != widget.task.localization.id) {
             localizationlist.add(l);
-          } else {
-            localizationlist.add(widget.task.localization);
           }
         });
 
@@ -124,7 +125,35 @@ class _AddLocalizationState extends State<AddLocalization> {
         icon: Icon(Icons.clear),
         onPressed: () {
           //TODO: DELETE FROM LIST OR DB
-          removeFromList(_index);
+          if (localizationlist[_index].id != null){
+
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Uwaga"),
+                    content: Text("Usuniecie tego rekordu doprowadzi do Usunięcia w każdym innym Zadaniu Lokalizacji"),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text("OK"),
+                        onPressed: (){
+                          Navigator.of(context).pop();
+
+                          removeFromList(_index);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text("Anuluj"),
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                });
+
+          }
+
         },
       ),
     );

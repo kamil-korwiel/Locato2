@@ -1,4 +1,5 @@
 import 'package:pageview/Classes/Group.dart';
+import 'package:pageview/Classes/Task.dart';
 
 import 'database_helper.dart';
 
@@ -17,6 +18,21 @@ class GroupHelper {
     return IdGroup + 1;
   }
 
+  static Future<void> addlist(List<Group> list) async {
+    //await Future.delayed(Duration(seconds: 1));
+    int IdGroup = await dbHelper.query("SELECT max(ID_Grupa) FROM Grupa");
+    IdGroup = IdGroup == null ? 0: IdGroup;
+    list.forEach((g) {
+      dbHelper.insert('Grupa', {
+        'ID_Grupa': IdGroup + 1,
+        'Nazwa_grupa': g.name,
+        'Ile_wykonane': g.howMuchDone,
+      });
+      IdGroup++;
+    });
+  }
+
+
   static Future<void> update(Group updatedGroup) async {
 
     dbHelper.update('Grupa', 'ID_Grupa', updatedGroup.id, {
@@ -26,6 +42,19 @@ class GroupHelper {
   }
 
   static Future<void> delete(int pickedIdGroup,) async {
+
+
+    dbHelper.delete('Grupa', 'ID_Grupa', pickedIdGroup);
+
+  }
+
+  static Future<void> deleteAndChangeIdInTask(int pickedIdGroup,List<Task> list) async {
+
+    list.forEach((t){
+      dbHelper.update('Task', 'ID_Task', t.id, {
+        'Grupa': 0,
+      });
+    });
 
     dbHelper.delete('Grupa', 'ID_Grupa', pickedIdGroup);
 

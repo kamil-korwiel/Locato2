@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pageview/Baza_danych/group_helper.dart';
+import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Localization.dart';
@@ -324,27 +326,29 @@ class _AddTaskState extends State<AddTask> {
       if (_date != "Nie wybrano daty" && _time != "Nie wybrano godziny rozpoczęcia") {
         dateColor = Colors.white;
         timeColor = Colors.white;
-        setState(() {});
+        //setState(() {});
 
         _task.name = _controllerName.text;
         _task.description = controllerDesc.text;
         _task.endTime = DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time);
         //print(_task.name + " " + "Opis: " + _task.description+ "Group: "+ _task.idGroup.toString());
-         print("Name: "+_task.name);
-         print("EndTask: "+_task.endTime.toString());
-         print("Desc: ${_task.description}");
-         print("idGroup: ${_task.group.id}");
-         print("Grupa: ${_task.group.name}");
-         print("idLokalizacja: ${_task.localization.id}");
-         print("Localization: ${_task.localization.name}");
-         print("City: ${_task.localization.city}");
-         print("Latitude: ${_task.localization.latitude}");
-         print("Longitude: ${_task.localization.longitude}");
-
-        _task.listNotifi.forEach((t) => print(t.duration));
+//         print("Name: "+_task.name);
+//         print("EndTask: "+_task.endTime.toString());
+//         print("Desc: ${_task.description}");
+//         print("idGroup: ${_task.group.id}");
+//         print("Grupa: ${_task.group.name}");
+//         print("idLokalizacja: ${_task.localization.id}");
+//         print("Localization: ${_task.localization.name}");
+//         print("City: ${_task.localization.city}");
+//         print("Latitude: ${_task.localization.latitude}");
+//         print("Longitude: ${_task.localization.longitude}");
+//
+//        _task.listNotifi.forEach((t) => print(t.duration));
 
         TaskHelper.add(_task);
-        //TaskHelper.add(task);
+        GroupHelper.addlist(listOfGroup);
+        LocalizationHelper.addlist(listOfLocalization);
+
         Navigator.of(context).pop();
 
       } else {

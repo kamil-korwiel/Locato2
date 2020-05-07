@@ -39,6 +39,8 @@ class TaskHelper {
 
   }
 
+
+
   static Future<void> updateDone( updatedTask ) async {
     dbHelper.update('Task', 'ID_Task', updatedTask.id, {
       'Zrobione': updatedTask.done ? 1 : 0,

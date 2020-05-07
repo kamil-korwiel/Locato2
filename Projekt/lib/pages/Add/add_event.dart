@@ -359,7 +359,7 @@ class _AddEventState extends State<AddEvent> {
 //                          //  print("Name: "+_event.cycle);
 //            print("Desc: "+_event.description);
 //            print("Notifi: ");
-            _event.listNotifi.forEach((e) => print(e.duration));
+//            _event.listNotifi.forEach((e) => print(e.duration));
              EventHelper.add(_event);
              Navigator.of(context).pop();
 
