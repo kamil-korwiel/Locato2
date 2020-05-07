@@ -1,4 +1,3 @@
-//import 'dart:html';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -348,31 +347,19 @@ class _AddEventState extends State<AddEvent> {
           _dateColor = Colors.white;
           _time1Color = Colors.white;
           _time2Color = Colors.white;
-          //setState(() {});
-//          if (widget.update != null) {
-//            widget.update.name = _controllerName.value.text;
-//            widget.update.description = _controllerDesc.value.text;
-//
-//            DateTime t1 = DateTime.parse("$_date $_time1");
-//            DateTime t2 = DateTime.parse("$_date $_time2");
-//            widget.update.beginTime = t1;
-//            widget.update.endTime = t2;
-//
-//            EventHelper.update(widget.update);
-//            Navigator.of(context).pop();
-//          } else {
+
           _event.name = _controllerName.value.text;
           _event.description = _controllerDesc.value.text; //<- tu jest problem
           DateTime t1 = DateTime.parse("$_date $_time1");
           DateTime t2 = DateTime.parse("$_date $_time2");
           _event.beginTime = t1;
           _event.endTime = t2;
-          print("Name: " + _event.name);
-          print("BeginTime: " + _event.beginTime.toString());
-          print("EndTime: " + _event.endTime.toString());
-          //  print("Name: "+_event.cycle);
-          print("Desc: " + _event.description);
-          print("Notifi: ");
+//            print("Name: "+_event.name);
+//            print("BeginTime: "+_event.beginTime.toString());
+//            print("EndTime: "+_event.endTime.toString());
+//                          //  print("Name: "+_event.cycle);
+//            print("Desc: "+_event.description);
+//            print("Notifi: ");
           _event.listNotifi.forEach((e) => print(e.duration));
           EventHelper.add(_event);
           Navigator.of(context).pop();

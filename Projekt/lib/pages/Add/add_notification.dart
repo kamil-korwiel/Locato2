@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Task.dart';
@@ -418,13 +417,7 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   }
 
   void confirm() {
-   List<Notifi> noti = List();
-                widget.event.listNotifi.clear();
-    for (Notifi n in _notifilist) {
-      if (n.id == null) {
-       noti.add(n);
-     }
-   }
+
 
     widget.event.listNotifi = _notifilist;
 

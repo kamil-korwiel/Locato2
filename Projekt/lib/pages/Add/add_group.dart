@@ -4,9 +4,6 @@ import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
 
-
-
-
 class AddGroup extends StatefulWidget {
   @override
   _AddGroupState createState() => _AddGroupState();
@@ -14,13 +11,12 @@ class AddGroup extends StatefulWidget {
   Task task;
   List<Group> listOfGroup;
 
-  AddGroup(this.task,this.listOfGroup);
+  AddGroup(this.task, this.listOfGroup);
 }
 
 class _AddGroupState extends State<AddGroup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _text = TextEditingController();
-
 
   List<Group> downloadlist;
   List<Group> list;
@@ -35,21 +31,22 @@ class _AddGroupState extends State<AddGroup> {
     //print(widget.task.idGroup);
   }
 
-  void _downloadData(){
-
+  void _downloadData() {
 //    print("lenght of list before ${widget.listOfGroup.length}");
     GroupHelper.lists().then((onList) {
-      if(onList != null) {
+      if (onList != null) {
         downloadlist = onList;
 
         downloadlist.removeAt(0);
+        downloadlist.forEach((g) {
+          if (g.id != widget.task.group.id) {
+            list.add(g);
+          } else {
+            list.add(widget.task.group);
+          }
+        });
 
-        list.addAll(downloadlist);
-
-        if(widget.task.group.id != 0){
-          list.add(widget.task.group);
-        }
-        if(widget.listOfGroup.isNotEmpty){
+        if (widget.listOfGroup.isNotEmpty) {
           //print("jestem");
           list.addAll(widget.listOfGroup);
         }
@@ -61,88 +58,81 @@ class _AddGroupState extends State<AddGroup> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-    title: Text("Dodaj grupę", style: TextStyle(color: Colors.white)),
-    // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
-        ),
-        body: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView(children: <Widget>[
-        Form(
-            key: _formKey,
-            child: buildCustomTextFieldwithValidation("Nowa Grupa", "Wprowadź nazwę nowej grupy", _text)),
-        buildSpace(),
-        buildCustomButton("Dodaj", add),
-        buildSpace(),
-        SizedBox(
-          height: 300,
-            child: ListView.builder(
-            physics: ScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                return RaisedButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    side: BorderSide(
-                      color: Colors.white,
-                    ),
-                  ),
-                  elevation: 5.0,
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 50.0,
-                    child: Row(
+      appBar: AppBar(
+        title: Text("Dodaj grupę", style: TextStyle(color: Colors.white)),
+        // tu kontrolujesz przycisk a
+        leading: new IconButton(
+            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+      ),
+      body: Padding(
+          padding: const EdgeInsets.all(12),
+          child: ListView(children: <Widget>[
+            buildSpace(),
+            Form(
+                key: _formKey,
+                child: buildCustomTextFieldwithValidation(
+                    "Nowa Grupa", "Wprowadź nazwę nowej grupy", _text)),
+            buildSpace(),
+            buildCustomButton("Dodaj", add),
+            buildSpace(),
+            SizedBox(
+              height: 300,
+              child: ListView.builder(
+                  physics: ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            SizedBox(width: 30),
-                            buildListIconTileWithText(Icons.account_circle, list[index].name),
-                            SizedBox(width: 30),
-                            buildRemoveButton(index),
-                          ],
+                        Flexible(
+                          child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                buildListTileWithText(list[index].name),
+                                buildRemoveButton(index),
+                              ],
+                            ),
+                            color: list[index].isSelected
+                                ? Color(0xFF333366)
+                                : Colors.transparent,
+                            onPressed: () => select(index),
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                  color: list[index].isSelected
-                      ? Color(0xFF333366)
-                      : Colors.transparent,
-                  onPressed: () => select(index),
-                );
-              }),
-        ),
-
-        buildSpace(),
-        buildCustomButton("Potwierdź", goBack),
-      ])),
-      );
+                    );
+                  }),
+            ),
+            buildSpace(),
+            buildCustomButton("Potwierdź", goBack),
+          ])),
+    );
   }
 
-  Widget buildListIconTileWithText(IconData _icon, String _text) {
+  Widget buildListTileWithText(String _text) {
     return Container(
       child: Row(
         children: <Widget>[
-          Icon(
-            _icon,
-            size: 18.0,
-            color: Colors.white,
-          ),
-          SizedBox(width: 30),
           Text(" $_text"),
         ],
       ),
     );
   }
 
-  Widget buildCustomTextFieldwithValidation(String label, String hint, TextEditingController control) {
+  Widget buildCustomTextFieldwithValidation(
+      String label, String hint, TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
-          filled: true,
-          fillColor: Color(0xFF333366),
+            filled: true,
+            fillColor: Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white),
@@ -173,17 +163,23 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   Widget buildRemoveButton(int _index) {
-    return SizedBox(
-      child: IconButton(
-        color: Colors.white,
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          removeFromList(_index);
-        },
-      ),
-    );
+    if (list[_index].id == null) {
+      return SizedBox(
+        width: 30,
+        child: IconButton(
+          color: Colors.white,
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            //TODO: DELETE FROM LIST OR DB ???
+            //TODO chyba z bazy lepiej !
+            removeFromList(_index);
+          },
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
-
 
   Widget buildCustomButton(String text, void action()) {
     return RaisedButton(
@@ -213,16 +209,14 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   void goBack() {
-
     widget.listOfGroup.clear();
-    list.forEach((g){
+    list.forEach((g) {
       //print("id: ${g.id} added: ${g.name} bool: ${g.isSelected}");
-      if(g.id == null && g.isSelected == false){
+      if (g.id == null && g.isSelected == false) {
         //print("added: ${g.name} bool: ${g.isSelected}");
         widget.listOfGroup.add(g);
       }
     });
-
 
 //    print("lenght of list after ${widget.listOfGroup.length}");
 
@@ -240,25 +234,24 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   void removeFromList(int _index) {
+//    if(list[_index].id != null) {
+//      GroupHelper.delete(list[_index].id);
+//    }
     list.removeAt(_index);
     setState(() {});
   }
 
   void select(int _index) {
-
-
-    if(list[_index].isSelected == true) {
+    if (list[_index].isSelected == true) {
       list[_index].isSelected = false;
-       widget.task.group = Group(id: 0);
-    }else{
+      widget.task.group = Group(id: 0);
+    } else {
       list.forEach((g) => g.isSelected = false);
       list[_index].isSelected = true;
       widget.task.group = list[_index];
     }
 
-
-      setState(() {});
-
+    setState(() {});
   }
 
   void onBackPressed() {

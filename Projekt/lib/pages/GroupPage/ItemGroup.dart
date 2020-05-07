@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
+import 'package:pageview/pages/Update/upgrade_task.dart';
 
 import 'ItemTask.dart';
 
@@ -19,17 +20,14 @@ class _ItemGroupState extends State<ItemGroup> {
   @override
   void initState() {
     _list = List();
-    _downloadData();
+    // _downloadData();
 
     super.initState();
   }
 
   void _downloadData() {
-    //   print("GroupID ${widget.group.id}");
-//    TaskHelper.listsID(widget.group.id).then((onList){
     TaskHelper.listsID(widget.group.id).then((onList) {
       if (onList != null) {
-        //       print("TaskID NotNUll ${onList.length}");
         _list.addAll(onList);
         setState(() {});
       }
@@ -38,77 +36,122 @@ class _ItemGroupState extends State<ItemGroup> {
 
   @override
   Widget build(BuildContext context) {
-    int donePercent = 50;
+    return FutureBuilder(
+        future: TaskHelper.listsID(widget.group.id),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            // return Container();
+            case ConnectionState.waiting:
+            // return Container();
+            case ConnectionState.active:
+            case ConnectionState.done:
+              _list = snapshot.data;
+              if (_list != null) {
+                int donePercent = 100;
 
-    if (_list.isNotEmpty) {
-      int doneTask = 0;
-      _list.forEach((task) {
-        if (task.done) {
-          doneTask++;
-        }
-      });
+                if (_list.isNotEmpty) {
+                  int doneTask = 0;
+                  _list.forEach((task) {
+                    if (task.done) {
+                      doneTask++;
+                    }
+                  });
 
-      donePercent = (100 * doneTask / _list.length).round();
-    }
+                  donePercent = (100 * doneTask / _list.length).round();
+                }
 
-    return Stack(
-      children: <Widget>[
-        Container(
-          height: 56,
-          decoration: BoxDecoration(
-              gradient:
-                  _buildGradient(Colors.orange, Colors.black38, donePercent)),
-        ),
-        GestureDetector(
-          onLongPress: () => print("onLongPress"),
-          child: ExpansionTile(
-              initiallyExpanded: true,
-              title: Text(
-                widget.group.name, //<=
-                style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    fontSize: 20),
-              ),
-              trailing: Text(
-                donePercent.toString() + "%",
-                style: TextStyle(color: Colors.white, fontSize: 17),
-              ),
-              children: _buildListofTask() //<=
-              ),
-        ),
-      ],
-    );
+                return Stack(
+                  children: <Widget>[
+                    Container(
+                      height: 56,
+                      decoration: BoxDecoration(
+                          gradient: _buildGradient(
+                              Colors.orange, Colors.black38, donePercent)),
+                    ),
+                    GestureDetector(
+                      onLongPress: () {
+                        // TODO: DAREK TUTAJ Pownno wyświetlić czy chcesz usunąć Grupę
+                        print("onLongPress");
+                      },
+                      child: ExpansionTile(
+                          initiallyExpanded: true,
+                          title: Text(
+                            widget.group.name, //<=
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: 20),
+                          ),
+                          trailing: Text(
+                            donePercent.toString() + "%",
+                            style: TextStyle(color: Colors.white, fontSize: 17),
+                          ),
+                          children: _buildListofTask() //<=
+                          ),
+                    ),
+                  ],
+                );
+              }
+          }
+          return Container();
+        });
   }
 
-//  List<Widget> _buildListofTask (List<Task> listOfTask){
+//  @override
+//  Widget build(BuildContext context) {
+//    int donePercent = 100;
 //
-//    List<Widget> listOfWidget  = List();
+//    if(_list.isNotEmpty){
+//      int doneTask = 0;
+//      _list.forEach((task) {if(task.done){doneTask++;}});
 //
-//    for (Task task in listOfTask) {
-//
-//      listOfWidget.add(ItemTask(task,
-//        onPressedDelete: (){
-//          //TaskHelper.delete(task.id);
-//          setState(() {});
-//        },
-//        onPressedEdit: (){
-//         // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTask(update: task)));
-//        },
-//        onPressedDone: () {
-//          setState(() {
-//
-//          });
-//        },
-//      )
-//
-//      );
+//      donePercent = (100 * doneTask/_list.length).round();
 //    }
-//    return listOfWidget;
+//
+//    return Stack(
+//      children: <Widget>[
+//        Container(
+//          height: 56,
+//          decoration: BoxDecoration(
+//              gradient:  _buildGradient(Colors.orange, Colors.black38, donePercent)
+//          ),
+//        ),
+//
+//        GestureDetector(
+//          onLongPress: () {
+//              // TODO: DAREK TUTAJ Pownno wyświetlić czy chcesz usunąć Grupę
+//              print("onLongPress");
+//
+//            },
+//          child: ExpansionTile(
+//              initiallyExpanded: true,
+//              title: Text(widget.group.name,         //<=
+//                style: TextStyle(
+//                    fontWeight: FontWeight.w600,
+//                    color: Colors.white,
+//                    fontSize: 20
+//                ),
+//              ),
+//              trailing: Text(donePercent.toString()+"%",
+//                style: TextStyle(
+//                    color: Colors.white,
+//                    fontSize: 17
+//                ),
+//              ),
+//              children:  _buildListofTask()//<=
+//          ),
+//        ),
+//      ],
+//    );
+//
 //  }
+//
 
   List<Widget> _buildListofTask() {
     List<ItemTask> listOfWidget = List();
+
+    // print("List of task ${_list.length}");
 
     // print("List of task ${_list.length}");
 
@@ -116,20 +159,18 @@ class _ItemGroupState extends State<ItemGroup> {
       listOfWidget.add(ItemTask(
         _list[i],
         onPressedDelete: () {
-          //TaskHelper.delete(task.id);
+          //TODO: DELETE FROM LIST OR DB
+          TaskHelper.delete(_list[i].id);
           setState(() {});
         },
         onPressedEdit: () {
-          // Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTask(update: task)));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => UpgradeTask(_list[i])));
         },
         onPressedDone: () {
           _list[i].done = !_list[i].done;
-//           if(_list[i].done) {
-//             _list.insert(_list.length, _list[i]);
-//             _list.removeAt(i);
-//           }
+          TaskHelper.updateDone(_list[i]);
           setState(() {});
-          //_list.forEach((t) => print(t.done));
         },
       ));
     }

@@ -125,6 +125,7 @@ class NotifiHelper {
     Database db = await dbHelper.database;
     final List<Map<String, dynamic>> maps =
         await db.rawQuery('SELECT * FROM Powiadomienia WHERE ID_Event=$id');
+    print("MapNotifiEvent: ${maps.length.toString()}");
     return List.generate(maps.length, (i) {
       return Notifi(
         id: maps[i]['ID_Powiadomienia'],

@@ -41,29 +41,15 @@ class _ListNotifiState extends State<ListNotifi> {
                   height: 50.0,
                   width: MediaQuery.of(context).size.width,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                buildListIconTile(),
-                                buildSpaceBetween(80),
-                                buildListTextTile(index),
-                              ],
-                            ),
-                          ),
-                          buildSpaceBetween(30),
-                          buildRemoveButton(index),
-                        ],
-                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: buildListTextTile(index)),
+                      buildRemoveButton(index),
                     ],
                   ),
                 ),
-                buildSpace(),
               ],
             );
           }),

@@ -8,6 +8,7 @@ import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/grouptaskpage.dart';
 
 import 'Baza_danych/database_helper.dart';
+import 'pages/calendar.dart';
 
 void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Locato',
       theme: ThemeData(
           primarySwatch: Colors.grey,
           accentColor: Colors.amber,
@@ -63,25 +64,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  int _counter;
-  DateTime _date;
-
   TabController _tabController;
+  PageController _pageController;
 
   @override
   void initState() {
-    _date = DateTime.now();
-    _counter = 0;
-
     // Definicja kontrolera tabbar
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(initialIndex: 1, length: 3, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        print("Index Taba " + _tabController.index.toString());
+        onPageC
+      }
+    });
+    _pageController = PageController(
+      initialPage: 1,
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     // Zmienna szerokosci ekranu dla TabBaru
-    var screenWidthTabBar = MediaQuery.of(context).size.width * 0.6;
+    var screenWidthTabBar = MediaQuery.of(context).size.width * 0.8;
 
     return SafeArea(
       child: Scaffold(
@@ -89,7 +94,7 @@ class _HomePageState extends State<HomePage>
             //title: Text("Locato"),
             leading: GestureDetector(
               onTap: () {},
-              child: Icon(Icons.menu),
+              //child: Icon(Icons.menu),
             ),
             elevation: 0.0,
             flexibleSpace: Container(
@@ -112,6 +117,12 @@ class _HomePageState extends State<HomePage>
                   indicatorColor: Color(0xff00c6ff),
                   controller: _tabController,
                   tabs: <Widget>[
+                    new Container(
+                      height: 40.0,
+                      child: new Tab(
+                        text: "Kalendarz".toUpperCase(),
+                      ),
+                    ),
                     new Container(
                       height: 40.0,
                       child: new Tab(text: "Tydzień".toUpperCase()),
@@ -140,22 +151,6 @@ class _HomePageState extends State<HomePage>
                 label: 'Wydarzenie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-//                  _counter++;
-//                  _date = _date.add(Duration(days: 1));
-//
-//                  Event e = Event(
-//                    id:_counter,
-//                    name:"Name $_counter",
-//                    beginTime: _date,
-//                    endTime: _date,
-//                    cycle:"D6",
-//                    description:"bal bal bal",
-//                    idNotification: 1,
-//                  );
-//                  print(e.toString());
-//
-//                  EventHelper.add(e);
-//                  setState(() {});
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -174,36 +169,25 @@ class _HomePageState extends State<HomePage>
                       builder: (context) => AddTask(),
                     ),
                   );
-//                _counter++;
-//                Group g= Group(id:_counter,name:"lol",howMuchDone: 0);
-//                GroupHelper.add(g);
                   setState(() {});
                 }),
-//            SpeedDialChild(
-//              child: Icon(Icons.add_location),
-//              label: 'Lokalizacja',
-//              labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
-//              onTap: () {
-//                print('Dodaj Lokalizacje');
-//                Navigator.push(
-//                  context,
-//                  MaterialPageRoute(
-//                  //  builder: (context) => AddLocation(),
-//                  ),
-//                );
-//              },
-//            ),
+            SpeedDialChild(
+              child: Icon(Icons.add_location),
+              label: 'Lokalizacja',
+              labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
+              onTap: () {
+                DatabaseHelper.instance.showalltables();
+              },
+            ),
           ],
         ),
         body: PageView(
-          controller: PageController(
-            initialPage: 0,
-          ),
+          controller: _pageController,
           onPageChanged: (page) {
             _tabController.animateTo(page);
           },
           children: <Widget>[
-            //Calendar(),
+            Calendar(),
             HomePageEvents(),
             GroupTaskPage(),
           ],

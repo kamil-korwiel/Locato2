@@ -14,7 +14,7 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
   @override
   void initState() {
     listOfGroup = List();
-    _downloadData();
+    //_downloadData();
 
     super.initState();
   }
@@ -30,7 +30,33 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
     });
   }
 
+  // Kamil build + Filip zmiany
   @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: GroupHelper.lists(),
+        builder: (context, snapshot) {
+          listOfGroup = snapshot.connectionState == ConnectionState.done
+              ? snapshot.data
+              : listOfGroup;
+
+          return CustomScrollView(
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) => GroupCard(
+                    listOfGroup[index],
+                  ),
+                  childCount: listOfGroup.length,
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  // Filip build - dzialajacy
+  /*@override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
@@ -44,31 +70,23 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
         ),
       ],
     );
-  }
+  }*/
 
 //  @override
 //  Widget build(BuildContext context) {
 //
-//    return FutureBuilder(
-//        future: GroupHelper.lists(),
-//        builder: (context, snapshot) {
+//    return CustomScrollView(
+//      slivers: <Widget>[
+//        SliverList(
+//          delegate: SliverChildBuilderDelegate(
+//                (context , index){
+//              return ItemGroup(listOfGroup[index]);
+//            },
+//            childCount: listOfGroup.length,
+//          ),
+//        ),
+//      ],
 //
-//          listOfGroup = snapshot.connectionState == ConnectionState.done ? snapshot.data : listOfGroup;
-//
-//          return CustomScrollView(
-//            slivers: <Widget>[
-//              SliverList(
-//                delegate: SliverChildBuilderDelegate(
-//                      (context , index){
-//                    return ItemGroup(listOfGroup[index]);
-//                  },
-//                  childCount: listOfGroup.length,
-//                ),
-//              ),
-//            ],
-//
-//          );
-//        }
 //    );
 //  }
 
