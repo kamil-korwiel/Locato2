@@ -87,35 +87,31 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
                   shrinkWrap: true,
                   itemCount: list.length,
                   itemBuilder: (context, index) {
-                    return RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(
-                          color: Colors.white,
-                        ),
-                      ),
-                      elevation: 5.0,
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 50.0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Flexible(
+                          child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                SizedBox(width: 30),
-                                buildListIconTileWithText(Icons.account_circle, list[index].name),
-                                SizedBox(width: 30),
+                                buildListTileWithText(list[index].name),
                                 buildRemoveButton(index),
                               ],
                             ),
-                          ],
+                            color: list[index].isSelected
+                                ? Color(0xFF333366)
+                                : Colors.transparent,
+                            onPressed: () => select(index),
+                          ),
                         ),
-                      ),
-                      color: list[index].isSelected
-                          ? Color(0xFF333366)
-                          : Colors.transparent,
-                      onPressed: () => select(index),
+                      ],
                     );
                   }),
             ),
@@ -126,19 +122,11 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
     );
   }
 
-  Widget buildListIconTileWithText(IconData _icon, String _text) {
+  Widget buildListTileWithText(String _text) {
     return Container(
-      child: Row(
-        children: <Widget>[
-          Icon(
-            _icon,
-            size: 18.0,
-            color: Colors.white,
-          ),
-          SizedBox(width: 30),
-          Text(" $_text"),
-        ],
-      ),
+      
+          child: Text(" $_text"),
+       
     );
   }
 

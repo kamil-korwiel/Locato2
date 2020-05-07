@@ -12,11 +12,10 @@ class AddLocalization extends StatefulWidget {
   Task task;
   List<Localization> listOfLocal;
 
-  AddLocalization(this.task,this.listOfLocal);
+  AddLocalization(this.task, this.listOfLocal);
 }
 
 class _AddLocalizationState extends State<AddLocalization> {
-
   List<Localization> localizationlist;
   List<Localization> downloadlist;
 //  int currentIndex = 0;
@@ -31,22 +30,21 @@ class _AddLocalizationState extends State<AddLocalization> {
     super.initState();
   }
 
-
-  void _downloadData(){
+  void _downloadData() {
     LocalizationHelper.lists().then((onList) {
-      if(onList != null) {
+      if (onList != null) {
         downloadlist = onList;
 
         downloadlist.removeAt(0);
-        downloadlist.forEach((l){
-          if(l.id !=  widget.task.localization.id){
+        downloadlist.forEach((l) {
+          if (l.id != widget.task.localization.id) {
             localizationlist.add(l);
-          }else{
+          } else {
             localizationlist.add(widget.task.localization);
           }
         });
 
-        if(widget.listOfLocal.isNotEmpty){
+        if (widget.listOfLocal.isNotEmpty) {
           localizationlist.addAll(widget.listOfLocal);
         }
 
@@ -55,13 +53,16 @@ class _AddLocalizationState extends State<AddLocalization> {
     });
   }
 
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj Lokalizację", style: TextStyle(color: Colors.white),),
-                     // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        title: Text(
+          "Dodaj Lokalizację",
+          style: TextStyle(color: Colors.white),
+        ),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(
+            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -75,76 +76,61 @@ class _AddLocalizationState extends State<AddLocalization> {
     );
   }
 
-
-
-
   Widget buildList() {
     return new ListView.builder(
-      physics: ScrollPhysics(),
+        physics: ScrollPhysics(),
         shrinkWrap: true,
         itemCount: localizationlist.length,
         itemBuilder: (context, index) {
-          return RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: BorderSide(
-                color: Colors.white,
-              ),
-            ),
-            elevation: 5.0,
-            child: Container(
-              alignment: Alignment.center,
-              height: 50.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(width: 30),
-                            Icon(
-                              Icons.location_on,
-                              size: 18.0,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 30),
-                            Text(" " + localizationlist[index].name.toString()),
-                            SizedBox(width: 30),
-                            buildRemoveButton(index),
-                            SizedBox(width: 30),
-                          ],
-                        ),
-                      )
-                    ],
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Flexible(
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: Colors.white,
+                    ),
                   ),
-                ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                    Container(
+                      child: Text(" " +
+                          localizationlist[index]
+                              .name
+                              .toString()),
+                    ),
+                    buildRemoveButton(index),
+                  ]),
+                  color: localizationlist[index].isSelected
+                      ? Color(0xFF333366)
+                      : Colors.transparent,
+                  onPressed: () => setState(() => checkifselected(index)),
+                ),
               ),
-            ),
-            color: localizationlist[index].isSelected
-                ? Color(0xFF333366)
-                : Colors.transparent,
-            onPressed: () => setState(() => checkifselected(index)),
+            ],
           );
         });
   }
 
   Widget buildRemoveButton(int _index) {
-    if(localizationlist[_index].id == null) {
-      return SizedBox(
-        child: IconButton(
-          color: Colors.white,
-          icon: Icon(Icons.clear),
-          onPressed: () {
-            //TODO: DELETE FROM LIST OR DB
-            removeFromList(_index);
-          },
-        ),
-      );
-    }else{
-      return Container();
-    }
+    // if (localizationlist[_index].id == null) {
+    return SizedBox(
+      width: 30,
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          //TODO: DELETE FROM LIST OR DB
+          removeFromList(_index);
+        },
+      ),
+    );
+    // } else {
+    //    return Container();
+    // }
   }
 
   Widget buildCustomButton(String text, void action()) {
@@ -175,17 +161,16 @@ class _AddLocalizationState extends State<AddLocalization> {
   }
 
   void goBack() {
-
     widget.listOfLocal.clear();
-    localizationlist.forEach((g){
-      if(g.id == null && g.isSelected == false){
+    localizationlist.forEach((g) {
+      if (g.id == null && g.isSelected == false) {
         widget.listOfLocal.add(g);
       }
     });
 
     Navigator.pop(context);
 
-  setState(() {});
+    setState(() {});
   }
 
   void onBackPressed() {
@@ -193,8 +178,8 @@ class _AddLocalizationState extends State<AddLocalization> {
   }
 
   void goToLocationPickPage() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddLocation(localizationlist)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddLocation(localizationlist)));
   }
 
   void removeFromList(int _index) {
@@ -204,11 +189,10 @@ class _AddLocalizationState extends State<AddLocalization> {
   }
 
   void checkifselected(_index) {
-
-    if(localizationlist[_index].isSelected  == true) {
+    if (localizationlist[_index].isSelected == true) {
       localizationlist[_index].isSelected = false;
-      widget.task.localization = Localization(id:0);
-    }else{
+      widget.task.localization = Localization(id: 0);
+    } else {
       localizationlist.forEach((g) => g.isSelected = false);
       localizationlist[_index].isSelected = true;
       widget.task.localization = localizationlist[_index];

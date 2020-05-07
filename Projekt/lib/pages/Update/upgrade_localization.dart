@@ -82,48 +82,35 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
         shrinkWrap: true,
         itemCount: localizationlist.length,
         itemBuilder: (context, index) {
-          return RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              side: BorderSide(
-                color: Colors.white,
-              ),
-            ),
-            elevation: 5.0,
-            child: Container(
-              alignment: Alignment.center,
-              height: 50.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(width: 30),
-                            Icon(
-                              Icons.location_on,
-                              size: 18.0,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 30),
-                            Text(" " + localizationlist[index].name.toString()),
-                            SizedBox(width: 30),
-                            buildRemoveButton(index),
-                            SizedBox(width: 30),
-                          ],
-                        ),
-                      )
-                    ],
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Flexible(
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: Colors.white,
+                    ),
                   ),
-                ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                    Container(
+                      child: Text(" " +
+                          localizationlist[index]
+                              .name
+                              .toString()),
+                    ),
+                    buildRemoveButton(index),
+                  ]),
+                  color: localizationlist[index].isSelected
+                      ? Color(0xFF333366)
+                      : Colors.transparent,
+                  onPressed: () => setState(() => checkifselected(index)),
+                ),
               ),
-            ),
-            color: localizationlist[index].isSelected
-                ? Color(0xFF333366)
-                : Colors.transparent,
-            onPressed: () => setState(() => checkifselected(index)),
+            ],
           );
         });
   }
