@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pageview/Classes/Group.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class GroupCardHeader extends StatelessWidget {
   var procent = 0.1;
@@ -19,8 +18,8 @@ class GroupCardHeader extends StatelessWidget {
       procent = howMuchDone / length;
     }
 
-    //print("Percent " + procent.toString());
-    //print("howmuchdone" + howMuchDone.toString() + "/" + length.toString());
+    print("Percent " + procent.toString());
+    print("howmuchdone" + howMuchDone.toString() + "/" + length.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

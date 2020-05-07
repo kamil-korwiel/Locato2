@@ -97,6 +97,65 @@ class GroupCardItem extends StatelessWidget {
             ),
           ],
         ),
+        children: <Widget>[
+          SizedBox(height: 8.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "Szczegóły:",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              Text(
+                "Opcje:",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Icon(
+                    Icons.description,
+                    size: 18.0,
+                  ),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Poppins',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: onPressedEdit,
+                  ),
+                  SizedBox(width: 4.0),
+                  IconButton(
+                      icon: Icon(Icons.delete), onPressed: onPressedDelete),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

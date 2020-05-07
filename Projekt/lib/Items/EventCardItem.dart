@@ -66,15 +66,6 @@ class _EventCardItemState extends State<EventCardItem> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  widget.description,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Poppins',
-                    fontSize: 11.0,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
               ],
             ),
           ],
@@ -109,11 +100,18 @@ class _EventCardItemState extends State<EventCardItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Icon(
-                    Icons.location_on,
+                    Icons.description,
                     size: 18.0,
-                    semanticLabel: "brak",
                   ),
-                  Text("brak"),
+                  Text(
+                    widget.description,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Poppins',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
                 ],
               ),
               Row(
