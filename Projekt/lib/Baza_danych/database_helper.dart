@@ -46,8 +46,6 @@ class DatabaseHelper {
     VALUES (0,'Brak Grupy',0)
     ''');
 
-
-
     await db.execute('''
            CREATE TABLE Powiadomienia(
      ID_Powiadomienia     INTEGER   PRIMARY KEY,
@@ -56,7 +54,6 @@ class DatabaseHelper {
      Czas                 TEXT    DEFAULT NULL
  )
            ''');
-
 
     await db.execute('''
            CREATE TABLE Lokalizacja (
@@ -137,47 +134,75 @@ class DatabaseHelper {
 
   Future<List<Map<String, int>>> queryTaskNotifiId(int id) async {
     Database db = await instance.database;
-    return await db.rawQuery(
-        "SELECT * FROM Powiadomienia WHERE ID_Task= $id");
+    return await db.rawQuery("SELECT * FROM Powiadomienia WHERE ID_Task= $id");
   }
 
   Future<void> showalltables() async {
     Database db = await instance.database;
-    List<Map<String, dynamic>> mapGroup = await db.rawQuery("SELECT * FROM Grupa");
-    List<Map<String, dynamic>> mapNotifi = await db.rawQuery("SELECT * FROM Powiadomienia");
-    List<Map<String, dynamic>> mapLocal = await db.rawQuery("SELECT * FROM Lokalizacja");
-    List<Map<String, dynamic>> mapTask = await db.rawQuery("SELECT * FROM Task");
-    List<Map<String, dynamic>> mapEvent = await db.rawQuery("SELECT * FROM Wydarzenie");
+    List<Map<String, dynamic>> mapGroup =
+        await db.rawQuery("SELECT * FROM Grupa");
+    List<Map<String, dynamic>> mapNotifi =
+        await db.rawQuery("SELECT * FROM Powiadomienia");
+    List<Map<String, dynamic>> mapLocal =
+        await db.rawQuery("SELECT * FROM Lokalizacja");
+    List<Map<String, dynamic>> mapTask =
+        await db.rawQuery("SELECT * FROM Task");
+    List<Map<String, dynamic>> mapEvent =
+        await db.rawQuery("SELECT * FROM Wydarzenie");
 
-    print("\nID_Task\t""Nazwa\t""Zrobione\t""Do_Kiedy\t""Opis\t""Lokalizacja\t""Grupa\t");
-    mapTask.forEach((m){
-      print("${m['ID_Task'].toString()}\t\t""${m['Nazwa'].toString()}\t""${m['Zrobione'].toString()}\t"
-            "${m['Do_Kiedy'].toString()}\t""${m['Opis'].toString()}\t""${m['Lokalizacja'].toString()}\t"
-            "${m['Grupa'].toString()}\t");
+    print("\nID_Task\t"
+        "Nazwa\t"
+        "Zrobione\t"
+        "Do_Kiedy\t"
+        "Opis\t"
+        "Lokalizacja\t"
+        "Grupa\t");
+    mapTask.forEach((m) {
+      print("${m['ID_Task'].toString()}\t\t"
+          "${m['Nazwa'].toString()}\t"
+          "${m['Zrobione'].toString()}\t"
+          "${m['Do_Kiedy'].toString()}\t"
+          "${m['Opis'].toString()}\t"
+          "${m['Lokalizacja'].toString()}\t"
+          "${m['Grupa'].toString()}\t");
     });
 
-    print("\nID_Wydarzenie\t""Nazwa\t""Termin_od\t""Termin_do\t""Opis\t");
-    mapEvent.forEach((m){
-      print("${m['ID_Wydarzenie'].toString()}\t\t\t""${m['Nazwa'].toString()}\t""${m['Termin_od'].toString()}\t""${m['Termin_do'].toString()}\t"
-            "${m['Opis'].toString()}\t");
+    print("\nID_Wydarzenie\t" "Nazwa\t" "Termin_od\t" "Termin_do\t" "Opis\t");
+    mapEvent.forEach((m) {
+      print("${m['ID_Wydarzenie'].toString()}\t\t\t"
+          "${m['Nazwa'].toString()}\t"
+          "${m['Termin_od'].toString()}\t"
+          "${m['Termin_do'].toString()}\t"
+          "${m['Opis'].toString()}\t");
     });
 
-    print("\nID_Grupa\t""Nazwa_grupa\t");
-    mapGroup.forEach((m){
-      print("${m['ID_Grupa'].toString()}\t\t""${m['Nazwa_grupa'].toString()}\t");
+    print("\nID_Grupa\t" "Nazwa_grupa\t");
+    mapGroup.forEach((m) {
+      print(
+          "${m['ID_Grupa'].toString()}\t\t" "${m['Nazwa_grupa'].toString()}\t");
     });
 
-    print("\nID_Lokalizacji\t""Latitude\t""Longitude\t""Nazwa\t""Miasto\t""Ulica\t");
-    mapLocal.forEach((m){
-      print("${m['ID_Lokalizacji'].toString()}\t\t\t\t""${m['Latitude'].toString()}\t""${m['Longitude'].toString()}\t"
-            "${m['Nazwa'].toString()}\t""${m['Miasto'].toString()}\t""${m['Ulica'].toString()}");
+    print("\nID_Lokalizacji\t"
+        "Latitude\t"
+        "Longitude\t"
+        "Nazwa\t"
+        "Miasto\t"
+        "Ulica\t");
+    mapLocal.forEach((m) {
+      print("${m['ID_Lokalizacji'].toString()}\t\t\t\t"
+          "${m['Latitude'].toString()}\t"
+          "${m['Longitude'].toString()}\t"
+          "${m['Nazwa'].toString()}\t"
+          "${m['Miasto'].toString()}\t"
+          "${m['Ulica'].toString()}");
     });
-    print("\nID_Powiadomienia\t""ID_Task\t""ID_Event\t""Czas\t");
-    mapNotifi.forEach((m){
-      print("${m['ID_Powiadomienia'].toString()}\t\t\t\t""${m['ID_Task'].toString()}\t\t""${m['ID_Event'].toString()}\t\t"
-            "${m['Czas'].toString()}\t");
+    print("\nID_Powiadomienia\t" "ID_Task\t" "ID_Event\t" "Czas\t");
+    mapNotifi.forEach((m) {
+      print("${m['ID_Powiadomienia'].toString()}\t\t\t\t"
+          "${m['ID_Task'].toString()}\t\t"
+          "${m['ID_Event'].toString()}\t\t"
+          "${m['Czas'].toString()}\t");
     });
-
   }
 
   Future<int> query(String q) async {

@@ -1,7 +1,6 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:pageview/Background/notification_helper_background.dart';
 import 'package:pageview/pages/Add/add_event.dart';
 import 'package:pageview/pages/Add/add_task.dart';
 import 'package:pageview/pages/GroupPage/GroupPage.dart';
@@ -15,7 +14,6 @@ void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await AndroidAlarmManager.initialize();
-  //Notifications_helper_background.initialize();
   runApp(MyApp());
 }
 
@@ -43,7 +41,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.grey,
           accentColor: Colors.amber,
-          canvasColor: Colors.grey[900],
+          canvasColor: Color.fromRGBO(51, 47, 83, 1),
           brightness: Brightness.dark,
           primaryTextTheme:
               TextTheme(title: TextStyle(color: Colors.amberAccent))),
@@ -66,52 +64,77 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-
   TabController _tabController;
+  PageController _pageController;
 
   @override
   void initState() {
     // Definicja kontrolera tabbar
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(initialIndex: 1, length: 3, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        print("Index Taba " + _tabController.index.toString());
+        onPageC
+      }
+    });
+    _pageController = PageController(
+      initialPage: 1,
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     // Zmienna szerokosci ekranu dla TabBaru
-    var screenWidthTabBar = MediaQuery.of(context).size.width * 0.6;
+    var screenWidthTabBar = MediaQuery.of(context).size.width * 0.8;
 
     return SafeArea(
       child: Scaffold(
-//        appBar: AppBar(
-//            //title: Text("Locato"),
-//            leading: GestureDetector(
-//              onTap: () {},
-//              child: Icon(Icons.menu),
-//            ),
-//            elevation: 0.0,
-//            bottom: PreferredSize(
-//              preferredSize: Size(screenWidthTabBar, 40.0),
-//              child: new Container(
-//                width: screenWidthTabBar,
-//                child: new TabBar(
-//                  indicatorSize: TabBarIndicatorSize.label,
-//                  indicatorColor: Color(0xff00c6ff),
-//                  controller: _tabController,
-//                  tabs: <Widget>[
-//                    new Container(
-//                      height: 40.0,
-//                      child: new Tab(text: "Tydzień".toUpperCase()),
-//                    ),
-//                    new Container(
-//                      height: 40.0,
-//                      child: new Tab(text: "Grupy".toUpperCase()),
-//                    ),
-//                  ],
-//                ),
-//              ),
-//            )
-//        ),
+        appBar: AppBar(
+            //title: Text("Locato"),
+            leading: GestureDetector(
+              onTap: () {},
+              //child: Icon(Icons.menu),
+            ),
+            elevation: 0.0,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [const Color(0xFF534B83), const Color(0xFF332F53)],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(0.0, 1.0),
+                  stops: [0.0, 0.7],
+                  tileMode: TileMode.clamp,
+                ),
+              ),
+            ),
+            bottom: PreferredSize(
+              preferredSize: Size(screenWidthTabBar, 40.0),
+              child: new Container(
+                width: screenWidthTabBar,
+                child: new TabBar(
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorColor: Color(0xff00c6ff),
+                  controller: _tabController,
+                  tabs: <Widget>[
+                    new Container(
+                      height: 40.0,
+                      child: new Tab(
+                        text: "Kalendarz".toUpperCase(),
+                      ),
+                    ),
+                    new Container(
+                      height: 40.0,
+                      child: new Tab(text: "Tydzień".toUpperCase()),
+                    ),
+                    new Container(
+                      height: 40.0,
+                      child: new Tab(text: "Grupy".toUpperCase()),
+                    ),
+                  ],
+                ),
+              ),
+            )),
         floatingActionButton: SpeedDial(
           elevation: 10.0,
           animatedIcon: AnimatedIcons.add_event,
@@ -154,19 +177,15 @@ class _HomePageState extends State<HomePage>
               labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
               onTap: () {
                 DatabaseHelper.instance.showalltables();
-
-
               },
             ),
           ],
         ),
         body: PageView(
-//          controller: PageController(
-//            initialPage: 0,
-//          ),
-//          onPageChanged: (page) {
-//            _tabController.animateTo(page);
-//           },
+          controller: _pageController,
+          onPageChanged: (page) {
+            _tabController.animateTo(page);
+          },
           children: <Widget>[
             Calendar(),
             HomePageEvents(),

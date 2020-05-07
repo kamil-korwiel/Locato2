@@ -1,72 +1,99 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/Classes/Event.dart';
+import 'package:pageview/Classes/Task.dart';
+import 'package:pageview/Classes/Localization.dart';
 
-class EventCardItem extends StatefulWidget {
-  @override
-  _EventCardItemState createState() => _EventCardItemState();
-
-  EventCardItem(Event event, {this.onPressedEdit, this.onPressedDelete}) {
-    this.name = event.name;
-    this.eventStart = DateFormat("hh:mm").format(event.beginTime);
-    this.eventEnd = DateFormat("hh:mm").format(event.endTime);
-    this.description = event.description;
-    //this.is_cyclic
-    //this.cycle
-    //this.color
-  }
-
-  //final Event event;
-  String name;
-  String eventStart;
-  String eventEnd;
-  String cycle;
-  bool is_cyclic;
-  String description;
-  Color color;
+class GroupCardItem extends StatelessWidget {
+  final Function onPressedDone;
   final Function onPressedEdit;
   final Function onPressedDelete;
-}
 
-class _EventCardItemState extends State<EventCardItem> {
+  String name;
+  bool done;
+  Localization localization;
+  String date;
+  String description;
+
+  GroupCardItem(Task task,
+      {this.onPressedDone, this.onPressedEdit, this.onPressedDelete}) {
+    this.name = task.name;
+    this.done = task.done;
+    this.date = DateFormat("yyyy-MM-dd hh:mm").format(task.endTime);
+    this.localization = task.localization;
+    this.description = task.description;
+  }
+
   @override
   Widget build(BuildContext context) {
+    var txt = "";
+    if (localization.street != null) {
+      txt = localization.street;
+      if (localization.city != null) {
+        txt += ", " + localization.city;
+      }
+    } else {
+      if (localization.city != null) {
+        txt = localization.city;
+      } else {
+        txt = "Brak";
+      }
+    }
+
     return ListTileTheme(
       contentPadding: EdgeInsets.all(0),
       child: ExpansionTile(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Column(
-              children: <Widget>[
-                Icon(Icons.event),
-              ],
-            ),
-            SizedBox(width: 8.0),
-            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Nazwa wydarzenia
+                // Nazwa zadanai
                 Text(
-                  widget.name,
+                  name,
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 16.0,
+                    fontSize: 15.0,
                     fontWeight: FontWeight.w500,
+                    decoration: done ? TextDecoration.lineThrough : null,
                   ),
                 ),
-                // Czas wydarzenia
+                // Lokalizacja zadania
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.location_on, size: 12.0),
+                    Text(
+                      txt,
+                      style: TextStyle(
+                        color: Color(0xFFB6B2DF),
+                        fontFamily: 'Poppins',
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                ),
+                // Data zadania
                 Text(
-                  widget.eventStart + " - " + widget.eventEnd,
+                  date,
                   style: TextStyle(
-                    color: Color(0xffb6b2df),
+                    color: Color(0xFFB6B2DF),
                     fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w300,
                   ),
                 ),
               ],
+            ),
+            Container(
+              padding: EdgeInsets.only(right: 10.0),
+              child: IconButton(
+                icon: Icon(Icons.done_outline),
+                color: done ? Colors.lightGreen[600] : Colors.grey[400],
+                onPressed: onPressedDone,
+              ),
             ),
           ],
         ),
@@ -104,7 +131,7 @@ class _EventCardItemState extends State<EventCardItem> {
                     size: 18.0,
                   ),
                   Text(
-                    widget.description,
+                    description,
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Poppins',
@@ -119,12 +146,11 @@ class _EventCardItemState extends State<EventCardItem> {
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.edit),
-                    onPressed: widget.onPressedEdit,
+                    onPressed: onPressedEdit,
                   ),
                   SizedBox(width: 4.0),
                   IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: widget.onPressedDelete),
+                      icon: Icon(Icons.delete), onPressed: onPressedDelete),
                 ],
               ),
             ],
