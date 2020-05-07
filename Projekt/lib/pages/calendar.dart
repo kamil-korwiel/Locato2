@@ -280,7 +280,8 @@ class _CalendarState extends State<Calendar> {
       children: _selectedEvents
           .map((event) => Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[700],
+                  //color: Colors.grey[700],
+                  color: Color(0xFF534B83),
                   border: Border.all(width: 0.8),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
@@ -348,26 +349,6 @@ class _CalendarState extends State<Calendar> {
                   children: <Widget>[
                     SizedBox(height: 8.0),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          //margin: EdgeInsets.all(10.0),
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: Text(
-                            event.description,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Poppins',
-                              fontSize: 11.0,
-                              fontWeight: FontWeight.w300,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8.0),
-                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Text(
@@ -396,11 +377,21 @@ class _CalendarState extends State<Calendar> {
                           children: <Widget>[
                             Padding(padding: EdgeInsets.all(16.0)),
                             Icon(
-                              Icons.location_on,
+                              Icons.description,
                               size: 18.0,
-                              semanticLabel: "brak",
                             ),
-                            Text("brak"),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Text(
+                                event.description,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         Row(
