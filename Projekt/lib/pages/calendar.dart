@@ -3,14 +3,13 @@ import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:intl/intl.dart';
+import 'package:pageview/pages/Update/upgrade_event.dart';
 class Calendar extends StatefulWidget {
-
   //Calendar({Key key}) : super(key:key);
 
   @override
   _CalendarState createState() => _CalendarState();
-
 }
 
 class _CalendarState extends State<Calendar> {
@@ -39,24 +38,22 @@ class _CalendarState extends State<Calendar> {
     _calendarController = CalendarController();
   }
 
-  void _downloadData(){
-
+  void _downloadData() {
     EventHelper.lists().then((onList) {
-      if(onList != null) {
+      if (onList != null) {
         _downloadEvents = onList;
         List<Event> tmpList = List();
         Event e;
-        while(_downloadEvents.length != 0){
+        while (_downloadEvents.length != 0) {
           e = _downloadEvents[0];
           tmpList.clear();
           tmpList.addAll(_downloadEvents);
           List<Event> newList = List();
           print("TMPLIST: ${tmpList.length}");
-          for(int i=0; i<tmpList.length; i++){
-            if( e.beginTime.day == tmpList[i].beginTime.day &&
+          for (int i = 0; i < tmpList.length; i++) {
+            if (e.beginTime.day == tmpList[i].beginTime.day &&
                 e.beginTime.month == tmpList[i].beginTime.month &&
-                e.beginTime.year == tmpList[i].beginTime.year
-            ){
+                e.beginTime.year == tmpList[i].beginTime.year) {
               newList.add(tmpList[i]);
               print("Downloadlist: ${_downloadEvents.length}");
               _downloadEvents.remove(tmpList[i]);
@@ -64,20 +61,20 @@ class _CalendarState extends State<Calendar> {
             }
           }
           tmpList.forEach((e) => print("Events: ${e.name}"));
-          _events.addAll({DateTime(e.beginTime.year,e.beginTime.month,e.beginTime.day) : newList});
+          _events.addAll({
+            DateTime(e.beginTime.year, e.beginTime.month, e.beginTime.day):
+                newList
+          });
         }
-       _events.forEach((date,listString){
-         
-         print(date.toString());
-         listString.forEach((s) => print(s.name));
-         print("");
-         
-       });
+        _events.forEach((date, listString) {
+          print(date.toString());
+          listString.forEach((s) => print(s.name));
+          print("");
+        });
         setState(() {});
       }
     });
   }
-
 
   @override
   void dispose() {
@@ -165,8 +162,7 @@ class _CalendarState extends State<Calendar> {
 
   Widget _buildTableCalendar() {
     return TableCalendar(
-      calendarStyle: CalendarStyle(
-      ),
+      calendarStyle: CalendarStyle(),
       headerStyle: HeaderStyle(
         centerHeaderTitle: true,
         formatButtonVisible: false,
@@ -237,9 +233,9 @@ class _CalendarState extends State<Calendar> {
         //     ),
         //   ),
         // ),
-        markersBuilder: (context, date, events, holidays){
+        markersBuilder: (context, date, events, holidays) {
           final children = <Widget>[];
-          if(events.isNotEmpty){
+          if (events.isNotEmpty) {
             children.add(
               Positioned(
                 right: 1,
@@ -254,14 +250,16 @@ class _CalendarState extends State<Calendar> {
     );
   }
 
-  Widget _buildEventsMarker(DateTime date, List<Event> events){
+  Widget _buildEventsMarker(DateTime date, List<Event> events) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: _calendarController.isSelected(date)
-          ? Colors.brown[500]
-          : _calendarController.isToday(date) ? Colors.brown[300] : Colors.blue[400],
+            ? Colors.brown[500]
+            : _calendarController.isToday(date)
+                ? Colors.brown[300]
+                : Colors.blue[400],
       ),
       width: 16.0,
       height: 16.0,
@@ -280,16 +278,18 @@ class _CalendarState extends State<Calendar> {
   Widget _buildEventList() {
     return ListView(
       children: _selectedEvents
-        .map((event) => Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[700],
-            border: Border.all(width: 0.8),
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          child: ListTile(
-            title: Text(event.name),
-            onTap: () => print('${event.name}'),
+          .map((event) => Container(
+                decoration: BoxDecoration(
+                  //color: Colors.grey[700],
+                  color: Color(0xFF534B83),
+                  border: Border.all(width: 0.8),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                //child: ListTile(
+                //title: Text(event.name),
+                //onTap: () => print('${event.name}'),
 //            trailing: Row(
 //              children: <Widget>[
 //                IconButton(icon: Icon(Icons.edit),
@@ -309,9 +309,122 @@ class _CalendarState extends State<Calendar> {
 //                ),
 //              ],
 //            ),
-          ),
-        ))
-        .toList(),
+                //),
+                child: ExpansionTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Icon(Icons.event),
+                        ],
+                      ),
+                      SizedBox(width: 8.0),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            event.name,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            DateFormat("hh:mm").format(event.beginTime) +
+                                " - " +
+                                DateFormat("hh:mm").format(event.endTime),
+                            style: TextStyle(
+                              color: Color(0xffb6b2df),
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  children: <Widget>[
+                    SizedBox(height: 8.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Text(
+                          "Szczegóły:",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        Text(
+                          "Opcje:",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.all(16.0)),
+                            Icon(
+                              Icons.description,
+                              size: 18.0,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Text(
+                                event.description,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.all(16.0)),
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        UpgradeEvent(event: event),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(width: 4.0),
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                EventHelper.delete(event.id);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ))
+          .toList(),
     );
   }
 }
