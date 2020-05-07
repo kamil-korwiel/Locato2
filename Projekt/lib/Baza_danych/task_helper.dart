@@ -39,6 +39,12 @@ class TaskHelper {
 
   }
 
+  static Future<void> updateDone( updatedTask ) async {
+    dbHelper.update('Task', 'ID_Task', updatedTask.id, {
+      'Zrobione': updatedTask.done ? 1 : 0,
+    });
+  }
+
   static Future<void> update( updatedTask ) async {
 
     int IdGroup = updatedTask.group.id == null ? await GroupHelper.add(updatedTask.group) : updatedTask.group.id;

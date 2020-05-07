@@ -81,35 +81,35 @@ class _HomePageState extends State<HomePage>
 
     return SafeArea(
       child: Scaffold(
-//        appBar: AppBar(
-//            //title: Text("Locato"),
-//            leading: GestureDetector(
-//              onTap: () {},
-//              child: Icon(Icons.menu),
-//            ),
-//            elevation: 0.0,
-//            bottom: PreferredSize(
-//              preferredSize: Size(screenWidthTabBar, 40.0),
-//              child: new Container(
-//                width: screenWidthTabBar,
-//                child: new TabBar(
-//                  indicatorSize: TabBarIndicatorSize.label,
-//                  indicatorColor: Color(0xff00c6ff),
-//                  controller: _tabController,
-//                  tabs: <Widget>[
-//                    new Container(
-//                      height: 40.0,
-//                      child: new Tab(text: "Tydzień".toUpperCase()),
-//                    ),
-//                    new Container(
-//                      height: 40.0,
-//                      child: new Tab(text: "Grupy".toUpperCase()),
-//                    ),
-//                  ],
-//                ),
-//              ),
-//            )
-//        ),
+        appBar: AppBar(
+            //title: Text("Locato"),
+            leading: GestureDetector(
+              onTap: () {},
+              child: Icon(Icons.menu),
+            ),
+            elevation: 0.0,
+            bottom: PreferredSize(
+              preferredSize: Size(screenWidthTabBar, 40.0),
+              child: new Container(
+                width: screenWidthTabBar,
+                child: new TabBar(
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorColor: Color(0xff00c6ff),
+                  controller: _tabController,
+                  tabs: <Widget>[
+                    new Container(
+                      height: 40.0,
+                      child: new Tab(text: "Tydzień".toUpperCase()),
+                    ),
+                    new Container(
+                      height: 40.0,
+                      child: new Tab(text: "Grupy".toUpperCase()),
+                    ),
+                  ],
+                ),
+              ),
+            )
+        ),
         floatingActionButton: SpeedDial(
           elevation: 10.0,
           animatedIcon: AnimatedIcons.add_event,
@@ -126,22 +126,6 @@ class _HomePageState extends State<HomePage>
                 label: 'Wydarzenie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
-//                  _counter++;
-//                  _date = _date.add(Duration(days: 1));
-//
-//                  Event e = Event(
-//                    id:_counter,
-//                    name:"Name $_counter",
-//                    beginTime: _date,
-//                    endTime: _date,
-//                    cycle:"D6",
-//                    description:"bal bal bal",
-//                    idNotification: 1,
-//                  );
-//                  print(e.toString());
-//
-//                  EventHelper.add(e);
-//                  setState(() {});
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -160,9 +144,6 @@ class _HomePageState extends State<HomePage>
                       builder: (context) => AddTask(),
                     ),
                   );
-//                _counter++;
-//                Group g= Group(id:_counter,name:"lol",howMuchDone: 0);
-//                GroupHelper.add(g);
                   setState(() {});
                 }),
             SpeedDialChild(
@@ -176,12 +157,12 @@ class _HomePageState extends State<HomePage>
           ],
         ),
         body: PageView(
-//          controller: PageController(
-//            initialPage: 0,
-//          ),
-//          onPageChanged: (page) {
-//            _tabController.animateTo(page);
-//          },
+          controller: PageController(
+            initialPage: 0,
+          ),
+          onPageChanged: (page) {
+            _tabController.animateTo(page);
+           },
           children: <Widget>[
             Calendar(),
             HomePageEvents(),

@@ -76,8 +76,6 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
   }
 
 
-
-
   Widget buildList() {
     return new ListView.builder(
         physics: ScrollPhysics(),
@@ -131,15 +129,20 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
   }
 
   Widget buildRemoveButton(int _index) {
-    return SizedBox(
-      child: IconButton(
-        color: Colors.white,
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          removeFromList(_index);
-        },
-      ),
-    );
+    if(localizationlist[_index].id == null) {
+      return SizedBox(
+        child: IconButton(
+          color: Colors.white,
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            //TODO: DELETE FROM LIST OR DB
+            removeFromList(_index);
+          },
+        ),
+      );
+    }else{
+      return Container();
+    }
   }
 
   Widget buildCustomButton(String text, void action()) {
@@ -193,7 +196,6 @@ class _UpgradeLocalizationState extends State<UpgradeLocalization> {
   }
 
   void removeFromList(int _index) {
-    //TODO sprawdz która jest z bazy i dopiero wtedy wywal
     localizationlist.removeAt(_index);
     setState(() {});
   }

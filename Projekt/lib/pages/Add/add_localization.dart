@@ -38,16 +38,17 @@ class _AddLocalizationState extends State<AddLocalization> {
         downloadlist = onList;
 
         downloadlist.removeAt(0);
+        downloadlist.forEach((l){
+          if(l.id !=  widget.task.localization.id){
+            localizationlist.add(l);
+          }else{
+            localizationlist.add(widget.task.localization);
+          }
+        });
 
-        localizationlist.addAll(downloadlist);
-
-        if(widget.task.localization.id != 0){
-          localizationlist.add(widget.task.localization);
-        }
         if(widget.listOfLocal.isNotEmpty){
           localizationlist.addAll(widget.listOfLocal);
         }
-
 
         setState(() {});
       }
@@ -130,15 +131,20 @@ class _AddLocalizationState extends State<AddLocalization> {
   }
 
   Widget buildRemoveButton(int _index) {
-    return SizedBox(
-      child: IconButton(
-        color: Colors.white,
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          removeFromList(_index);
-        },
-      ),
-    );
+    if(localizationlist[_index].id == null) {
+      return SizedBox(
+        child: IconButton(
+          color: Colors.white,
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            //TODO: DELETE FROM LIST OR DB
+            removeFromList(_index);
+          },
+        ),
+      );
+    }else{
+      return Container();
+    }
   }
 
   Widget buildCustomButton(String text, void action()) {

@@ -178,15 +178,20 @@ class _UpgradeGroupState extends State<UpgradeGroup> {
   }
 
   Widget buildRemoveButton(int _index) {
-    return SizedBox(
-      child: IconButton(
-        color: Colors.white,
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          removeFromList(_index);
-        },
-      ),
-    );
+    if(list[_index].id == null){
+      return SizedBox(
+        child: IconButton(
+          color: Colors.white,
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            //TODO: DELETE FROM LIST OR DB ???
+            removeFromList(_index);
+          },
+        ),
+      );
+    }else{
+      return Container();
+    }
   }
 
 

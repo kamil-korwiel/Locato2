@@ -38,6 +38,7 @@ class EventCardEvents extends StatelessWidget {
               );
             },
             onPressedDelete: () {
+              //TODO: DELETE FROM LIST OR DB
               EventHelper.delete(event.id);
             },
           ),

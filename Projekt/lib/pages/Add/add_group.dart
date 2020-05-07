@@ -43,12 +43,15 @@ class _AddGroupState extends State<AddGroup> {
         downloadlist = onList;
 
         downloadlist.removeAt(0);
+        downloadlist.forEach((g){
+          if(g.id !=  widget.task.group.id){
+            list.add(g);
+          }else{
+            list.add(widget.task.group);
+          }
+        });
 
-        list.addAll(downloadlist);
 
-        if(widget.task.group.id != 0){
-          list.add(widget.task.group);
-        }
         if(widget.listOfGroup.isNotEmpty){
           //print("jestem");
           list.addAll(widget.listOfGroup);
@@ -173,15 +176,20 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   Widget buildRemoveButton(int _index) {
-    return SizedBox(
-      child: IconButton(
-        color: Colors.white,
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          removeFromList(_index);
-        },
-      ),
-    );
+    if(list[_index].id == null){
+      return SizedBox(
+        child: IconButton(
+          color: Colors.white,
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            //TODO: DELETE FROM LIST OR DB ???
+            removeFromList(_index);
+          },
+        ),
+      );
+    }else{
+      return Container();
+    }
   }
 
 
@@ -240,6 +248,9 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   void removeFromList(int _index) {
+//    if(list[_index].id != null) {
+//      GroupHelper.delete(list[_index].id);
+//    }
     list.removeAt(_index);
     setState(() {});
   }
