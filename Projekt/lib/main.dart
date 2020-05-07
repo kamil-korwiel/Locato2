@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage>
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
         print("Index Taba " + _tabController.index.toString());
-        onPageC
+        //onPageC
       }
     });
     _pageController = PageController(
