@@ -75,7 +75,7 @@ class _UpgradeTaskState extends State<UpgradeTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj zadanie', style: TextStyle(color: Colors.white),),
+        title: Text('Uaktualnij zadanie', style: TextStyle(color: Colors.white),),
         // tu kontrolujesz przycisk wstecz
         leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),

@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:pageview/Background/notification_helper_background.dart';
 import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
@@ -26,8 +27,8 @@ class EventHelper {
 
 
       newEvent.listNotifi.forEach((n) => n.idEvent = IdEvent);
-      NotifiHelper.addList(newEvent.listNotifi);
-
+      await NotifiHelper.addList(newEvent.listNotifi,newEvent,null);
+      //Notifications_helper_background.addEvent(newEvent,IdEvent);
 
   }
 
@@ -42,13 +43,13 @@ class EventHelper {
     });
 
     updatedEvent.listNotifi.forEach((n) => n.idEvent = updatedEvent.id);
-    NotifiHelper.addList(updatedEvent.listNotifi);
+    NotifiHelper.addList(updatedEvent.listNotifi,updatedEvent,null);
 
   }
 
   static Future<void> delete(int pickedIdEvent) async {
     dbHelper.delete('Wydarzenie', 'ID_Wydarzenie', pickedIdEvent);
-    NotifiHelper.deleteEventID(pickedIdEvent);
+    Notifications_helper_background.deleteEvent(pickedIdEvent);
   }
 
   static Future<List<Event>> lists() async {

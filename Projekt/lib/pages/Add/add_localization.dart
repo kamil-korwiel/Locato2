@@ -124,7 +124,6 @@ class _AddLocalizationState extends State<AddLocalization> {
         color: Colors.white,
         icon: Icon(Icons.clear),
         onPressed: () {
-          //TODO: DELETE FROM LIST OR DB
           if (localizationlist[_index].id != null){
 
             showDialog(
@@ -138,7 +137,7 @@ class _AddLocalizationState extends State<AddLocalization> {
                         child: Text("OK"),
                         onPressed: (){
                           Navigator.of(context).pop();
-
+                          LocalizationHelper.deleteAndReplaceIdTask(localizationlist[_index].id);
                           removeFromList(_index);
                         },
                       ),
@@ -152,6 +151,8 @@ class _AddLocalizationState extends State<AddLocalization> {
                   );
                 });
 
+          }else{
+            removeFromList(_index);
           }
 
         },

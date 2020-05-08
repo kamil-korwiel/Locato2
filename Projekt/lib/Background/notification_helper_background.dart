@@ -47,36 +47,30 @@ class Notifications_helper_background{
     await flutterLocalNotificationsPlugin.schedule(id_notifi, title, description, when, platformChannelSpecifics);
   }
 
-  static Future<void> addTask(Task task) async {
-    List<Notifi> notifi = await NotifiHelper.listsTaskID(task.id);
-//    for(Notifi n in notifi) {
-//      await flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie", task.name, task.endTime.add(n.duration), platformChannelSpecifics);
-//    }
-    notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie", task.name, task.endTime.add(n.duration), platformChannelSpecifics));
+  static void addTask(Task task, List<Notifi>  notifi)  {
+    notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics));
   }
 
-  static  Future<void> addEvent(Event event) async {
-    List<Notifi> notifi = await NotifiHelper.listsEventID(event.id);
-//    for(Notifi n in notifi) {
-//      await flutterLocalNotificationsPlugin.schedule(n.id, "Wydarzenie", event.name, event.endTime.add(n.duration), platformChannelSpecifics);
-//    }
-    notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Wydarzenie", event.name, event.endTime.add(n.duration), platformChannelSpecifics));
+  static  void addEvent(Event event,List<Notifi>  notifi)  {
+    notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Wydarzenie:", event.name, event.endTime.subtract(n.duration), platformChannelSpecifics));
   }
 
-  static Future<void> deleteTask(Task task) async {
-    List<Notifi> notifi = await NotifiHelper.listsTaskID(task.id);
+  static Future<void> deleteTask(int id) async {
+    List<Notifi> notifi = await NotifiHelper.listsTaskID(id);
 //    for(Notifi n in notifi) {
 //      await flutterLocalNotificationsPlugin.cancel(n.id);
 //    }
     notifi.forEach((n) => flutterLocalNotificationsPlugin.cancel(n.id));
+    NotifiHelper.deleteTaskID(id);
   }
 
-  static Future<void> deleteEvent(Event event) async {
-    List<Notifi> notifi = await NotifiHelper.listsEventID(event.id);
+  static Future<void> deleteEvent(int id) async {
+    List<Notifi> notifi = await NotifiHelper.listsEventID(id);
 //    for(Notifi n in notifi) {
 //      await flutterLocalNotificationsPlugin.cancel(n.id);
 //    }
      notifi.forEach((n) => flutterLocalNotificationsPlugin.cancel(n.id));
+     NotifiHelper.deleteEventID(id);
   }
 
   static  Future<void> deleteNotifi(int id) async {

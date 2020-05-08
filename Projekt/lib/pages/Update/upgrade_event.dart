@@ -66,7 +66,7 @@ class _UpgradeEventState extends State<UpgradeEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj wydarzenie'),
+        title:  Text('Uaktualnij wydarzenie', style: TextStyle(color: Colors.white),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -115,22 +115,24 @@ class _UpgradeEventState extends State<UpgradeEvent> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
+            filled: true,
+            fillColor: new Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amberAccent),
+              borderSide: BorderSide(color: Colors.transparent),
             ),
             focusedBorder: new OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.amber[400])),
+                borderSide: BorderSide(color: Colors.white)),
             border: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.red),
             ),
             labelText: label,
-            labelStyle: TextStyle(color: Colors.amber[400]),
+            labelStyle: TextStyle(color: Colors.white),
             hintText: hint,
             suffixIcon: IconButton(
-                icon: Icon(Icons.clear, color: Colors.amber[400]),
+                icon: Icon(Icons.clear, color: Colors.white),
                 onPressed: () {
                   control.clear();
                 })),
@@ -148,23 +150,26 @@ class _UpgradeEventState extends State<UpgradeEvent> {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
+          filled: true,
+          fillColor: new Color(0xFF333366),
           enabledBorder: new OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(color: Colors.amberAccent),
+            borderSide: BorderSide(color: Colors.transparent),
           ),
           focusedBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.amber[400])),
+              borderSide: BorderSide(color: Colors.white)),
           labelText: label,
-          labelStyle: TextStyle(color: Colors.amber[400]),
+          labelStyle: TextStyle(color: Colors.white),
           hintText: hint,
           helperText: helper,
-          helperStyle: TextStyle(color: Colors.amber[400]),
+          helperStyle: TextStyle(color: Colors.white),
           suffixIcon: IconButton(
-              icon: Icon(Icons.clear, color: Colors.amber[400]),
+              icon: Icon(Icons.clear, color: Colors.white),
               onPressed: () {
                 control.clear();
-              })),
+              })
+      ),
       keyboardType: TextInputType.text,
     );
   }
@@ -205,7 +210,7 @@ class _UpgradeEventState extends State<UpgradeEvent> {
           ],
         ),
       ),
-      color: Colors.amber[400],
+        color: Color(0xFF333366),
     );
   }
 
@@ -237,7 +242,7 @@ class _UpgradeEventState extends State<UpgradeEvent> {
           ],
         ),
       ),
-      color: Colors.amber[400],
+        color: Color(0xFF333366),
     );
   }
 

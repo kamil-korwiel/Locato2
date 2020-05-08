@@ -4,9 +4,14 @@ import 'package:pageview/Classes/Group.dart';
 import 'GroupCard.dart';
 import 'ItemGroup.dart';
 
+_GroupTaskPageState groupCardState;
+
 class GroupTaskPage extends StatefulWidget {
   @override
-  _GroupTaskPageState createState() => _GroupTaskPageState();
+  _GroupTaskPageState createState() {
+    groupCardState = _GroupTaskPageState();
+    return groupCardState;
+  }
 }
 
 class _GroupTaskPageState extends State<GroupTaskPage> {

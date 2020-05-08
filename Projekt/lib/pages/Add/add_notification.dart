@@ -161,7 +161,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
                 onPressed: () {
                   control.clear();
                 })),
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.number,
         validator: (val) {
           if (val.isEmpty) {
             return 'Pole nie może być puste!';

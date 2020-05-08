@@ -13,28 +13,30 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  List<Event> _selectedEvents;
+  List<dynamic> _selectedEvents;
   Map<DateTime, List<Event>> _events;
   //Map<DateTime, List> _events2;
   List<Event> _downloadEvents;
 
   CalendarController _calendarController;
+  final DateTime _selectedDay = DateFormat("yyyy-MM-dd").parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
 
   @override
   void initState() {
     initializeDateFormatting();
     super.initState();
-    final _selectedDay = DateTime.now();
+
     _events = Map();
-    _downloadData();
-    //_downloadEvents = List();
+//    _downloadData();
+//    _downloadEvents = List();
 //    _events = {
 //      DateTime(2020, 4, 30): ['Wydarzenie 1'],
 //      DateTime(2020, 5, 1): ['Wydarzenie 2', 'Wydarzenie 3', 'Wydarzenie 4'],
 //      DateTime(2020, 5, 3): ['Wydarzenie 5', 'Wydarzenie 6'],
 //      DateTime(2020, 5, 10): ['Wydarzenie 7'],
 //    };
-    _selectedEvents = _events[_selectedDay] ?? [];
+//    _selectedEvents = _events[_selectedDay] ?? [];
+    _selectedEvents = List();
     _calendarController = CalendarController();
   }
 
@@ -89,76 +91,64 @@ class _CalendarState extends State<Calendar> {
     });
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return TableCalendar(
-  //     calendarStyle: CalendarStyle(
-
-  //     ),
-  //     headerStyle: HeaderStyle(
-  //       centerHeaderTitle: true,
-  //       formatButtonVisible: false,
-  //     ),
-  //     locale: ('pl' 'PL'),
-  //     startingDayOfWeek: StartingDayOfWeek.monday,
-  //     calendarController: _calendarController,
-  //     onDaySelected: (date, events){
-  //       print(date.toIso8601String());
-  //     },
-  //     builders: CalendarBuilders(
-  //       selectedDayBuilder: (context, date, events) =>
-  //           Container(
-  //             margin: const EdgeInsets.all(5.0),
-  //             alignment: Alignment.center,
-  //             decoration: BoxDecoration(
-  //               color: Colors.orange,
-  //               shape: BoxShape.circle,
-  //             ),
-  //            child: Text(date.day.toString(), style: TextStyle(
-  //                color:Colors.white)
-  //            )
-  //         ),
-  //         todayDayBuilder: (context, date, events) =>
-  //           Container(
-  //             margin: const EdgeInsets.all(5.0),
-  //             alignment: Alignment.center,
-  //             decoration: BoxDecoration(
-  //             color: Colors.red,
-  //             shape: BoxShape.circle,
-  //             ),
-  //             child: Text(date.day.toString(), style: TextStyle(
-  //             color:Colors.white)
-  //           )
-  //         ),
-  //         /*dayBuilder: (context, date, events) =>
-  //            Text(date.day.toString(), style: TextStyle(
-  //              color: Colors.white)
-  //            ),
-  //            weekendDayBuilder: (context, date, events) =>
-  //              Text(date.day.toString(), style: TextStyle(
-  //           color: Colors.red)*/
-  //         )
-  //       //)
-  //     );
-  // }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          _buildTableCalendar(),
-          const SizedBox(
-            height: 8.0,
-          ),
-          const SizedBox(
-            height: 8.0,
-          ),
-          Expanded(child: _buildEventList()),
-        ],
-      ),
+    return FutureBuilder(
+        future: EventHelper.lists(),
+        builder: (context, snapshot) {
+          if (snapshot.data != null && snapshot.connectionState == ConnectionState.done) {
+            _events.clear();
+            _downloadEvents = snapshot.data;
+            List<Event> tmpList = List();
+            Event e;
+            while (_downloadEvents.length != 0) {
+              e = _downloadEvents[0];
+              tmpList.clear();
+              tmpList.addAll(_downloadEvents);
+              List<Event> newList = List();
+              print("TMPLIST: ${tmpList.length}");
+              for (int i = 0; i < tmpList.length; i++) {
+                if (e.beginTime.day == tmpList[i].beginTime.day &&
+                    e.beginTime.month == tmpList[i].beginTime.month &&
+                    e.beginTime.year == tmpList[i].beginTime.year) {
+                  newList.add(tmpList[i]);
+                  print("Downloadlist: ${_downloadEvents.length}");
+                  _downloadEvents.remove(tmpList[i]);
+                  print(".");
+                }
+              }
+              tmpList.forEach((e) => print("Events: ${e.name}"));
+              _events.addAll({
+                DateTime(e.beginTime.year, e.beginTime.month, e.beginTime.day):
+                newList
+              });
+
+            }
+            _events.forEach((date, listString) {
+              print(date.toString());
+              listString.forEach((s) => print(s.name));
+              print("");
+            });
+          }
+
+          return Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                _buildTableCalendar(),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Expanded(child: _buildEventList()),
+              ],
+            ),
+          );
+        }
     );
-  }
+    }
 
   Widget _buildTableCalendar() {
     return TableCalendar(
@@ -415,6 +405,8 @@ class _CalendarState extends State<Calendar> {
                               icon: Icon(Icons.delete),
                               onPressed: () {
                                 EventHelper.delete(event.id);
+                                _selectedEvents.remove(event);
+                                setState(() {});
                               },
                             ),
                           ],

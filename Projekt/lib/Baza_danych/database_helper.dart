@@ -27,7 +27,7 @@ class DatabaseHelper {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = documentsDirectory.path + _databaseName;
     print("path: " + path);
-    deleteDatabase(path);
+    //deleteDatabase(path);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }

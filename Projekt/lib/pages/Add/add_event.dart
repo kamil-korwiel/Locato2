@@ -165,7 +165,8 @@ class _AddEventState extends State<AddEvent> {
               icon: Icon(Icons.clear, color: Colors.white),
               onPressed: () {
                 control.clear();
-              })),
+              })
+      ),
       keyboardType: TextInputType.text,
     );
   }

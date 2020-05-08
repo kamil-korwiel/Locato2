@@ -1,5 +1,8 @@
 import 'package:intl/intl.dart';
+import 'package:pageview/Background/notification_helper_background.dart';
+import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
+import 'package:pageview/Classes/Task.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'database_helper.dart';
@@ -21,21 +24,27 @@ class NotifiHelper {
     });
   }
 
-  static Future<void> addList(List<Notifi> list) async {
+  static Future<void> addList(List<Notifi> list,Event event,Task task) async {
     if(list.isNotEmpty) {
       int IdNotifi = await dbHelper.query(
           "SELECT MAX(ID_Powiadomienia) FROM Powiadomienia");
 
-      print("ID Notifi:  $IdNotifi");
+     // print("ID Notifi:  $IdNotifi");
 
       IdNotifi = IdNotifi == null ? 0 : IdNotifi;
       for (Notifi n in list) {
+        n.id = ++IdNotifi;
         dbHelper.insert('Powiadomienia', {
-          'ID_Powiadomienia': ++IdNotifi,
+          'ID_Powiadomienia': n.id,
           'ID_Task': n.idTask,
           'ID_Event': n.idEvent,
           'Czas': n.duration.toString(),
         });
+      }
+      if(task != null) {
+        Notifications_helper_background.addTask(task, list);
+      }else{
+        Notifications_helper_background.addEvent(event, list);
       }
     }
   }

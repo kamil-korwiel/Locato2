@@ -1,5 +1,6 @@
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Task.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'database_helper.dart';
 
@@ -48,16 +49,12 @@ class GroupHelper {
 
   }
 
-  static Future<void> deleteAndChangeIdInTask(int pickedIdGroup,List<Task> list) async {
 
-    list.forEach((t){
-      dbHelper.update('Task', 'ID_Task', t.id, {
-        'Grupa': 0,
-      });
-    });
 
-    dbHelper.delete('Grupa', 'ID_Grupa', pickedIdGroup);
-
+  static Future<void> deleteAndReplaceIdTask(int id) async {
+    Database db = await dbHelper.database;
+    db.rawUpdate("UPDATE Task SET Grupa = 0 WHERE Grupa = $id");
+    dbHelper.delete('Grupa', 'ID_Grupa', id);
   }
 
   static Future<int> getPercent(int id) async {

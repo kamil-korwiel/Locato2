@@ -6,15 +6,16 @@ import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/GroupPage/GroupCardHeader.dart';
 import 'package:pageview/pages/GroupPage/GroupCardTasks.dart';
 
-_GroupCardState groupCardState;
+//_GroupCardState groupCardState;
 
 class GroupCard extends StatefulWidget {
-  @override
-  _GroupCardState createState() {
-    groupCardState = _GroupCardState();
-    return groupCardState;
-  }
 
+//  _GroupCardState createState() {
+//    groupCardState = _GroupCardState();
+//    return groupCardState;
+//  }
+  @override
+  _GroupCardState createState() =>  _GroupCardState();
   Group group;
 
   GroupCard(this.group);

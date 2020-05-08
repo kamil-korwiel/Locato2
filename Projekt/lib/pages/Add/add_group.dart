@@ -172,8 +172,6 @@ class _AddGroupState extends State<AddGroup> {
           color: Colors.white,
           icon: Icon(Icons.clear),
           onPressed: () {
-            //TODO: DELETE FROM LIST OR DB ???
-            //TODO chyba z bazy lepiej !
             if (list[_index].id != null){
               showDialog(
                   context: context,
@@ -186,6 +184,7 @@ class _AddGroupState extends State<AddGroup> {
                           child: Text("OK"),
                           onPressed: (){
                             Navigator.of(context).pop();
+                            GroupHelper.deleteAndReplaceIdTask(list[_index].id);
                             removeFromList(_index);
                           },
                         ),
@@ -198,6 +197,8 @@ class _AddGroupState extends State<AddGroup> {
                       ],
                     );
                   });
+            }else{
+              removeFromList(_index);
             }
           },
         ),

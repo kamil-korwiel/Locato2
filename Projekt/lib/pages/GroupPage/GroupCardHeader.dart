@@ -18,8 +18,9 @@ class GroupCardHeader extends StatelessWidget {
       procent = howMuchDone / length;
     }
 
-    print("Percent " + procent.toString());
-    print("howmuchdone" + howMuchDone.toString() + "/" + length.toString());
+//   print("Percent " + procent.toString());
+//    print("howmuchdone" + howMuchDone.toString() + "/" + length.toString());
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

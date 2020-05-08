@@ -182,7 +182,7 @@ class _UpgradeNotificationTaskState extends State<UpgradeNotificationTask> {
                 onPressed: () {
                   control.clear();
                 })),
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.number,
         validator: (val) {
           if (val.isEmpty) {
             return 'Pole nie może być puste!';

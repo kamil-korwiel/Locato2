@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/GroupPage/GroupCard.dart';
 import 'package:pageview/pages/Update/upgrade_task.dart';
 import 'GroupCardItem.dart';
+import 'GroupPage.dart';
 
 class GroupCardTasks extends StatefulWidget {
   @override
@@ -38,6 +38,7 @@ class _GroupCardTasksState extends State<GroupCardTasks> {
             onPressedDone: () {
               task.done = !task.done;
               TaskHelper.updateDone(task);
+              setState(() {});
               groupCardState.setState(() {});
             },
             onPressedEdit: () {

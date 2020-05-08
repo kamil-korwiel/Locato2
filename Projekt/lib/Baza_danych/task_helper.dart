@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:pageview/Background/notification_helper_background.dart';
 import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:pageview/Classes/Group.dart';
@@ -34,7 +35,7 @@ class TaskHelper {
     });
 
     newTask.listNotifi.forEach((n) => n.idTask = IdTask);
-    NotifiHelper.addList(newTask.listNotifi);
+    NotifiHelper.addList(newTask.listNotifi,null,newTask);
 
 
   }
@@ -63,13 +64,13 @@ class TaskHelper {
     });
 
     updatedTask.listNotifi.forEach((n) => n.idTask = updatedTask.id);
-    NotifiHelper.addList(updatedTask.listNotifi);
+    NotifiHelper.addList(updatedTask.listNotifi,null,updatedTask);
 
   }
 
-  static Future<void> delete(int pickedIdTask,) async {
+  static Future<void> delete(int pickedIdTask) async {
     dbHelper.delete('Task', 'ID_Task', pickedIdTask);
-    NotifiHelper.deleteTaskID(pickedIdTask);
+    Notifications_helper_background.deleteTask(pickedIdTask);
   }
 
 

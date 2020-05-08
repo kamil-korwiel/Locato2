@@ -49,7 +49,7 @@ class _EventCardEventsState extends State<EventCardEvents> {
               //TODO: DELETE FROM LIST OR DB
               EventHelper.delete(event.id);
               widget.events.remove(event);
-              setState(() {});
+              //setState(() {});
               homePageEventsState.refresh();
             },
           ),

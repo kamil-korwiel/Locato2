@@ -1,4 +1,5 @@
 import 'package:pageview/Classes/Localization.dart';
+import 'package:sqflite/sqflite.dart';
 import 'database_helper.dart';
 
 class LocalizationHelper {
@@ -51,6 +52,13 @@ class LocalizationHelper {
   static Future<void> delete(int pickedIdLocalization) async {
     dbHelper.delete('Lokalizacja', 'ID_Lokalizacji', pickedIdLocalization);
   }
+
+  static Future<void> deleteAndReplaceIdTask(int id) async {
+    Database db = await dbHelper.database;
+    db.rawUpdate("UPDATE Task SET Lokalizacja = 0 WHERE Lokalizacja = $id");
+    dbHelper.delete('Lokalizacja', 'ID_Lokalizacji', id);
+  }
+
 
   static Future<List<Localization>> lists() async {
     final List<Map<String, dynamic>> maps =

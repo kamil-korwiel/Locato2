@@ -7,28 +7,30 @@ import 'package:pageview/pages/GroupPage/GroupPage.dart';
 import 'package:pageview/pages/homepage.dart';
 import 'package:pageview/pages/grouptaskpage.dart';
 
+import 'Background/notification_helper_background.dart';
 import 'Baza_danych/database_helper.dart';
 import 'pages/calendar.dart';
 
 void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
+  Notifications_helper_background.initialize();
   await AndroidAlarmManager.initialize();
   runApp(MyApp());
 }
 
-MaterialColor myGrey = const MaterialColor(0xFF333333, const {
-  50: const Color(0xFF333333),
-  100: const Color(0xFF333333),
-  200: const Color(0xFF333333),
-  300: const Color(0xFF333333),
-  400: const Color(0xFF333333),
-  500: const Color(0xFF333333),
-  600: const Color(0xFF333333),
-  700: const Color(0xFF333333),
-  800: const Color(0xFF333333),
-  900: const Color(0xFF333333),
-});
+//MaterialColor myGrey = const MaterialColor(0xFF333333, const {
+//  50: const Color(0xFF333333),
+//  100: const Color(0xFF333333),
+//  200: const Color(0xFF333333),
+//  300: const Color(0xFF333333),
+//  400: const Color(0xFF333333),
+//  500: const Color(0xFF333333),
+//  600: const Color(0xFF333333),
+//  700: const Color(0xFF333333),
+//  800: const Color(0xFF333333),
+//  900: const Color(0xFF333333),
+//});
 
 class MyApp extends StatelessWidget {
   final DatabaseHelper dbHelper = DatabaseHelper();
@@ -40,8 +42,10 @@ class MyApp extends StatelessWidget {
       title: 'Locato',
       theme: ThemeData(
           primarySwatch: Colors.grey,
-          accentColor: Colors.amber,
+          appBarTheme: AppBarTheme(color: Color(0xFF332F53)),
+          accentColor:  Colors.amberAccent,
           canvasColor: Color.fromRGBO(51, 47, 83, 1),
+          bottomAppBarColor: Color(0xFF333366),
           brightness: Brightness.dark,
           primaryTextTheme:
               TextTheme(title: TextStyle(color: Colors.amberAccent))),
@@ -89,8 +93,7 @@ class _HomePageState extends State<HomePage>
     // Zmienna szerokosci ekranu dla TabBaru
     var screenWidthTabBar = MediaQuery.of(context).size.width * 0.8;
 
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
             //title: Text("Locato"),
             leading: GestureDetector(
@@ -110,7 +113,7 @@ class _HomePageState extends State<HomePage>
               ),
             ),
             bottom: PreferredSize(
-              preferredSize: Size(screenWidthTabBar, 40.0),
+              preferredSize: Size(screenWidthTabBar, 5.0),
               child: new Container(
                 width: screenWidthTabBar,
                 child: new TabBar(
@@ -142,6 +145,7 @@ class _HomePageState extends State<HomePage>
           animatedIconTheme: IconThemeData(size: 22.0),
           closeManually: false,
           overlayColor: Colors.black,
+          backgroundColor: Color(0xFF444477),
           overlayOpacity: 0.5,
           onOpen: () => print('Otwieram Dial na Tasks'),
           onClose: () => print('Zamykam Dial na Tasks'),
@@ -149,6 +153,7 @@ class _HomePageState extends State<HomePage>
           children: [
             SpeedDialChild(
                 child: Icon(Icons.event_note),
+                backgroundColor: Color(0xFF444477),
                 label: 'Wydarzenie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
@@ -161,6 +166,7 @@ class _HomePageState extends State<HomePage>
                 }),
             SpeedDialChild(
                 child: Icon(Icons.check_box),
+                backgroundColor: Color(0xFF444477),
                 label: 'Zadanie',
                 labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
                 onTap: () {
@@ -173,10 +179,13 @@ class _HomePageState extends State<HomePage>
                   setState(() {});
                 }),
             SpeedDialChild(
-              child: Icon(Icons.add_location),
-              label: 'Lokalizacja',
+              child: Icon(Icons.data_usage),
+              label: 'DB',
               labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
               onTap: () {
+
+               // Notifications_helper_background.now("NOW", "FUCK");
+
                 DatabaseHelper.instance.showalltables();
               },
             ),
@@ -196,8 +205,7 @@ class _HomePageState extends State<HomePage>
             GroupTaskPage(),
           ],
         ),
-      ),
-    );
+      );
   }
 
   onPageChange(int index, {PageController p, TabController t}) async {
