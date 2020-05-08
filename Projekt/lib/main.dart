@@ -18,11 +18,12 @@ import 'pages/calendar.dart';
 void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
+  final DatabaseHelper dbHelper = DatabaseHelper();
   Notifications_helper_background.initialize();
   await AndroidAlarmManager.initialize();
 
   await AndroidAlarmManager.periodic(
-      Duration(minutes: 2), 0, checkLocationRadius);
+      Duration(minutes: 1), 0, checkLocationRadius);
   runApp(MyApp());
 }
 
@@ -260,7 +261,7 @@ void checkLocationRadius() async {
     }
   }
 
-  _list.clear();
+  //_list.clear();
 
   /*if (id >= 0) {
     TaskHelper.listsIDLocal(id).th
