@@ -14,6 +14,7 @@ import 'add_group.dart';
 import 'add_localization.dart';
 import 'add_notification.dart';
 
+_AddTaskState addTaskState;
 
 class AddTask extends StatefulWidget {
   @override
@@ -377,4 +378,8 @@ class _AddTaskState extends State<AddTask> {
     goBack();
   }
 
+  void selectedGroup(String selectedGroup) {
+    _group = "Grupa: " + selectedGroup;
+    addTaskState.setState(() {});
+  }
 }

@@ -27,7 +27,7 @@ class _GroupCardState extends State<GroupCard> {
   @override
   void initState() {
     _list = List();
-    _downloadData();
+    //_downloadData();
 
     super.initState();
   }
@@ -41,7 +41,8 @@ class _GroupCardState extends State<GroupCard> {
     });
   }
 
-  @override
+  // Stary build bez FutureBuild ~Filip
+  /*@override
   Widget build(BuildContext context) {
     if (_list.isNotEmpty) {
       doneTasks = 0;
@@ -77,6 +78,64 @@ class _GroupCardState extends State<GroupCard> {
           ),
         ],
       ),
+    );
+  }*/
+
+  @override
+  Widget build(BuildContext context) {
+    doneTasks = 0;
+    return FutureBuilder(
+      future: TaskHelper.listsID(widget.group.id),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          // return Container();
+          case ConnectionState.waiting:
+          // return Container();
+          case ConnectionState.active:
+          case ConnectionState.done:
+            _list = snapshot.data;
+            if (_list != null) {
+              doneTasks = 0;
+              if (_list.isNotEmpty) {
+                _list.forEach((task) {
+                  if (task.done) doneTasks++;
+                });
+              }
+              return Container(
+                // Odstep miedzy grupami
+                margin:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                decoration: new BoxDecoration(
+                  color: new Color(0xFF333366),
+                  shape: BoxShape.rectangle,
+                  borderRadius: new BorderRadius.circular(8.0),
+                  boxShadow: <BoxShadow>[
+                    new BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10.0,
+                      offset: new Offset(0.0, 10.0),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Divider(
+                      color: Colors.black12,
+                      height: 0.5,
+                    ),
+                    _buildContent(),
+                    Divider(
+                      color: Colors.black12,
+                      height: 0.5,
+                    ),
+                  ],
+                ),
+              );
+            }
+        }
+        return Container();
+      },
     );
   }
 

@@ -90,10 +90,6 @@ class _AddLocationState extends State<AddLocation> {
   Completer<GoogleMapController> mapController = Completer();
   Future<List<Adres>> futureAdresy;
 
-
-
-
-
   // Funkcja inicjujaca mape
   _onMapCreated(GoogleMapController controller) {
     setState(() {
@@ -125,7 +121,7 @@ class _AddLocationState extends State<AddLocation> {
 
   final _formKey = new GlobalKey<FormState>();
 
-  // Dekoracja
+  // Dekoracja szaro-zolta
   InputDecoration _buildInputDecoration(String hint, String iconPath) {
     return InputDecoration(
       focusedBorder: UnderlineInputBorder(
@@ -141,6 +137,34 @@ class _AddLocationState extends State<AddLocation> {
       focusedErrorBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Color.fromRGBO(248, 218, 87, 1))),
       suffixIcon: hint == 'Adres'
+          ? IconButton(
+              icon: Icon(Icons.clear), onPressed: () => adresController.clear())
+          : null,
+    );
+  }
+
+  // Dekoracja nowa - granatowa
+  InputDecoration _buildInputDecoration2(
+      String label, String hint, String iconPath) {
+    return InputDecoration(
+      //contentPadding: new EdgeInsets.all(5.0),
+      filled: true,
+      fillColor: new Color(0xFF333366),
+      enabledBorder: new OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: BorderSide(color: Colors.transparent),
+      ),
+      focusedBorder: new OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: BorderSide(color: Colors.white),
+      ),
+      border: new OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide(color: Colors.red)),
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.white),
+      hintText: hint,
+      suffixIcon: label == 'Adres'
           ? IconButton(
               icon: Icon(Icons.clear), onPressed: () => adresController.clear())
           : null,
@@ -212,7 +236,7 @@ class _AddLocationState extends State<AddLocation> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-            color: Color.fromRGBO(36, 43, 47, 1),
+            color: Color.fromRGBO(51, 47, 83, 1),
             padding: const EdgeInsets.symmetric(horizontal: 35.0),
             child: Form(
                 key: _formKey,
@@ -222,6 +246,7 @@ class _AddLocationState extends State<AddLocation> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       _buildNazwaLokalizacji(),
+                      SizedBox(height: 8.0),
                       _buildAdres(),
                       _buildMapa(),
                       _buildDodaj(context)
@@ -240,7 +265,8 @@ class _AddLocationState extends State<AddLocation> {
           value.isEmpty ? 'Nazwa lokalizacji nie może być pusta' : null,
       style: TextStyle(
           color: Color.fromRGBO(252, 252, 252, 1), fontFamily: 'RadikalLight'),
-      decoration: _buildInputDecoration("Nazwa lokalizacji", ''),
+      decoration: _buildInputDecoration2(
+          "Nazwa lokalizacji", "Podaj nazwę nowej lokalizacji", null),
     );
   }
 
@@ -249,7 +275,7 @@ class _AddLocationState extends State<AddLocation> {
       child: TypeAheadFormField(
         textFieldConfiguration: TextFieldConfiguration(
           controller: adresController,
-          decoration: _buildInputDecoration("Adres", ''),
+          decoration: _buildInputDecoration2("Adres", '', null),
           style: TextStyle(color: Color.fromRGBO(252, 252, 252, 1)),
         ),
         suggestionsCallback: (pattern) {
@@ -314,7 +340,7 @@ class _AddLocationState extends State<AddLocation> {
 
   Widget _buildDodaj(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 43.0),
+      margin: const EdgeInsets.only(top: 35.0),
       width: MediaQuery.of(context).size.width * 0.62,
       child: RaisedButton(
         child: const Text(

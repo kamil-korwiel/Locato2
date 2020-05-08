@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   PageController _pageController;
+  var pageCanChange = true;
 
   @override
   void initState() {
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage>
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
         print("Index Taba " + _tabController.index.toString());
-        //onPageC
+        onPageChange(_tabController.index, p: _pageController);
       }
     });
     _pageController = PageController(
@@ -184,7 +185,10 @@ class _HomePageState extends State<HomePage>
         body: PageView(
           controller: _pageController,
           onPageChanged: (page) {
-            _tabController.animateTo(page);
+            if (pageCanChange) {
+              onPageChange(page);
+            }
+            //_tabController.animateTo(page);
           },
           children: <Widget>[
             Calendar(),
@@ -194,5 +198,18 @@ class _HomePageState extends State<HomePage>
         ),
       ),
     );
+  }
+
+  onPageChange(int index, {PageController p, TabController t}) async {
+    // Obsluga PageControllera
+    if (p != null) {
+      pageCanChange = false;
+      await _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 500), curve: Curves.ease);
+      pageCanChange = true;
+    } else {
+      // Obsluga TabControllera
+      _tabController.animateTo(index);
+    }
   }
 }
