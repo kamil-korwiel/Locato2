@@ -171,6 +171,8 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   }
 
   void validateAndAdd() {
+    bool notthesame = true;
+
     if (_formKey.currentState.validate()) {
       if (holder == "Minuty") {
         czas = int.parse(_text.text);
@@ -187,7 +189,19 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
         duration = new Duration(days: czas);
         name = "$czas dni przed";
       }
-      _notifilist.add(Notifi(duration: duration));
+      _notifilist.forEach((n){
+        if(n.duration.compareTo(duration)==0) {
+          notthesame = false;
+        }
+      });
+      if(notthesame) {
+        _notifilist.add(Notifi(duration: duration));
+      }
+//    }
+//      print(
+//          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
+
+
       setState(() {});
     }
   }
@@ -382,6 +396,8 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   }
 
   void validateAndAdd() {
+    bool notthesame = true;
+    
     if (_formKey.currentState.validate()) {
       if (holder == "Minuty") {
         czas = int.parse(_text.text);
@@ -398,11 +414,18 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
         duration = new Duration(days: czas);
         name = "$czas dni przed";
       }
+      _notifilist.forEach((n){
+        if(n.duration.compareTo(duration)==0) {
+          notthesame = false;
+        }
+      });
+      if(notthesame) {
+        _notifilist.add(Notifi(duration: duration));
+      }
+//    }
+//      print(
+//          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
 
-      _notifilist.add(Notifi(duration: duration));
-
-      print(
-          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
 
       setState(() {});
     }
