@@ -230,11 +230,13 @@ class _HomePageState extends State<HomePage>
 }
 
 void checkLocationRadius() async {
-  List<Localization> _list;
+  List<Localization> _list = List();
   double dist;
   Position pos;
   int id = -1;
   int distance = 100;
+  final DatabaseHelper dbHelper = DatabaseHelper();
+  Notifications_helper_background.initialize();
 
   pos = await Geolocator().getCurrentPosition();
   print("Obecna lokalizacja: " + pos.toString());
@@ -247,6 +249,7 @@ void checkLocationRadius() async {
   });
 
   if (_list != null) {
+    print("jestem w liscie");
     for (var loc in _list) {
       // Dystans w metrach pomiedzy dwoma punktami
       dist = await Geolocator().distanceBetween(
@@ -261,6 +264,7 @@ void checkLocationRadius() async {
     }
   }
 
+  Notifications_helper_background.now("Testeś tutaj:", pos.toString());
   //_list.clear();
 
   /*if (id >= 0) {

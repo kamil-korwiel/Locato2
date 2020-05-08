@@ -61,8 +61,9 @@ class LocalizationHelper {
 
 
   static Future<List<Localization>> lists() async {
-    final List<Map<String, dynamic>> maps =
-        await dbHelper.queryAllRows('Lokalizacja');
+    Database db = await dbHelper.database;
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery("SELECT * FROM Lokalizacja");
     return List.generate(maps.length, (i) {
       return Localization(
         id: maps[i]['ID_Lokalizacji'],
