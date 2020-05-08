@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
+import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/Add/add_event.dart';
 import 'package:pageview/pages/Add/add_task.dart';
 import 'package:pageview/pages/GroupPage/GroupPage.dart';
@@ -230,7 +231,8 @@ class _HomePageState extends State<HomePage>
 }
 
 void checkLocationRadius() async {
-  List<Localization> _list = List();
+  List<Localization> _listloc = List();
+  List<Task> _listtask = List();
   double dist;
   Position pos;
   int id = -1;
@@ -242,29 +244,28 @@ void checkLocationRadius() async {
   print("Obecna lokalizacja: " + pos.toString());
 
   // DownloadData
-  LocalizationHelper.lists().then((onList) {
-    if (onList != null) {
-      _list.addAll(onList);
-    }
-  });
+  _listloc = await LocalizationHelper.lists();
+  _listloc.forEach((t) => print("Loc: ${t.name}"));
 
-  if (_list != null) {
-    print("jestem w liscie");
-    for (var loc in _list) {
-      // Dystans w metrach pomiedzy dwoma punktami
-      dist = await Geolocator().distanceBetween(
-          loc.latitude, loc.longitude, pos.latitude, pos.longitude);
-      print("Dystans pomiedzy punktami" + dist.toString());
-      // Sprawdz czy znajduje sie w poblizu lokalizacja
-      if (dist < distance) {
-        // Jestes w okregu o promieniu 'distance' metrow
-        id = loc.id;
-        print("Id zadania w poblizu: " + id.toString());
+    if (_listloc != null) {
+      for (var loc in _listloc) {
+        if(loc.id != 0) {
+          dist = await Geolocator().distanceBetween(
+              loc.latitude, loc.longitude, pos.latitude, pos.longitude);
+          print("Dystans pomiedzy punktami" + dist.toString());
+          if (dist < distance) {
+            id = loc.id;
+            print("Id zadania w poblizu: " + id.toString());
+
+            _listtask = await TaskHelper.listsIDLocal(id);
+            _listtask.forEach((t) => print("Task: ${t.name}"));
+          }
+        }
       }
     }
-  }
 
-  Notifications_helper_background.now("Testeś tutaj:", pos.toString());
+
+  //Notifications_helper_background.now("Testeś tutaj:", pos.toString());
   //_list.clear();
 
   /*if (id >= 0) {
