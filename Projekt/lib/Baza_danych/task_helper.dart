@@ -4,6 +4,7 @@ import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Localization.dart';
+import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -48,6 +49,9 @@ class TaskHelper {
     });
   }
 
+
+
+
   static Future<void> update( updatedTask ) async {
 
     int IdGroup = updatedTask.group.id == null ? await GroupHelper.add(updatedTask.group) : updatedTask.group.id;
@@ -64,8 +68,13 @@ class TaskHelper {
     });
 
     updatedTask.listNotifi.forEach((n) => n.idTask = updatedTask.id);
-    NotifiHelper.addList(updatedTask.listNotifi,null,updatedTask);
 
+//    List<Notifi> notifitoupdate = await NotifiHelper.listsTaskID(updatedTask);
+    
+//    notifitoupdate.forEach((n) => Notifications_helper_background.)
+    
+    NotifiHelper.addList(updatedTask.listNotifi,null,updatedTask);
+    
   }
 
   static Future<void> delete(int pickedIdTask) async {
@@ -168,6 +177,45 @@ class TaskHelper {
       );
     });
   }
+
+
+
+  static Future<List<Task>> listsIDLocal(int idloca) async {
+    Database db = await dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db
+        .rawQuery('''
+        SELECT t.ID_Task, t.Nazwa, t.Zrobione, t.Do_Kiedy, t.Opis, t.Lokalizacja, t.Grupa,
+        l.Nazwa AS Nazwa_Lokalizacji, l.Miasto, l.Ulica,
+        g.Nazwa_grupa
+        FROM Task AS t 
+        INNER JOIN Lokalizacja AS l ON (l.ID_Lokalizacji = t.Lokalizacja) 
+        INNER JOIN Grupa AS g ON (g.ID_Grupa = t.Grupa)
+        WHERE Lokalizacja = ?
+        ''', [idloca]);
+
+    return List.generate(maps.length, (i) {
+      return Task(
+        id: maps[i]['ID_Task'],
+        done: maps[i]['Zrobione']  == 1 ? true : false,
+        name: maps[i]['Nazwa'],
+        endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
+        description: maps[i]['Opis'],
+        localization: Localization(
+          id: maps[i]['Lokalizacja'],
+          name: maps[i]['Nazwa_Lokalizacji'],
+          city: maps[i]['Miasto'],
+          street: maps[i]['Ulica'],
+          isSelected: true,
+        ),
+        group: Group(
+          id: maps[i]['Grupa'],
+          name: maps[i]['Nazwa_grupa'],
+          isSelected: true,
+        ),
+      );
+    });
+  }
+
 
 //  static Future<List<Task>> listsWeekend() async {
 //    final List<Map<String, dynamic>> maps = await dbHelper.queryTaskWeekend();

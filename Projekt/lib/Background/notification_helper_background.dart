@@ -51,8 +51,18 @@ class Notifications_helper_background{
     notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics));
   }
 
+//  static void updateTask(Notifi n, Task task)  {
+//    //flutterLocalNotificationsPlugin.cancel(n.id);
+//    flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics);
+//  }
+
+//  static void updateTask(Notifi n, Event event)  {
+//    //flutterLocalNotificationsPlugin.cancel(n.id);
+//    flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics);
+//  }
+
   static  void addEvent(Event event,List<Notifi>  notifi)  {
-    notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Wydarzenie:", event.name, event.endTime.subtract(n.duration), platformChannelSpecifics));
+    notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Wydarzenie:", event.name, event.beginTime.subtract(n.duration), platformChannelSpecifics));
   }
 
   static Future<void> deleteTask(int id) async {
