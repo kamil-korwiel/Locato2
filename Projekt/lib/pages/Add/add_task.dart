@@ -36,6 +36,8 @@ class _AddTaskState extends State<AddTask> {
   Color dateColor;
   Color timeColor;
   String _date;
+  bool isTimeEnabled;
+  bool isLocalizationEnabled;
 
   Task _task;
   List<Localization> listOfLocalization;
@@ -48,6 +50,9 @@ class _AddTaskState extends State<AddTask> {
     print("start");
     listOfLocalization = List();
     listOfGroup = List();
+
+    isLocalizationEnabled = true;
+    isTimeEnabled = true;
 
     _date = "Nie wybrano daty";
     _time = "Nie wybrano godziny rozpoczęcia";
@@ -98,7 +103,7 @@ class _AddTaskState extends State<AddTask> {
               buildSpace(),
               buildCustomButton(_notification, Icons.notifications, goToNotificationPickPage),
               buildSpace(),
-              buildCustomButton(_localization, Icons.edit_location, goToLocalizationPickPage),
+              buildCustomLocalizationButton(_localization, Icons.edit_location, goToLocalizationPickPage),
               buildSpace(),
               buildCustomTextField("Opis", "Wprowadź opis swojego zadania","Pole jest opcjonalne", controllerDesc),
               buildSpace(),
@@ -192,7 +197,7 @@ class _AddTaskState extends State<AddTask> {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
-      onPressed: onPressed,
+      onPressed: isTimeEnabled ? onPressed : null,
       child: Container(
         alignment: Alignment.center,
         height: 50.0,
@@ -207,7 +212,7 @@ class _AddTaskState extends State<AddTask> {
                   color: textcolor,
                 ),
                 Text(
-                  " $text",
+                  (isTimeEnabled)? " $text" : "Wybrałeś powiadomienie oparte na lokalizacji",
                   style: TextStyle(
                     color: textcolor,
                   ),
@@ -221,13 +226,11 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomButton(String text, IconData icon, void action()) {
+  Widget buildCustomButton(String text, IconData icon, GestureTapCallback onPressed) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
-      onPressed: () {
-        action();
-      },
+      onPressed: onPressed,
       child: Container(
         alignment: Alignment.center,
         height: 50.0,
@@ -253,6 +256,36 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  Widget buildCustomLocalizationButton(String text, IconData icon, GestureTapCallback onPressed) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      elevation: 5.0,
+      onPressed: isLocalizationEnabled ? onPressed : null,
+      child: Container(
+        alignment: Alignment.center,
+        height: 50.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Icon(
+                  icon,
+                  size: 20.0,
+                ),
+                Text(
+                  isLocalizationEnabled? " $text" : "Wybrałeś zadanie oparte na konkretnym czasie",
+                  style: TextStyle(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      color: new Color(0xFF333366),
+    );
+  }
+
   Widget buildButtonBarTile(String text, Color color, void action()) {
     return RaisedButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -266,6 +299,7 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void datePick() {
+    isLocalizationEnabled = false;
     DatePicker.showDatePicker(context,
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
@@ -283,6 +317,7 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void timePick() {
+    isLocalizationEnabled = false;
     DatePicker.showTimePicker(context,
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
@@ -311,6 +346,7 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void goToLocalizationPickPage() {
+    isTimeEnabled = false;
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => AddLocalization(_task,listOfLocalization)));
   }
