@@ -235,6 +235,8 @@ class _AddGroupState extends State<AddGroup> {
     );
   }
 
+  //TODO KAMIL - gdy nie wybierzesz grupy a tylko utworzysz to SelectedGroup jest null i nie dziala potwierdz
+
   void goBack() {
     widget.listOfGroup.clear();
     list.forEach((g) {

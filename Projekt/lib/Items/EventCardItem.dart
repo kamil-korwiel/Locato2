@@ -9,14 +9,13 @@ class EventCardItem extends StatefulWidget {
 
   EventCardItem(Event event, {this.onPressedEdit, this.onPressedDelete}) {
     this.name = event.name;
-    this.eventStart = DateFormat("hh:mm").format(event.beginTime);
-    this.eventEnd = DateFormat("hh:mm").format(event.endTime);
+    this.eventStart = DateFormat("HH:mm").format(event.beginTime);
+    this.eventEnd = DateFormat("HH:mm").format(event.endTime);
     this.description = event.description;
     //this.is_cyclic
     //this.cycle
     //this.color
   }
-
   //final Event event;
   String name;
   String eventStart;

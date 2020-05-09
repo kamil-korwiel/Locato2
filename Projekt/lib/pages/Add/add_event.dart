@@ -1,20 +1,15 @@
-
 import 'dart:ui';
+import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pageview/Baza_danych/event_helper.dart';
-
 import 'package:pageview/Classes/Event.dart';
-
 import 'add_notification.dart';
-
-
 
 class AddEvent extends StatefulWidget {
   @override
   _AddEventState createState() => _AddEventState();
-
 
   AddEvent();
 }
@@ -24,34 +19,28 @@ class _AddEventState extends State<AddEvent> {
   TextEditingController _controllerDesc;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
-  String _date;
-  String _time1;
-  String _time2;
-  String _notification;
-  DateTime _start;
-  DateTime _end;
+  DateTime _date;
+  DateTime _time1;
+  DateTime _time2;
   Color _dateColor;
   Color _time1Color;
   Color _time2Color;
-
   Event _event = Event();
+  bool isDateSelected;
+  bool isTime1Selected;
+  bool isTime2Selected;
 
   @override
   void initState() {
-
-    _date =  "Nie wybrano daty";
-    _time1 =  "Nie wybrano godziny rozpoczęcia";
-    _time2 =  "Nie wybrano godziny zakończenia";
-    _notification = "Powiadomienia";
-    _start = new DateTime.now();
-    _end = new DateTime.now().add(new Duration(hours: 1));
-
     _controllerName = TextEditingController();
     _controllerDesc = TextEditingController();
     _dateColor = Colors.white;
     _time1Color = Colors.white;
     _time2Color = Colors.white;
+
+    isDateSelected = false;
+    isTime1Selected = false;
+    isTime2Selected = false;
 //
 //    if (widget.update != null) {
 //      _controllerName = TextEditingController(text: _name);
@@ -64,9 +53,13 @@ class _AddEventState extends State<AddEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj wydarzenie', style: TextStyle(color: Colors.white),),
-                 // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        title: Text(
+          'Dodaj wydarzenie',
+          style: TextStyle(color: Colors.white),
+        ),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(
+            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -75,16 +68,60 @@ class _AddEventState extends State<AddEvent> {
           child: ListView(
             children: <Widget>[
               buildSpace(),
-              buildCustomTextFieldwithValidation("Nazwa","Wprowadź nazwę swojego wydarzenia", _controllerName),
+              //textfield z nazwa
+              buildCustomTextFieldwithValidation("Nazwa",
+                  "Wprowadź nazwę swojego wydarzenia", _controllerName),
               buildSpace(),
-              buildCustomButtonWithValidation(_dateColor, _date, Icons.date_range, datePick),
+              //button z data
+              buildCustomButtonWithValidation(
+                  _dateColor,
+                  (isDateSelected)
+                      ? DateFormat("dd/MM/yyyy").format(_date)
+                      : "Nie wybrano daty",
+                  Icons.date_range,
+                  datePick,
+                  buildClearButton(clearDate)),
               buildSpace(),
-              buildCustomButtonWithValidation(_time1Color, _time1, Icons.access_time, startTimePick),
+              //button z rozpoczeciem
+              buildCustomButtonWithValidation(
+                  _time1Color,
+                  (isTime1Selected)
+                      ? DateFormat("HH:mm").format(_time1)
+                      : "Nie wybrano godziny rozpoczęcia",
+                  Icons.access_time,
+                  startTimePick,
+                  buildClearButton(clearTime1)),
               buildSpace(),
-              buildCustomButtonWithValidation(_time2Color, _time2, Icons.access_time, endTimePick),
+              //button z zakonczeniem
+              buildCustomButtonWithValidation(
+                  _time2Color,
+                  (isTime2Selected)
+                      ? DateFormat("HH:mm").format(_time2)
+                      : "Nie wybrano godziny zakończenia",
+                  Icons.access_time,
+                  endTimePick,
+                  buildClearButton(clearTime2)),
               buildSpace(),
-              buildCustomButton(_notification, Icons.notifications, goToNotificationPickPage),
+              //button z notyfikacjami
+              buildCustomButton(
+                  ((_event.listNotifi).isEmpty)
+                      ? "Nie wybrano powiadomień"
+                      : ((_event.listNotifi).length == 1)
+                          ? "Wybrano ${(_event.listNotifi).length} powiadomienie"
+                          : ((_event.listNotifi).length < 5)
+                              ? "Wybrano ${(_event.listNotifi).length} powiadomienia"
+                              : ((_event.listNotifi).length < 21)
+                                  ? "Wybrano ${(_event.listNotifi).length} powiadomień"
+                                  : ((_event.listNotifi).length % 10 == 2 ||
+                                          (_event.listNotifi).length % 10 == 3 ||
+                                          (_event.listNotifi).length % 10 == 4 )
+                                      ? "Wybrano ${(_event.listNotifi).length} powiadomienia"
+                                      : "Wybrano ${(_event.listNotifi).length} powiadomień",
+                  Icons.notifications,
+                  goToNotificationPickPage,
+                  buildClearButton(clearNotifiList)),
               buildSpace(),
+              //textfield z opisem
               buildCustomTextField("Opis", "Wpisz opis swojego wydarzenia",
                   "Pole jest opcjonalne", _controllerDesc),
               buildSpace(),
@@ -112,8 +149,8 @@ class _AddEventState extends State<AddEvent> {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
-          filled: true,
-          fillColor: new Color(0xFF333366),
+            filled: true,
+            fillColor: new Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.transparent),
@@ -147,8 +184,8 @@ class _AddEventState extends State<AddEvent> {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
-        filled: true,
-        fillColor: new Color(0xFF333366),
+          filled: true,
+          fillColor: new Color(0xFF333366),
           enabledBorder: new OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(color: Colors.transparent),
@@ -165,8 +202,7 @@ class _AddEventState extends State<AddEvent> {
               icon: Icon(Icons.clear, color: Colors.white),
               onPressed: () {
                 control.clear();
-              })
-      ),
+              })),
       keyboardType: TextInputType.text,
     );
   }
@@ -178,7 +214,7 @@ class _AddEventState extends State<AddEvent> {
   }
 
   Widget buildCustomButtonWithValidation(Color textcolor, String text,
-      IconData icon, GestureTapCallback onPressed) {
+      IconData icon, GestureTapCallback onPressed, Widget clearButton) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -204,6 +240,7 @@ class _AddEventState extends State<AddEvent> {
                 ),
               ],
             ),
+            clearButton,
           ],
         ),
       ),
@@ -211,13 +248,12 @@ class _AddEventState extends State<AddEvent> {
     );
   }
 
-  Widget buildCustomButton(String text, IconData icon, void action()) {
+  Widget buildCustomButton(String text, IconData icon,
+      GestureTapCallback onPressed, Widget clearButton) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
-      onPressed: () {
-        action();
-      },
+      onPressed: onPressed,
       child: Container(
         alignment: Alignment.center,
         height: 50.0,
@@ -236,6 +272,7 @@ class _AddEventState extends State<AddEvent> {
                 ),
               ],
             ),
+            clearButton,
           ],
         ),
       ),
@@ -243,17 +280,47 @@ class _AddEventState extends State<AddEvent> {
     );
   }
 
-  Widget buildButtonBarTile(String text, Color color, void action()) {
+  Widget buildButtonBarTile(
+      String text, Color color, GestureTapCallback onPressed) {
     return RaisedButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        elevation: 5.0,
-        color: Color(0xFF333366),
-        splashColor: color,
-        child: Text("$text"),
-        onPressed: () {
-          action();
-        });
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      elevation: 5.0,
+      color: Color(0xFF333366),
+      splashColor: color,
+      child: Text("$text"),
+      onPressed: onPressed,
+    );
+  }
+
+  Widget buildClearButton(GestureTapCallback onPressed) {
+    return SizedBox(
+      width: 30,
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(Icons.clear),
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  void clearDate() {
+    isDateSelected = false;
+    setState(() {});
+  }
+
+  void clearTime1() {
+    isTime1Selected = false;
+    setState(() {});
+  }
+
+  void clearTime2() {
+    isTime2Selected = false;
+    setState(() {});
+  }
+
+  void clearNotifiList() {
+    (_event.listNotifi).clear();
+    setState(() {});
   }
 
   void datePick() {
@@ -269,9 +336,10 @@ class _AddEventState extends State<AddEvent> {
         minTime: DateTime(2020, 1, 1),
         maxTime: DateTime(2025, 12, 31), onConfirm: (date) {
       /// tu jest  save data
-      _date = new DateFormat("yyyy-MM-dd").format(date);
+      isDateSelected = true;
+      _date = date;
       setState(() {});
-    }, currentTime: _start, locale: LocaleType.pl);
+    }, currentTime: new DateTime.now(), locale: LocaleType.pl);
   }
 
   void startTimePick() {
@@ -285,11 +353,11 @@ class _AddEventState extends State<AddEvent> {
         ),
         showSecondsColumn: false,
         showTitleActions: true, onConfirm: (time) {
-      print('confirm $time');
-      _start = time;
-      _time1 = new DateFormat("HH:mm").format(time);
+      // print('confirm $time');
+      isTime1Selected = true;
+      _time1 = time;
       setState(() {});
-    }, currentTime: _start, locale: LocaleType.pl);
+    }, currentTime: new DateTime.now(), locale: LocaleType.pl);
     setState(() {});
   }
 
@@ -305,10 +373,12 @@ class _AddEventState extends State<AddEvent> {
         showTitleActions: true,
         showSecondsColumn: false, onConfirm: (time) {
       print('confirm $time');
-      _end = time;
-      _time2 = new DateFormat("HH:mm").format(time);
+      isTime2Selected = true;
+      _time2 = time;
       setState(() {});
-    }, currentTime: _end, locale: LocaleType.pl);
+    },
+        currentTime: DateTime.now().add(new Duration(hours: 1)),
+        locale: LocaleType.pl);
     setState(() {});
   }
 
@@ -317,10 +387,8 @@ class _AddEventState extends State<AddEvent> {
   }
 
   void goToNotificationPickPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddNotificationEvent(_event)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddNotificationEvent(_event)));
   }
 
   void onBackPressed() {
@@ -328,7 +396,7 @@ class _AddEventState extends State<AddEvent> {
   }
 
   void acceptAndValidate() {
-    if (_end.isBefore(_start)) {
+    if (isTime1Selected && isTime2Selected && _time2.isBefore(_time1)) {
       print("ERROR");
       showDialog(
           context: context,
@@ -341,39 +409,35 @@ class _AddEventState extends State<AddEvent> {
           });
     } else {
       if (_formKey.currentState.validate()) {
-        if (_date != "Nie wybrano daty" &&
-            _time1 != "Nie wybrano godziny rozpoczęcia" &&
-            _time2 != "Nie wybrano godziny zakończenia") {
+        if (isDateSelected && isTime1Selected && isTime2Selected) {
           _dateColor = Colors.white;
           _time1Color = Colors.white;
           _time2Color = Colors.white;
 
-            _event.name = _controllerName.value.text;
-            _event.description =_controllerDesc.value.text; //<- tu jest problem
-            DateTime t1 = DateTime.parse("$_date $_time1");
-            DateTime t2 = DateTime.parse("$_date $_time2");
-            _event.beginTime = t1;
-            _event.endTime = t2;
+          _event.name = _controllerName.value.text;
+          _event.description = _controllerDesc.text; 
+          //TODO tutaj teraz przypisuje godziny i przy print jest wszystko fajnie 
+          _event.beginTime = DateTime(_date.year, _date.month, _date.day, _time1.hour, _time1.minute);
+          _event.endTime = DateTime(_date.year, _date.month, _date.day, _time2.hour, _time2.minute);
 //            print("Name: "+_event.name);
-//            print("BeginTime: "+_event.beginTime.toString());
-//            print("EndTime: "+_event.endTime.toString());
-//                          //  print("Name: "+_event.cycle);
+    //        print("BeginTime: "+_event.beginTime.toString());
+  //          print("EndTime: "+_event.endTime.toString());
+//            print("Name: "+_event.cycle);
 //            print("Desc: "+_event.description);
 //            print("Notifi: ");
 //            _event.listNotifi.forEach((e) => print(e.duration));
-             EventHelper.add(_event);
-             Navigator.of(context).pop();
-
+          EventHelper.add(_event);
+          Navigator.of(context).pop();
         } else {
-          if (_date == "Nie wybrano daty")
+          if (isDateSelected == false)
             _dateColor = Colors.red;
           else
             _dateColor = Colors.white;
-          if (_time1 == "Nie wybrano godziny rozpoczęcia")
+          if (isTime1Selected == false)
             _time1Color = Colors.red;
           else
             _time1Color = Colors.white;
-          if (_time2 == "Nie wybrano godziny zakończenia")
+          if (isTime2Selected == false)
             _time2Color = Colors.red;
           else
             _time2Color = Colors.white;

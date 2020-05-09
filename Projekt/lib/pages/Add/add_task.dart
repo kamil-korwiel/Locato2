@@ -9,7 +9,6 @@ import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Localization.dart';
 import 'package:pageview/Classes/Task.dart';
 
-
 import 'add_group.dart';
 import 'add_localization.dart';
 import 'add_notification.dart';
@@ -29,21 +28,19 @@ class _AddTaskState extends State<AddTask> {
   TextEditingController controllerDesc = TextEditingController();
 
   int id;
-  String _time;
-  String _group;
-  String _notification;
-  String _localization;
   Color dateColor;
   Color timeColor;
-  String _date;
   bool isTimeEnabled;
   bool isLocalizationEnabled;
+  bool isTimeSelected;
+  bool isDateSelected;
+  bool isLocalizationSelected;
+  DateTime _terminData;
+  DateTime _terminCzas;
 
   Task _task;
   List<Localization> listOfLocalization;
   List<Group> listOfGroup;
-
-  DateTime _end;
 
   @override
   void initState() {
@@ -53,14 +50,9 @@ class _AddTaskState extends State<AddTask> {
 
     isLocalizationEnabled = true;
     isTimeEnabled = true;
-
-    _date = "Nie wybrano daty";
-    _time = "Nie wybrano godziny rozpoczęcia";
-    _group = "Grupa" ;
-    _notification = "Powiadomienia" ;
-    _localization =  "Lokalizacja" ;
-
-    _end =  new DateTime.now() ;
+    isDateSelected = false;
+    isTimeSelected = false;
+    isLocalizationSelected = false;
 
     _task = Task(
       group: Group(id: 0),
@@ -82,9 +74,13 @@ class _AddTaskState extends State<AddTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dodaj zadanie', style: TextStyle(color: Colors.white),),
-            // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        title: Text(
+          'Dodaj zadanie',
+          style: TextStyle(color: Colors.white),
+        ),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(
+            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -93,19 +89,67 @@ class _AddTaskState extends State<AddTask> {
           child: ListView(
             children: <Widget>[
               buildSpace(),
-              buildCustomTextFieldwithValidation("Nazwa", "Podaj nazwę nowego zadania", _controllerName),
+              //textfield z nazwa
+              buildCustomTextFieldwithValidation(
+                  "Nazwa", "Podaj nazwę nowego zadania", _controllerName),
               buildSpace(),
-              buildCustomButtonWithValidation(dateColor, _date, Icons.date_range, datePick),
+              //button z data
+              buildCustomButtonWithValidation(
+                  dateColor,
+                  (isDateSelected)
+                      ? DateFormat("dd/MM/yyyy").format(_terminData)
+                      : "Nie wybrano daty",
+                  Icons.date_range,
+                  datePick,
+                  buildClearButton(clearDate)),
               buildSpace(),
-              buildCustomButtonWithValidation(timeColor, _time, Icons.access_time, timePick),
+              //button z godzina
+              buildCustomButtonWithValidation(
+                  timeColor,
+                  (isTimeSelected)
+                      ? DateFormat("HH:mm").format(_terminCzas)
+                      : "Nie wybrano godziny",
+                  Icons.access_time,
+                  timePick,
+                  buildClearButton(clearTime)),
               buildSpace(),
-              buildCustomButton(_group, Icons.account_circle, goToGroupPickPage),
+              //button grupa
+              buildCustomButton(
+                  (_task.group.id == 0)
+                      ? "Nie wybrano grupy"
+                      : "${_task.group.name}",
+                  Icons.account_circle,
+                  goToGroupPickPage,
+                  buildClearButton(clearGroup)),
               buildSpace(),
-              buildCustomButton(_notification, Icons.notifications, goToNotificationPickPage),
+              //button powiadomienia
+              buildCustomButton(
+                  ((_task.listNotifi).isEmpty)
+                      ? "Nie wybrano powiadomień"
+                      : ((_task.listNotifi).length == 1)
+                          ? "Wybrano ${(_task.listNotifi).length} powiadomienie"
+                          : ((_task.listNotifi).length < 5)
+                              ? "Wybrano ${(_task.listNotifi).length} powiadomienia"
+                              : ((_task.listNotifi).length < 21)
+                                  ? "Wybrano ${(_task.listNotifi).length} powiadomień"
+                                  : ((_task.listNotifi).length % 10 == 2 ||
+                                          (_task.listNotifi).length % 10 == 3 ||
+                                          (_task.listNotifi).length % 10 == 4)
+                                      ? "Wybrano ${(_task.listNotifi).length} powiadomienia"
+                                      : "Wybrano ${(_task.listNotifi).length} powiadomień",
+                  Icons.notifications,
+                  goToNotificationPickPage,
+                  buildClearButton(clearNotifiList)),
               buildSpace(),
-              buildCustomLocalizationButton(_localization, Icons.edit_location, goToLocalizationPickPage),
+              buildCustomLocalizationButton(
+                  (_task.localization.id == 0)
+                      ? "Nie wybrano lokalizacji"
+                      : "${_task.localization.name}",
+                  Icons.edit_location,
+                  goToLocalizationPickPage),
               buildSpace(),
-              buildCustomTextField("Opis", "Wprowadź opis swojego zadania","Pole jest opcjonalne", controllerDesc),
+              buildCustomTextField("Opis", "Wprowadź opis swojego zadania",
+                  "Pole jest opcjonalne", controllerDesc),
               buildSpace(),
               ButtonBar(
                   children: [
@@ -126,12 +170,13 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomTextFieldwithValidation(String label, String hint, TextEditingController control) {
+  Widget buildCustomTextFieldwithValidation(
+      String label, String hint, TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
-          filled: true,
-          fillColor: new Color(0xFF333366),
+            filled: true,
+            fillColor: new Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.transparent),
@@ -160,12 +205,24 @@ class _AddTaskState extends State<AddTask> {
         });
   }
 
-  Widget buildCustomTextField(String label, String hint, String helper, TextEditingController control) {
+  Widget buildClearButton(GestureTapCallback onPressed) {
+    return SizedBox(
+      width: 30,
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(Icons.clear),
+        onPressed: onPressed,
+      ),
+    );
+  }
+
+  Widget buildCustomTextField(
+      String label, String hint, String helper, TextEditingController control) {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
-        filled: true,
-        fillColor: new Color(0xFF333366),
+          filled: true,
+          fillColor: new Color(0xFF333366),
           enabledBorder: new OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(color: Colors.transparent),
@@ -193,7 +250,8 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomButtonWithValidation(Color textcolor, String text,IconData icon, GestureTapCallback onPressed) {
+  Widget buildCustomButtonWithValidation(Color textcolor, String text,
+      IconData icon, GestureTapCallback onPressed, Widget clearButton) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -212,13 +270,16 @@ class _AddTaskState extends State<AddTask> {
                   color: textcolor,
                 ),
                 Text(
-                  (isTimeEnabled)? " $text" : "Wybrałeś powiadomienie oparte na lokalizacji",
+                  (isTimeEnabled)
+                      ? " $text"
+                      : "Wybrałeś zadanie oparte na lokalizacji",
                   style: TextStyle(
                     color: textcolor,
                   ),
                 ),
               ],
             ),
+            clearButton,
           ],
         ),
       ),
@@ -226,7 +287,8 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomButton(String text, IconData icon, GestureTapCallback onPressed) {
+  Widget buildCustomButton(String text, IconData icon,
+      GestureTapCallback onPressed, Widget clearButton) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -249,6 +311,7 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ],
             ),
+            clearButton,
           ],
         ),
       ),
@@ -256,7 +319,8 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomLocalizationButton(String text, IconData icon, GestureTapCallback onPressed) {
+  Widget buildCustomLocalizationButton(
+      String text, IconData icon, GestureTapCallback onPressed) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -274,11 +338,14 @@ class _AddTaskState extends State<AddTask> {
                   size: 20.0,
                 ),
                 Text(
-                  isLocalizationEnabled? " $text" : "Wybrałeś zadanie oparte na konkretnym czasie",
+                  isLocalizationEnabled
+                      ? " $text"
+                      : "Wybrałeś zadanie oparte na konkretnym czasie",
                   style: TextStyle(),
                 ),
               ],
             ),
+            buildClearButton(clearLocalization),
           ],
         ),
       ),
@@ -286,16 +353,47 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildButtonBarTile(String text, Color color, void action()) {
+  Widget buildButtonBarTile(
+      String text, Color color, GestureTapCallback onPressed) {
     return RaisedButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        elevation: 5.0,
-        color: new Color(0xFF333366),
-        splashColor: color,
-        child: Text("$text"),
-        onPressed: () {
-          action();
-        });
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      elevation: 5.0,
+      color: new Color(0xFF333366),
+      splashColor: color,
+      child: Text("$text"),
+      onPressed: onPressed,
+    );
+  }
+
+  void clearDate() {
+    isDateSelected = false;
+    if (isDateSelected == false && isTimeSelected == false)
+      isLocalizationEnabled = true;
+    setState(() {});
+  }
+
+  void clearTime() {
+    isTimeSelected = false;
+    if (isDateSelected == false && isTimeSelected == false)
+      isLocalizationEnabled = true;
+    setState(() {});
+  }
+
+  void clearLocalization() {
+    isTimeEnabled = true;
+    _task.localization = Localization(id: 0);
+    setState(() {});
+  }
+
+  void clearGroup() {
+    isTimeEnabled = true;
+    _task.group = Group(id: 0);
+    setState(() {});
+  }
+
+  void clearNotifiList() {
+    (_task.listNotifi).clear();
+    setState(() {});
   }
 
   void datePick() {
@@ -311,9 +409,10 @@ class _AddTaskState extends State<AddTask> {
         showTitleActions: true,
         minTime: DateTime(2020, 1, 1),
         maxTime: DateTime(2025, 12, 31), onConfirm: (date) {
-      _date = new DateFormat("yyyy-MM-dd").format(date);
+      isDateSelected = true;
+      _terminData = date;
       setState(() {});
-    }, currentTime: _end, locale: LocaleType.pl);
+    }, currentTime: DateTime.now(), locale: LocaleType.pl);
   }
 
   void timePick() {
@@ -328,10 +427,10 @@ class _AddTaskState extends State<AddTask> {
         ),
         showSecondsColumn: false,
         showTitleActions: true, onConfirm: (time) {
-      _time = new DateFormat("HH:mm").format(time);
+      isTimeSelected = true;
+      _terminCzas = time;
       setState(() {});
-    }, currentTime: _end, locale: LocaleType.pl);
-    setState(() {});
+    }, currentTime: DateTime.now(), locale: LocaleType.pl);
   }
 
   void goBack() {
@@ -339,35 +438,40 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void goToNotificationPickPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddNotificationTask(_task)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddNotificationTask(_task)));
   }
 
   void goToLocalizationPickPage() {
     isTimeEnabled = false;
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddLocalization(_task,listOfLocalization)));
-  }
-
-  void goToGroupPickPage() {
+    isLocalizationSelected = true;
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => AddGroup(_task,listOfGroup)));
+            builder: (context) => AddLocalization(_task, listOfLocalization)));
+  }
+
+  void goToGroupPickPage() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => AddGroup(_task, listOfGroup)));
   }
 
   void acceptAndValidate() {
     if (_formKey.currentState.validate()) {
-      if (_date != "Nie wybrano daty" && _time != "Nie wybrano godziny rozpoczęcia") {
+      if (isDateSelected == true && isTimeSelected == true ||
+          isTimeEnabled == false) {
         dateColor = Colors.white;
         timeColor = Colors.white;
         //setState(() {});
 
         _task.name = _controllerName.text;
         _task.description = controllerDesc.text;
-        _task.endTime = DateFormat("yyyy-MM-dd hh:mm").parse(_date + " " + _time);
+
+//TODO zrob tak zeby data nie byla obowiazkowa = KAMIL
+        if (isTimeEnabled) {
+          _task.endTime = DateTime(_terminData.year, _terminData.month, _terminData.day, _terminCzas.hour, _terminCzas.minute);
+        }
+
         //print(_task.name + " " + "Opis: " + _task.description+ "Group: "+ _task.idGroup.toString());
 //         print("Name: "+_task.name);
 //         print("EndTask: "+_task.endTime.toString());
@@ -387,13 +491,12 @@ class _AddTaskState extends State<AddTask> {
         LocalizationHelper.addlist(listOfLocalization);
 
         Navigator.of(context).pop();
-
       } else {
-        if (_date == "Nie wybrano daty")
+        if (isDateSelected == false)
           dateColor = Colors.red;
         else
           dateColor = Colors.white;
-        if (_time == "Nie wybrano godziny rozpoczęcia")
+        if (isTimeSelected == false)
           timeColor = Colors.red;
         else
           timeColor = Colors.white;
@@ -415,7 +518,6 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void selectedGroup(String selectedGroup) {
-    _group = "Grupa: " + selectedGroup;
     addTaskState.setState(() {});
   }
 }
