@@ -70,7 +70,7 @@ class _ListNotifiState extends State<ListNotifi> {
 
   Widget buildListTextTile(int _index) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width - 300,
+      width: 150,
       child: Text(
           printDuration(widget.lista[_index].duration, abbreviated: true) +
               " przed"),

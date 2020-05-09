@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Task.dart';
@@ -17,56 +19,60 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   List<Notifi> _notifilist = [];
-  List<String> unitlist = ["Minuty", "Godziny", "Dni"];
-  String holder = "Minuty";
-  String _value = "Minuty";
   var duration;
-  int czas;
+  int minuty;
+  int godziny;
+  int dni;
   String name;
-
-
 
   @override
   void initState() {
-
     _notifilist = widget.task.listNotifi;
+    dni = 0;
+    godziny = 0;
+    minuty = 1;
 
     super.initState();
-  }
-
-
-
-  void getDropDownItem() {
-    setState(() {
-      holder = _value;
-    });
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
-                     // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        title:
+            Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(
+            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(children: <Widget>[
             new Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                buildCustomDropdownButton(),
-                SizedBox(
-                  width: 20,
-                ),
-                Flexible(
-                  child: Form(
-                    key: _formKey,
-                    child: buildCustomTextFieldwithValidation(
-                        holder, "Podaj wartość", _text),
-                  ),
-                ),
+                buildPickerNameTile("Dni"),
+                SizedBox(width: 10),
+                buildPickerNameTile("Godziny"),
+                SizedBox(width: 10),
+                buildPickerNameTile("Minuty"),
               ],
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(color: Colors.transparent),
+                color: Colors.transparent,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(child: buildNumberPicker1(0, 30)),
+                  SizedBox(width: 10),
+                  Flexible(child: buildNumberPicker2(0, 24)),
+                  SizedBox(width: 10),
+                  Flexible(child: buildNumberPicker3(1, 60)),
+                ],
+              ),
             ),
             buildSpace(),
             buildcustomButton("Dodaj", validateAndAdd),
@@ -78,13 +84,81 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
     );
   }
 
+  Widget buildPickerNameTile(String _value) {
+    return Flexible(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Color(0xFF333366)),
+          color: Color(0xFF333366),
+        ),
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("$_value"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildNumberPicker1(int _min, int _max) {
+    return NumberPicker.integer(
+        listViewWidth: double.infinity,
+        itemExtent: 40,
+        initialValue: dni,
+        minValue: _min,
+        maxValue: _max,
+        zeroPad: true,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Colors.indigo),
+        ),
+        highlightSelectedValue: true,
+        onChanged: (value) => setState(() => dni = value));
+  }
+
+  Widget buildNumberPicker2(int _min, int _max) {
+    return NumberPicker.integer(
+        listViewWidth: double.infinity,
+        itemExtent: 40,
+        initialValue: godziny,
+        minValue: _min,
+        maxValue: _max,
+        zeroPad: true,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Colors.indigo),
+        ),
+        highlightSelectedValue: true,
+        onChanged: (value) => setState(() => godziny = value));
+  }
+
+  Widget buildNumberPicker3(int _min, int _max) {
+    return NumberPicker.integer(
+        listViewWidth: double.infinity,
+        itemExtent: 40,
+        initialValue: minuty,
+        minValue: _min,
+        maxValue: _max,
+        zeroPad: true,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Colors.indigo),
+        ),
+        highlightSelectedValue: true,
+        onChanged: (value) => setState(() => minuty = value));
+  }
+
   Widget buildcustomButton(String text, void action()) {
     return RaisedButton(
       color: Color(0xFF333366),
+      elevation: 5.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.white,
+          color: Colors.transparent,
         ),
       ),
       onPressed: () {
@@ -105,42 +179,13 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
     );
   }
 
-  Widget buildCustomDropdownButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5.0),
-      decoration: BoxDecoration(
-        color: Color(0xFF333366),
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: Colors.white),
-      ),
-      child: DropdownButton<String>(
-        value: _value,
-        icon: Icon(Icons.arrow_drop_down),
-        iconSize: 24,
-        elevation: 16,
-        onChanged: (String data) {
-          setState(() {
-            _value = data;
-            getDropDownItem();
-          });
-        },
-        items: unitlist.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
   Widget buildCustomTextFieldwithValidation(
       String label, String hint, TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
-          filled: true,
-          fillColor: Color(0xFF333366),
+            filled: true,
+            fillColor: Color(0xFF333366),
             enabledBorder: new OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.white),
@@ -173,43 +218,35 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
   void validateAndAdd() {
     bool notthesame = true;
 
-    if (_formKey.currentState.validate()) {
-      if (holder == "Minuty") {
-        czas = int.parse(_text.text);
-        duration = new Duration(minutes: czas);
-        name = "$czas minut przed";
+    duration = new Duration(days: dni, hours: godziny, minutes: minuty);
+    name = "Powiadomienie ";
+    if (dni != 0) {
+      name += "$dni" + "d,";
+    }
+    if (godziny != 0) {
+      name += "$godziny" + "h ,";
+    }
+    name += "$minuty" + "m przed";
+
+    _notifilist.forEach((n) {
+      if (n.duration.compareTo(duration) == 0) {
+        notthesame = false;
       }
-      if (holder == "Godziny") {
-        czas = int.parse(_text.text);
-        duration = new Duration(hours: czas);
-        name = "$czas godzin przed";
-      }
-      if (holder == "Dni") {
-        czas = int.parse(_text.text);
-        duration = new Duration(days: czas);
-        name = "$czas dni przed";
-      }
-      _notifilist.forEach((n){
-        if(n.duration.compareTo(duration)==0) {
-          notthesame = false;
-        }
-      });
-      if(notthesame) {
-        _notifilist.add(Notifi(duration: duration));
-      }
+    });
+    if (notthesame) {
+      _notifilist.add(Notifi(duration: duration));
+    }
 //    }
 //      print(
 //          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
 
-
-      setState(() {});
-    }
+    setState(() {});
   }
 
   void goBack() {
     Navigator.pop(context);
   }
-  
+
   void onBackPressed() {
     goBack();
   }
@@ -246,46 +283,59 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
 
   @override
   void initState() {
-
     _notifilist = widget.event.listNotifi;
-
+    dni = 0;
+    godziny = 0;
+    minuty = 1;
     super.initState();
   }
 
   List<Notifi> _notifilist = [];
-  List<String> unitlist = ["Minuty", "Godziny", "Dni"];
-  String holder = "Minuty";
-  String _value = "Minuty";
   var duration;
-  int czas;
+  int minuty;
+  int godziny;
+  int dni;
   String name;
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white),),
-         // tu kontrolujesz przycisk wstecz
-    leading: new IconButton(icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        title:
+            Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
+        // tu kontrolujesz przycisk wstecz
+        leading: new IconButton(
+            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(children: <Widget>[
-          Container( 
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                buildCustomDropdownButton(),
-                SizedBox(width: 30),
-                Flexible(
-                  child: Form(
-                    key: _formKey,
-                    child: buildCustomTextFieldwithValidation(
-                        holder, "Wprowadź wartość", _text),
-                  ),
-                ),
+                buildPickerNameTile("Dni"),
+                SizedBox(width: 10),
+                buildPickerNameTile("Godziny"),
+                SizedBox(width: 10),
+                buildPickerNameTile("Minuty"),
               ],
             ),
-          ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(color: Colors.transparent),
+                color: Colors.transparent,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(child: buildNumberPicker1(0, 30)),
+                  SizedBox(width: 10),
+                  Flexible(child: buildNumberPicker2(0, 24)),
+                  SizedBox(width: 10),
+                  Flexible(child: buildNumberPicker3(1, 60)),
+                ],
+              ),
+            ),
             buildSpace(),
             buildcustomButton("Dodaj", validateAndAdd),
             buildSpace(),
@@ -294,6 +344,73 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
             buildcustomButton("Potwierdź", confirm)
           ])),
     );
+  }
+
+  Widget buildPickerNameTile(String _value) {
+    return Flexible(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Color(0xFF333366)),
+          color: Color(0xFF333366),
+        ),
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("$_value"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildNumberPicker1(int _min, int _max) {
+    return NumberPicker.integer(
+        listViewWidth: double.infinity,
+        itemExtent: 40,
+        initialValue: dni,
+        minValue: _min,
+        maxValue: _max,
+        zeroPad: true,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Colors.indigo),
+        ),
+        highlightSelectedValue: true,
+        onChanged: (value) => setState(() => dni = value));
+  }
+
+  Widget buildNumberPicker2(int _min, int _max) {
+    return NumberPicker.integer(
+        listViewWidth: double.infinity,
+        itemExtent: 40,
+        initialValue: godziny,
+        minValue: _min,
+        maxValue: _max,
+        zeroPad: true,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Colors.indigo),
+        ),
+        highlightSelectedValue: true,
+        onChanged: (value) => setState(() => godziny = value));
+  }
+
+  Widget buildNumberPicker3(int _min, int _max) {
+    return NumberPicker.integer(
+        listViewWidth: double.infinity,
+        itemExtent: 40,
+        initialValue: minuty,
+        minValue: _min,
+        maxValue: _max,
+        zeroPad: true,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Colors.indigo),
+        ),
+        highlightSelectedValue: true,
+        onChanged: (value) => setState(() => minuty = value));
   }
 
   Widget buildcustomButton(String text, void action()) {
@@ -324,114 +441,35 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     );
   }
 
-  Widget buildCustomDropdownButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5.0),
-      decoration: BoxDecoration(
-        color: Color(0xFF333366),
-        borderRadius: BorderRadius.circular(10.0),
-        border: Border.all(color: Colors.white),
-      ),
-      child: DropdownButton<String>(
-        value: _value,
-        icon: Icon(Icons.arrow_drop_down),
-        iconSize: 24,
-        elevation: 16,
-        onChanged: (String data) {
-          setState(() {
-            _value = data;
-            getDropDownItem();
-          });
-        },
-        items: unitlist.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget buildCustomTextFieldwithValidation(
-      String label, String hint, TextEditingController control) {
-    return TextFormField(
-        controller: control,
-        decoration: new InputDecoration(
-          filled: true,
-          fillColor: Color(0xFF333366),
-            enabledBorder: new OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.white),
-            ),
-            focusedBorder: new OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(color: Colors.white)),
-            border: new OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.red),
-            ),
-            labelText: label,
-            labelStyle: TextStyle(color: Colors.white),
-            hintText: hint,
-            hintStyle: TextStyle(color: Colors.white),
-            suffixIcon: IconButton(
-                icon: Icon(Icons.clear, color: Colors.white),
-                onPressed: () {
-                  control.clear();
-                })),
-        keyboardType: TextInputType.number,
-        validator: (val) {
-          if (val.isEmpty) {
-            return 'Pole nie może być puste!';
-          }
-          return null;
-        });
-  }
-
-  void getDropDownItem() {
-    setState(() {
-      holder = _value;
-    });
-  }
-
   void validateAndAdd() {
     bool notthesame = true;
-    
-    if (_formKey.currentState.validate()) {
-      if (holder == "Minuty") {
-        czas = int.parse(_text.text);
-        duration = new Duration(minutes: czas);
-        name = "$czas minut przed";
+
+    duration = new Duration(days: dni, hours: godziny, minutes: minuty);
+    name = "Powiadomienie ";
+    if (dni != 0) {
+      name += "$dni" + "d,";
+    }
+    if (godziny != 0) {
+      name += "$godziny" + "h ,";
+    }
+    name += "$minuty" + "m przed";
+
+    _notifilist.forEach((n) {
+      if (n.duration.compareTo(duration) == 0) {
+        notthesame = false;
       }
-      if (holder == "Godziny") {
-        czas = int.parse(_text.text);
-        duration = new Duration(hours: czas);
-        name = "$czas godzin przed";
-      }
-      if (holder == "Dni") {
-        czas = int.parse(_text.text);
-        duration = new Duration(days: czas);
-        name = "$czas dni przed";
-      }
-      _notifilist.forEach((n){
-        if(n.duration.compareTo(duration)==0) {
-          notthesame = false;
-        }
-      });
-      if(notthesame) {
-        _notifilist.add(Notifi(duration: duration));
-      }
+    });
+    if (notthesame) {
+      _notifilist.add(Notifi(duration: duration));
+    }
 //    }
 //      print(
 //          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
 
-
-      setState(() {});
-    }
+    setState(() {});
   }
 
-    void goBack() {
+  void goBack() {
     Navigator.pop(context);
   }
 
@@ -440,8 +478,6 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   }
 
   void confirm() {
-
-
     widget.event.listNotifi = _notifilist;
 
     Navigator.pop(context);
