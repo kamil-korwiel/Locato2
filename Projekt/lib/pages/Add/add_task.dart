@@ -30,8 +30,7 @@ class _AddTaskState extends State<AddTask> {
   int id;
   Color dateColor;
   Color timeColor;
-  bool isTimeEnabled;
-  bool isLocalizationEnabled;
+  bool isNotificationEnabled;
   bool isTimeSelected;
   bool isDateSelected;
   bool isLocalizationSelected;
@@ -48,8 +47,7 @@ class _AddTaskState extends State<AddTask> {
     listOfLocalization = List();
     listOfGroup = List();
 
-    isLocalizationEnabled = true;
-    isTimeEnabled = true;
+    isNotificationEnabled = false;
     isDateSelected = false;
     isTimeSelected = false;
     isLocalizationSelected = false;
@@ -123,30 +121,31 @@ class _AddTaskState extends State<AddTask> {
                   buildClearButton(clearGroup)),
               buildSpace(),
               //button powiadomienia
-              buildCustomButton(
-                  ((_task.listNotifi).isEmpty)
-                      ? "Nie wybrano powiadomień"
-                      : ((_task.listNotifi).length == 1)
-                          ? "Wybrano ${(_task.listNotifi).length} powiadomienie"
-                          : ((_task.listNotifi).length < 5)
-                              ? "Wybrano ${(_task.listNotifi).length} powiadomienia"
-                              : ((_task.listNotifi).length < 21)
-                                  ? "Wybrano ${(_task.listNotifi).length} powiadomień"
-                                  : ((_task.listNotifi).length % 10 == 2 ||
-                                          (_task.listNotifi).length % 10 == 3 ||
-                                          (_task.listNotifi).length % 10 == 4)
-                                      ? "Wybrano ${(_task.listNotifi).length} powiadomienia"
-                                      : "Wybrano ${(_task.listNotifi).length} powiadomień",
-                  Icons.notifications,
-                  goToNotificationPickPage,
-                  buildClearButton(clearNotifiList)),
+              buildCustomNotificationButton(
+                ((_task.listNotifi).isEmpty)
+                    ? "Nie wybrano powiadomień"
+                    : ((_task.listNotifi).length == 1)
+                        ? "Wybrano ${(_task.listNotifi).length} powiadomienie"
+                        : ((_task.listNotifi).length < 5)
+                            ? "Wybrano ${(_task.listNotifi).length} powiadomienia"
+                            : ((_task.listNotifi).length < 21)
+                                ? "Wybrano ${(_task.listNotifi).length} powiadomień"
+                                : ((_task.listNotifi).length % 10 == 2 ||
+                                        (_task.listNotifi).length % 10 == 3 ||
+                                        (_task.listNotifi).length % 10 == 4)
+                                    ? "Wybrano ${(_task.listNotifi).length} powiadomienia"
+                                    : "Wybrano ${(_task.listNotifi).length} powiadomień",
+                Icons.notifications,
+                goToNotificationPickPage,
+              ),
               buildSpace(),
-              buildCustomLocalizationButton(
+              buildCustomButton(
                   (_task.localization.id == 0)
                       ? "Nie wybrano lokalizacji"
                       : "${_task.localization.name}",
                   Icons.edit_location,
-                  goToLocalizationPickPage),
+                  goToLocalizationPickPage,
+                  buildClearButton(clearLocalization)),
               buildSpace(),
               buildCustomTextField("Opis", "Wprowadź opis swojego zadania",
                   "Pole jest opcjonalne", controllerDesc),
@@ -216,6 +215,17 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  Widget buildNotifiListClearButton(GestureTapCallback onPressed) {
+    return SizedBox(
+      width: 30,
+      child: IconButton(
+        color: Colors.white,
+        icon: Icon(Icons.clear),
+        onPressed: (isNotificationEnabled)? onPressed : null,
+      ),
+    );
+  }
+
   Widget buildCustomTextField(
       String label, String hint, String helper, TextEditingController control) {
     return TextFormField(
@@ -255,7 +265,7 @@ class _AddTaskState extends State<AddTask> {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
-      onPressed: isTimeEnabled ? onPressed : null,
+      onPressed: onPressed,
       child: Container(
         alignment: Alignment.center,
         height: 50.0,
@@ -270,9 +280,7 @@ class _AddTaskState extends State<AddTask> {
                   color: textcolor,
                 ),
                 Text(
-                  (isTimeEnabled)
-                      ? " $text"
-                      : "Wybrałeś zadanie oparte na lokalizacji",
+                  " $text",
                   style: TextStyle(
                     color: textcolor,
                   ),
@@ -319,12 +327,12 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomLocalizationButton(
+  Widget buildCustomNotificationButton(
       String text, IconData icon, GestureTapCallback onPressed) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
-      onPressed: isLocalizationEnabled ? onPressed : null,
+      onPressed: (isNotificationEnabled) ? onPressed : null,
       child: Container(
         alignment: Alignment.center,
         height: 50.0,
@@ -338,14 +346,14 @@ class _AddTaskState extends State<AddTask> {
                   size: 20.0,
                 ),
                 Text(
-                  isLocalizationEnabled
+                  isNotificationEnabled
                       ? " $text"
-                      : "Wybrałeś zadanie oparte na konkretnym czasie",
+                      : "Ustal temin by wybrać powiadomienia",
                   style: TextStyle(),
                 ),
               ],
             ),
-            buildClearButton(clearLocalization),
+            buildNotifiListClearButton(clearNotifiList),
           ],
         ),
       ),
@@ -367,26 +375,22 @@ class _AddTaskState extends State<AddTask> {
 
   void clearDate() {
     isDateSelected = false;
-    if (isDateSelected == false && isTimeSelected == false)
-      isLocalizationEnabled = true;
+    isNotificationEnabled = false;
     setState(() {});
   }
 
   void clearTime() {
     isTimeSelected = false;
-    if (isDateSelected == false && isTimeSelected == false)
-      isLocalizationEnabled = true;
+    isNotificationEnabled = false;
     setState(() {});
   }
 
   void clearLocalization() {
-    isTimeEnabled = true;
     _task.localization = Localization(id: 0);
     setState(() {});
   }
 
   void clearGroup() {
-    isTimeEnabled = true;
     _task.group = Group(id: 0);
     setState(() {});
   }
@@ -397,7 +401,6 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void datePick() {
-    isLocalizationEnabled = false;
     DatePicker.showDatePicker(context,
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
@@ -410,13 +413,13 @@ class _AddTaskState extends State<AddTask> {
         minTime: DateTime(2020, 1, 1),
         maxTime: DateTime(2025, 12, 31), onConfirm: (date) {
       isDateSelected = true;
+      if (isDateSelected && isTimeSelected) isNotificationEnabled = true;
       _terminData = date;
       setState(() {});
     }, currentTime: DateTime.now(), locale: LocaleType.pl);
   }
 
   void timePick() {
-    isLocalizationEnabled = false;
     DatePicker.showTimePicker(context,
         theme: DatePickerTheme(
           backgroundColor: Colors.black38,
@@ -428,6 +431,7 @@ class _AddTaskState extends State<AddTask> {
         showSecondsColumn: false,
         showTitleActions: true, onConfirm: (time) {
       isTimeSelected = true;
+      if (isDateSelected && isTimeSelected) isNotificationEnabled = true;
       _terminCzas = time;
       setState(() {});
     }, currentTime: DateTime.now(), locale: LocaleType.pl);
@@ -443,7 +447,6 @@ class _AddTaskState extends State<AddTask> {
   }
 
   void goToLocalizationPickPage() {
-    isTimeEnabled = false;
     isLocalizationSelected = true;
     Navigator.push(
         context,
@@ -458,8 +461,7 @@ class _AddTaskState extends State<AddTask> {
 
   void acceptAndValidate() {
     if (_formKey.currentState.validate()) {
-      if (isDateSelected == true && isTimeSelected == true ||
-          isTimeEnabled == false) {
+      if (isDateSelected == true && isTimeSelected == true) {
         dateColor = Colors.white;
         timeColor = Colors.white;
         //setState(() {});
@@ -468,9 +470,11 @@ class _AddTaskState extends State<AddTask> {
         _task.description = controllerDesc.text;
 
 //TODO zrob tak zeby data nie byla obowiazkowa = KAMIL
-        if (isTimeEnabled) {
-          _task.endTime = DateTime(_terminData.year, _terminData.month, _terminData.day, _terminCzas.hour, _terminCzas.minute);
-        }
+        _task.endTime = DateTime(_terminData.year, _terminData.month,
+            _terminData.day, _terminCzas.hour, _terminCzas.minute);
+
+        if (isNotificationEnabled)
+          clearNotifiList(); // clear listy powiadomien jesli ktos usunie terminy i bedzie dodawal task
 
         //print(_task.name + " " + "Opis: " + _task.description+ "Group: "+ _task.idGroup.toString());
 //         print("Name: "+_task.name);
