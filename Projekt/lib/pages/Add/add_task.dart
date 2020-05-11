@@ -461,17 +461,11 @@ class _AddTaskState extends State<AddTask> {
 
   void acceptAndValidate() {
     if (_formKey.currentState.validate()) {
-      if (isDateSelected == true && isTimeSelected == true) {
-        dateColor = Colors.white;
-        timeColor = Colors.white;
-        //setState(() {});
-
         _task.name = _controllerName.text;
         _task.description = controllerDesc.text;
-
-//TODO zrob tak zeby data nie byla obowiazkowa = KAMIL
-        _task.endTime = DateTime(_terminData.year, _terminData.month,
-            _terminData.day, _terminCzas.hour, _terminCzas.minute);
+        //TODO zrobic zeby data nie byla obowiazkowa (ogolnie)
+      if(isTimeSelected && isDateSelected) {_task.endTime = DateTime(_terminData.year, _terminData.month,
+           _terminData.day, _terminCzas.hour, _terminCzas.minute);} // ustaw date jesli jest wybrana
 
         if (isNotificationEnabled)
           clearNotifiList(); // clear listy powiadomien jesli ktos usunie terminy i bedzie dodawal task
@@ -495,25 +489,9 @@ class _AddTaskState extends State<AddTask> {
         LocalizationHelper.addlist(listOfLocalization);
 
         Navigator.of(context).pop();
-      } else {
-        if (isDateSelected == false)
-          dateColor = Colors.red;
-        else
-          dateColor = Colors.white;
-        if (isTimeSelected == false)
-          timeColor = Colors.red;
-        else
-          timeColor = Colors.white;
+     
         setState(() {});
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Brak danych"),
-                content: Text("Wprowadź niezbędne dane"),
-              );
-            });
-      }
+
     }
   }
 
