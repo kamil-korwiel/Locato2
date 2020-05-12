@@ -64,13 +64,16 @@ class GroupCardItem extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Icon(Icons.location_on, size: 12.0),
-                    Text(
-                      txt,
-                      style: TextStyle(
-                        color: Color(0xFFB6B2DF),
-                        fontFamily: 'Poppins',
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w300,
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: Text(
+                        txt,
+                        style: TextStyle(
+                          color: Color(0xFFB6B2DF),
+                          fontFamily: 'Poppins',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ),
                   ],
@@ -130,13 +133,16 @@ class GroupCardItem extends StatelessWidget {
                     Icons.description,
                     size: 18.0,
                   ),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Poppins',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w300,
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Text(
+                      description,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Poppins',
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                 ],
