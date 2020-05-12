@@ -243,36 +243,48 @@ void checkLocationRadius() async {
   Notifications_helper_background.initialize();
 
   pos = await Geolocator().getCurrentPosition();
-  print("Obecna lokalizacja: " + pos.toString());
+  //print("Obecna lokalizacja: " + pos.toString());
 
   // DownloadData
   _listloc.addAll(await LocalizationHelper.lists());
   _listloc.removeWhere((l) => l.id == 0);
 
-
-
   if(_listloc.isNotEmpty){
     print("Length list loc: ${_listloc.length}");
 
     for(Localization loc in _listloc){
-      dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
-      print("Dystans pomiedzy punktami " + dist.toString());
-      if(dist < distance){
+      loc.isNearBy = false;
+
+        dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
+       // print("Dystans pomiedzy punktami " + dist.toString());
+
+        if(dist < distance){
+        loc.isNearBy = true;
         _listtask.addAll(await TaskHelper.listsIDLocal(loc.id));
 
-        if(_listtask.isNotEmpty) {
-          String title = "Na :${loc.street}";
-          String decription = "Masz do zrobienia: ${_listtask
-              .length} zadania.\n" +
-              "Odleglosc od miesca: $dist m\n";
-          print("LocID ${loc.id}");
-          print("List of Task: ${_listtask.length}");
-          _listtask.forEach((t) => print("TaskName: ${t.name}"));
+          if(_listtask.isNotEmpty
+             // && (loc.wasNotified==false)
+          ) {
 
+            String title = "Na :${loc.street}";
+            String decription = "Masz do zrobienia: ${_listtask
+                .length} zadania.\n" +
+                "Odleglosc od miesca: $dist m\n";
+
+            print("LocID ${loc.id}");
+            print("List of Task: ${_listtask.length}");
+
+
+
+            _listtask.forEach((t) => print("TaskName: ${t.name}"));
+
+            loc.wasNotified = true;
+            Notifications_helper_background.now(title, decription);
+
+          }
 
         }
-      }
-
+        LocalizationHelper.updateStatus(loc);
     }
   }
 
