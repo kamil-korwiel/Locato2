@@ -162,7 +162,7 @@ class TaskHelper {
           name: maps[i]['Nazwa_Lokalizacji'],
           city: maps[i]['Miasto'],
           street: maps[i]['Ulica'],
-          isNearBy: maps[i]['JestesBlisko'],
+          isNearBy: maps[i]['JestesBlisko']== 1? true:false,
           isSelected: true,
         ),
         group: Group(
