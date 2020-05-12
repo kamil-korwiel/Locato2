@@ -142,7 +142,7 @@ class TaskHelper {
     final List<Map<String, dynamic>> maps = await db
         .rawQuery('''
         SELECT t.ID_Task, t.Nazwa, t.Zrobione, t.Do_Kiedy, t.Opis, t.Lokalizacja, t.Grupa,
-        l.Nazwa AS Nazwa_Lokalizacji, l.Miasto, l.Ulica,
+        l.Nazwa AS Nazwa_Lokalizacji, l.Miasto, l.Ulica, l.JestesBlisko,
         g.Nazwa_grupa
         FROM Task AS t 
         INNER JOIN Lokalizacja AS l ON (l.ID_Lokalizacji = t.Lokalizacja) 
