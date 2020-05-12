@@ -24,30 +24,52 @@ class NotifiHelper {
     });
   }
 
-  static Future<void> addList(List<Notifi> list,Event event,Task task) async {
-    if(list.isNotEmpty) {
+  static Future<void> addListNotifiTask(Task task) async {
+    if(task.listNotifi.isNotEmpty) {
       int IdNotifi = await dbHelper.query(
           "SELECT MAX(ID_Powiadomienia) FROM Powiadomienia");
 
      // print("ID Notifi:  $IdNotifi");
 
       IdNotifi = IdNotifi == null ? 0 : IdNotifi;
-      for (Notifi n in list) {
-        n.id = ++IdNotifi;
-        dbHelper.insert('Powiadomienia', {
-          'ID_Powiadomienia': n.id,
-          'ID_Task': n.idTask,
-          'ID_Event': n.idEvent,
-          'Czas': n.duration.toString(),
-        });
+      for (Notifi n in task.listNotifi) {
+        if(n.id == null) {
+          n.id = ++IdNotifi;
+          dbHelper.insert('Powiadomienia', {
+            'ID_Powiadomienia': n.id,
+            'ID_Task': n.idTask,
+            'ID_Event': n.idEvent,
+            'Czas': n.duration.toString(),
+          });
+        }
       }
-      if(task != null) {
-        Notifications_helper_background.addTask(task, list);
-      }else{
-        Notifications_helper_background.addEvent(event, list);
-      }
+      Notifications_helper_background.ListOfTaskNotifi(task);
     }
   }
+
+  static Future<void> addListNotifiEvent(Event event) async {
+    if(event.listNotifi.isNotEmpty) {
+      int IdNotifi = await dbHelper.query(
+          "SELECT MAX(ID_Powiadomienia) FROM Powiadomienia");
+
+      // print("ID Notifi:  $IdNotifi");
+
+      IdNotifi = IdNotifi == null ? 0 : IdNotifi;
+      for (Notifi n in event.listNotifi) {
+        if(n.id == null) {
+          n.id = ++IdNotifi;
+          dbHelper.insert('Powiadomienia', {
+            'ID_Powiadomienia': n.id,
+            'ID_Task': n.idTask,
+            'ID_Event': n.idEvent,
+            'Czas': n.duration.toString(),
+          });
+        }
+      }
+      Notifications_helper_background.ListOfEventNotifi(event);
+    }
+  }
+
 
   static Future<void> update(Notifi notifi) async {
     dbHelper.update('Wydarzenie', 'ID_Wydarzenie', notifi.id, {
@@ -73,6 +95,7 @@ class NotifiHelper {
 
   static Future<void> delete(int id) async {
     dbHelper.delete('Powiadomienia', 'ID_Powiadomienia', id);
+    Notifications_helper_background.deleteNotifi(id);
   }
 
   static Future<void> deleteTask(Notifi notifi) async {

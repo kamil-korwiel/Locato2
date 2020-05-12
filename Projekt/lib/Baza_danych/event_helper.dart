@@ -25,11 +25,10 @@ class EventHelper {
       'Opis': newEvent.description,
     });
 
-
-      newEvent.listNotifi.forEach((n) => n.idEvent = IdEvent);
-      await NotifiHelper.addList(newEvent.listNotifi,newEvent,null);
-      //Notifications_helper_background.addEvent(newEvent,IdEvent);
-
+//      if(newEvent.listNotifi.isNotEmpty) {
+//        newEvent.listNotifi.forEach((n) => n.idEvent = IdEvent);
+//        await NotifiHelper.addListNotifiEvent(newEvent);
+//      }
   }
 
   static Future<void> update(Event updatedEvent) async {
@@ -42,9 +41,11 @@ class EventHelper {
       'Opis': updatedEvent.description,
     });
 
-    updatedEvent.listNotifi.forEach((n) => n.idEvent = updatedEvent.id);
-    NotifiHelper.addList(updatedEvent.listNotifi,updatedEvent,null);
-
+//    if(updatedEvent.listNotifi.isNotEmpty) {
+//      updatedEvent.listNotifi.forEach((n) => n.idEvent = updatedEvent.id);
+//      await NotifiHelper.addList(updatedEvent.listNotifi);
+//      Notifications_helper_background.addListOfEventNotifi(updatedEvent);
+//    }
   }
 
   static Future<void> delete(int pickedIdEvent) async {

@@ -58,6 +58,9 @@ class _AddTaskState extends State<AddTask> {
       done: false,
     );
 
+//     _terminData = DateTime();
+//     _terminCzas = DateTime();
+
     dateColor = Colors.white;
     timeColor = Colors.white;
 
@@ -464,33 +467,38 @@ class _AddTaskState extends State<AddTask> {
         _task.name = _controllerName.text;
         _task.description = controllerDesc.text;
         //TODO zrobic zeby data nie byla obowiazkowa (ogolnie)
-      if(isTimeSelected && isDateSelected) {_task.endTime = DateTime(_terminData.year, _terminData.month,
-           _terminData.day, _terminCzas.hour, _terminCzas.minute);} // ustaw date jesli jest wybrana
+      if(isTimeSelected && isDateSelected) {
+        print("isTimeSelected: $isTimeSelected");
+        print("isDateSelected: $isDateSelected");
+        _task.endTime = DateTime(_terminData.year, _terminData.month, _terminData.day, _terminCzas.hour, _terminCzas.minute);
+      }else{
+        _task.listNotifi.clear();
+      }
 
-        if (isNotificationEnabled)
-          clearNotifiList(); // clear listy powiadomien jesli ktos usunie terminy i bedzie dodawal task
+//        if (isNotificationEnabled)
+//          clearNotifiList(); // clear listy powiadomien jesli ktos usunie terminy i bedzie dodawal task
 
         //print(_task.name + " " + "Opis: " + _task.description+ "Group: "+ _task.idGroup.toString());
-//         print("Name: "+_task.name);
-//         print("EndTask: "+_task.endTime.toString());
-//         print("Desc: ${_task.description}");
-//         print("idGroup: ${_task.group.id}");
-//         print("Grupa: ${_task.group.name}");
-//         print("idLokalizacja: ${_task.localization.id}");
-//         print("Localization: ${_task.localization.name}");
-//         print("City: ${_task.localization.city}");
-//         print("Latitude: ${_task.localization.latitude}");
-//         print("Longitude: ${_task.localization.longitude}");
+         print("");
+         print("Name: "+_task.name);
+         print("EndTask: "+_task.endTime.toString());
+         print("Desc: ${_task.description}");
+         print("idGroup: ${_task.group.id}");
+         print("Grupa: ${_task.group.name}");
+         print("idLokalizacja: ${_task.localization.id}");
+         print("Localization: ${_task.localization.name}");
+         print("City: ${_task.localization.city}");
+         print("Latitude: ${_task.localization.latitude}");
+         print("Longitude: ${_task.localization.longitude}");
 //
-//        _task.listNotifi.forEach((t) => print(t.duration));
-
+       _task.listNotifi.forEach((t) => print(t.duration));
+//
         TaskHelper.add(_task);
         GroupHelper.addlist(listOfGroup);
         LocalizationHelper.addlist(listOfLocalization);
-
+//
         Navigator.of(context).pop();
-     
-        setState(() {});
+
 
     }
   }

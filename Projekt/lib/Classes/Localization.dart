@@ -5,14 +5,20 @@ class Localization {
   String name;
   String city;
   String street;
-  bool isSelected;
+  bool isNearBy;
+  bool wasNotified;
+  bool isSelected ;
 
   Localization(
-      {this.id,
-      this.latitude,
-      this.longitude,
-      this.name,
-      this.city,
-      this.street,
-      this.isSelected = false});
+      {
+        this.id,
+        this.latitude,
+        this.longitude,
+        this.name,
+        this.city,
+        this.street,
+        this.isNearBy,
+        this.wasNotified,
+        this.isSelected = false
+      });
 }

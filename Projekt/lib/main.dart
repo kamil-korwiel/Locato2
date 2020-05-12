@@ -2,6 +2,7 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/Add/add_event.dart';
@@ -13,18 +14,20 @@ import 'package:pageview/pages/grouptaskpage.dart';
 import 'Background/notification_helper_background.dart';
 import 'Baza_danych/database_helper.dart';
 import 'Baza_danych/localization_helper.dart';
+import 'Classes/Event.dart';
 import 'Classes/Localization.dart';
 import 'pages/calendar.dart';
 
 void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
-  final DatabaseHelper dbHelper = DatabaseHelper();
+  DatabaseHelper();
   Notifications_helper_background.initialize();
   await AndroidAlarmManager.initialize();
 
   await AndroidAlarmManager.periodic(
       Duration(minutes: 1), 0, checkLocationRadius);
+  AndroidAlarmManager.cancel(0);
   runApp(MyApp());
 }
 
@@ -42,7 +45,6 @@ void main() async {
 //});
 
 class MyApp extends StatelessWidget {
-  final DatabaseHelper dbHelper = DatabaseHelper();
   //final dbHelper = DatabaseHelper.instance;
   // This widget is the root of your application.
   @override
@@ -237,38 +239,73 @@ void checkLocationRadius() async {
   Position pos;
   int id = -1;
   int distance = 100;
-  final DatabaseHelper dbHelper = DatabaseHelper();
+  DatabaseHelper();
   Notifications_helper_background.initialize();
 
   pos = await Geolocator().getCurrentPosition();
   print("Obecna lokalizacja: " + pos.toString());
 
   // DownloadData
-  _listloc = await LocalizationHelper.lists();
-  _listloc.forEach((t) => print("Loc: ${t.name}"));
+  _listloc.addAll(await LocalizationHelper.lists());
+  _listloc.removeWhere((l) => l.id == 0);
 
-    if (_listloc != null) {
-      for (var loc in _listloc) {
-        if(loc.id != 0) {
-          dist = await Geolocator().distanceBetween(
-              loc.latitude, loc.longitude, pos.latitude, pos.longitude);
-          print("Dystans pomiedzy punktami" + dist.toString());
-          if (dist < distance) {
-            id = loc.id;
-            print("Id zadania w poblizu: " + id.toString());
 
-            _listtask = await TaskHelper.listsIDLocal(id);
-            _listtask.forEach((t) => print("Task: ${t.name}"));
-          }
+
+  if(_listloc.isNotEmpty){
+    print("Length list loc: ${_listloc.length}");
+
+    for(Localization loc in _listloc){
+      dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
+      print("Dystans pomiedzy punktami " + dist.toString());
+      if(dist < distance){
+        _listtask.addAll(await TaskHelper.listsIDLocal(loc.id));
+
+        if(_listtask.isNotEmpty) {
+          String title = "Na :${loc.street}";
+          String decription = "Masz do zrobienia: ${_listtask
+              .length} zadania.\n" +
+              "Odleglosc od miesca: $dist m\n";
+          print("LocID ${loc.id}");
+          print("List of Task: ${_listtask.length}");
+          _listtask.forEach((t) => print("TaskName: ${t.name}"));
+
+
         }
       }
+
     }
+  }
 
-
-  //Notifications_helper_background.now("Testeś tutaj:", pos.toString());
-  //_list.clear();
-
-  /*if (id >= 0) {
-    TaskHelper.listsIDLocal(id).th
-  }*/
 }
+
+
+updateDataOnThisDay() async{
+
+  TaskHelper.deleteDoneTaskToday();
+  LocalizationHelper.resetAllStatus();
+
+}
+
+//    if (_listloc != null) {
+//      for (var loc in _listloc) {
+//        if(loc.id != 0) {
+//          dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
+//          print("Dystans pomiedzy punktami" + dist.toString());
+//          if (dist < distance) {
+//            id = loc.id;
+//            print("Id zadania w poblizu: " + id.toString());
+//
+//            _listtask = await TaskHelper.listsIDLocal(id);
+//            _listtask.forEach((t) => print("Task: ${t.name}"));
+//          }
+//        }
+//      }
+//    }
+//
+//
+//  Notifications_helper_background.now("Testeś tutaj:", pos.toString());
+//  //_list.clear();
+//
+//  /*if (id >= 0) {
+//    TaskHelper.listsIDLocal(id).th
+//  }*/

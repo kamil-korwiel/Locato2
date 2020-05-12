@@ -27,7 +27,7 @@ class DatabaseHelper {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = documentsDirectory.path + _databaseName;
     print("path: " + path);
-    //deleteDatabase(path);
+    deleteDatabase(path);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
@@ -62,13 +62,15 @@ class DatabaseHelper {
      Longitude      DOUBLE    DEFAULT NULL,
      Nazwa          TEXT      DEFAULT NULL,
      Miasto         TEXT      DEFAULT NULL,
-     Ulica          TEXT      DEFAULT NULL
+     Ulica          TEXT      DEFAULT NULL,
+     JestesBlisko   BOOLEAN   NOT NULL,
+     WyslanoPowiadomienie BOOLEAN NOT NULL
  )
            ''');
 
     await db.execute('''
-            INSERT INTO Lokalizacja (ID_Lokalizacji,Nazwa,Miasto,Ulica)
-    VALUES (0,NULL,NULL,NULL)
+            INSERT INTO Lokalizacja (ID_Lokalizacji,Nazwa,Miasto,Ulica,JestesBlisko,WyslanoPowiadomienie)
+    VALUES (0,NULL,NULL,NULL,0,0)
     ''');
     await db.execute('''
            CREATE TABLE Task (
@@ -194,7 +196,10 @@ class DatabaseHelper {
           "${m['Longitude'].toString()}\t"
           "${m['Nazwa'].toString()}\t"
           "${m['Miasto'].toString()}\t"
-          "${m['Ulica'].toString()}");
+          "${m['Ulica'].toString()}\t"
+          "${m['JestesBlisko'].toString()}\t"
+          "${m['WyslanoPowiadomienie'].toString()}"
+      );
     });
     print("\nID_Powiadomienia\t" "ID_Task\t" "ID_Event\t" "Czas\t");
     mapNotifi.forEach((m) {

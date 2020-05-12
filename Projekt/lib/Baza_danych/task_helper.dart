@@ -4,7 +4,6 @@ import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Localization.dart';
-import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -29,16 +28,14 @@ class TaskHelper {
       'ID_Task': ++IdTask ,
       'Nazwa': newTask.name,
       'Zrobione': newTask.done ? 1 : 0,
-      'Do_Kiedy': DateFormat("yyyy-MM-dd hh:mm").format(newTask.endTime),
+      'Do_Kiedy': newTask.endTime!=null?DateFormat("yyyy-MM-dd hh:mm").format(newTask.endTime):null,
       'Opis': newTask.description,
       'Lokalizacja': IdLocal,
       'Grupa': IdGroup,
     });
 
     newTask.listNotifi.forEach((n) => n.idTask = IdTask);
-    NotifiHelper.addList(newTask.listNotifi,null,newTask);
-
-
+    NotifiHelper.addListNotifiTask(newTask);
   }
 
 
@@ -68,21 +65,19 @@ class TaskHelper {
     });
 
     updatedTask.listNotifi.forEach((n) => n.idTask = updatedTask.id);
-
-//    List<Notifi> notifitoupdate = await NotifiHelper.listsTaskID(updatedTask);
-    
-//    notifitoupdate.forEach((n) => Notifications_helper_background.)
-    
-    NotifiHelper.addList(updatedTask.listNotifi,null,updatedTask);
+    NotifiHelper.addListNotifiTask(updatedTask);
     
   }
 
   static Future<void> delete(int pickedIdTask) async {
     dbHelper.delete('Task', 'ID_Task', pickedIdTask);
-    Notifications_helper_background.deleteTask(pickedIdTask);
+    await Notifications_helper_background.deleteTask(pickedIdTask);
   }
 
-
+  static Future<void> deleteDoneTaskToday() async {
+    Database db = await dbHelper.database;
+    db.rawDelete("DELETE FROM Task WHERE date(Do_Kiedy) = date('now') AND Zrobione = 1" );
+  }
 
 //  List<MyNotification> listofNotifi(int idTask)  {
 //    dbHelper.queryIdNotifi(idTask).then((maps) {
@@ -124,7 +119,7 @@ class TaskHelper {
         id: maps[i]['ID_Task'],
         done: maps[i]['Zrobione']  == 1 ? true : false,
         name: maps[i]['Nazwa'],
-        endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
+        endTime: maps[i]['Do_Kiedy'] != null ? new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']) : null,
         description: maps[i]['Opis'],
         localization: Localization(
             id: maps[i]['Lokalizacja'],
@@ -160,13 +155,14 @@ class TaskHelper {
         id: maps[i]['ID_Task'],
         done: maps[i]['Zrobione']  == 1 ? true : false,
         name: maps[i]['Nazwa'],
-        endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
+        endTime: maps[i]['Do_Kiedy'] != null ? new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']) : null,
         description: maps[i]['Opis'],
         localization: Localization(
           id: maps[i]['Lokalizacja'],
           name: maps[i]['Nazwa_Lokalizacji'],
           city: maps[i]['Miasto'],
           street: maps[i]['Ulica'],
+          isNearBy: maps[i]['JestesBlisko'],
           isSelected: true,
         ),
         group: Group(
@@ -184,11 +180,9 @@ class TaskHelper {
     Database db = await dbHelper.database;
     final List<Map<String, dynamic>> maps = await db
         .rawQuery('''
-        SELECT t.ID_Task, t.Nazwa, t.Zrobione, t.Do_Kiedy, t.Opis, t.Lokalizacja, t.Grupa,
-        l.Nazwa AS Nazwa_Lokalizacji, l.Miasto, l.Ulica,
+        SELECT t.ID_Task, t.Nazwa, t.Zrobione, t.Do_Kiedy, t.Opis,
         g.Nazwa_grupa
         FROM Task AS t 
-        INNER JOIN Lokalizacja AS l ON (l.ID_Lokalizacji = t.Lokalizacja) 
         INNER JOIN Grupa AS g ON (g.ID_Grupa = t.Grupa)
         WHERE Lokalizacja = ?
         ''', [idloca]);
@@ -198,19 +192,9 @@ class TaskHelper {
         id: maps[i]['ID_Task'],
         done: maps[i]['Zrobione']  == 1 ? true : false,
         name: maps[i]['Nazwa'],
-        endTime: new DateFormat("yyyy-MM-dd hh:mm").parse(maps[i]['Do_Kiedy']),
         description: maps[i]['Opis'],
-        localization: Localization(
-          id: maps[i]['Lokalizacja'],
-          name: maps[i]['Nazwa_Lokalizacji'],
-          city: maps[i]['Miasto'],
-          street: maps[i]['Ulica'],
-          isSelected: true,
-        ),
         group: Group(
-          id: maps[i]['Grupa'],
           name: maps[i]['Nazwa_grupa'],
-          isSelected: true,
         ),
       );
     });

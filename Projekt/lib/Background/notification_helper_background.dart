@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
@@ -47,19 +49,25 @@ class Notifications_helper_background{
     await flutterLocalNotificationsPlugin.schedule(id_notifi, title, description, when, platformChannelSpecifics);
   }
 
-  static void addTask(Task task, List<Notifi>  notifi)  {
-    notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics));
+  static Future<void> now(String title,String decription) async {
+    int isolateId = Isolate.current.hashCode;
+    await flutterLocalNotificationsPlugin.show(isolateId,title, decription, platformChannelSpecifics);
   }
 
-//  static void updateTask(Notifi n, Task task)  {
-//    //flutterLocalNotificationsPlugin.cancel(n.id);
-//    flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics);
+
+//  static void addTask(Task task, List<Notifi>  notifi)  {
+//    notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics));
 //  }
 
-//  static void updateTask(Notifi n, Event event)  {
-//    //flutterLocalNotificationsPlugin.cancel(n.id);
-//    flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics);
-//  }
+  static void ListOfTaskNotifi(Task task) {
+      task.listNotifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Zadanie do zrobienia:", task.name, task.endTime.subtract(n.duration), platformChannelSpecifics));
+  }
+
+  static void ListOfEventNotifi(Event event){
+    event.listNotifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Wydarzenie:", event.name, event.beginTime.subtract(n.duration), platformChannelSpecifics));
+  }
+
+
 
   static  void addEvent(Event event,List<Notifi>  notifi)  {
     notifi.forEach((n) => flutterLocalNotificationsPlugin.schedule(n.id, "Wydarzenie:", event.name, event.beginTime.subtract(n.duration), platformChannelSpecifics));
@@ -67,18 +75,12 @@ class Notifications_helper_background{
 
   static Future<void> deleteTask(int id) async {
     List<Notifi> notifi = await NotifiHelper.listsTaskID(id);
-//    for(Notifi n in notifi) {
-//      await flutterLocalNotificationsPlugin.cancel(n.id);
-//    }
     notifi.forEach((n) => flutterLocalNotificationsPlugin.cancel(n.id));
     NotifiHelper.deleteTaskID(id);
   }
 
   static Future<void> deleteEvent(int id) async {
     List<Notifi> notifi = await NotifiHelper.listsEventID(id);
-//    for(Notifi n in notifi) {
-//      await flutterLocalNotificationsPlugin.cancel(n.id);
-//    }
      notifi.forEach((n) => flutterLocalNotificationsPlugin.cancel(n.id));
      NotifiHelper.deleteEventID(id);
   }
@@ -91,9 +93,7 @@ class Notifications_helper_background{
     list.forEach((n) => flutterLocalNotificationsPlugin.cancel(n.id));
   }
 
-  static Future<void> now(String title,String decription) async {
-    await flutterLocalNotificationsPlugin.show(0,title, decription, platformChannelSpecifics);
-  }
+
 
 
 

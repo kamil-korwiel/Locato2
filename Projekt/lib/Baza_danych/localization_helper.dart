@@ -16,6 +16,8 @@ class LocalizationHelper {
       'Nazwa': newLocalization.name,
       'Miasto': newLocalization.city,
       'Ulica': newLocalization.street,
+      'JestesBlisko': 0,
+      'WyslanoPowiadomienie': 0,
     });
 
     return IdLocalization + 1;
@@ -33,8 +35,17 @@ class LocalizationHelper {
         'Nazwa': l.name,
         'Miasto': l.city,
         'Ulica': l.street,
+        'JestesBlisko': 0,
+        'WyslanoPowiadomienie': 0,
       });
       IdLocalization++;
+    });
+  }
+
+  static Future<void> updateStatus(Localization updatedLocalization) async {
+    dbHelper.update('Lokalizacja', 'ID_Lokalizacji', updatedLocalization.id, {
+      'JestesBlisko': updatedLocalization.isNearBy? 1:0,
+      'WyslanoPowiadomienie': updatedLocalization.wasNotified? 1:0,
     });
   }
 
@@ -46,6 +57,8 @@ class LocalizationHelper {
       'Nazwa': updatedLocalization.name,
       'Miasto': updatedLocalization.city,
       'Ulica': updatedLocalization.street,
+      'JestesBlisko': 0,
+      'WyslanoPowiadomienie': 0,
     });
   }
 
@@ -72,7 +85,16 @@ class LocalizationHelper {
         name: maps[i]['Nazwa'],
         city: maps[i]['Miasto'],
         street: maps[i]['Ulica'],
+        isNearBy: maps[i]['JestesBlisko'] == 1? true:false,
+        wasNotified: maps[i]['WyslanoPowiadomienie'] == 1? true:false ,
       );
     });
   }
+
+  static Future<List<Localization>> resetAllStatus() async {
+    Database db = await dbHelper.database;
+    db.rawUpdate("UPDATE Lokalizacja SET JestesBlisko = 0, WyslanoPowiadomienie = 0");
+  }
+
+
 }

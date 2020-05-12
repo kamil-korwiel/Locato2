@@ -47,45 +47,60 @@ class GroupCardItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // Nazwa zadanai
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w500,
-                    decoration: done ? TextDecoration.lineThrough : null,
-                  ),
-                ),
-                // Lokalizacja zadania
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.location_on, size: 12.0),
-                    Text(
-                      txt,
-                      style: TextStyle(
-                        color: Color(0xFFB6B2DF),
-                        fontFamily: 'Poppins',
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w300,
-                      ),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Nazwa zadanai
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.w500,
+                      decoration: done ? TextDecoration.lineThrough : null,
                     ),
-                  ],
-                ),
-                // Data zadania
-                Text(
-                  date,
-                  style: TextStyle(
-                    color: Color(0xFFB6B2DF),
-                    fontFamily: 'Poppins',
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w300,
                   ),
-                ),
-              ],
+                  // Lokalizacja zadania
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+
+                    children: <Widget>[
+                      Container(
+//                          color: Colors.deepOrange,
+                          child: Icon(Icons.location_on, size: 14.0)),
+                      SizedBox(width: 2,),
+                      Flexible(
+                        child: Container(
+//                          color: Colors.green,
+                          child: Text(
+                            txt,
+//                        overflow: TextOverflow.ellipsis,
+//                        maxLines: 2,
+                            style: TextStyle(
+                              color: Color(0xFFB6B2DF),
+                              fontFamily: 'Poppins',
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Data zadania
+                  Text(
+                    date,
+                    style: TextStyle(
+                      color: Color(0xFFB6B2DF),
+                      fontFamily: 'Poppins',
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Container(
               padding: EdgeInsets.only(right: 10.0),
@@ -123,23 +138,28 @@ class GroupCardItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Icon(
-                    Icons.description,
-                    size: 18.0,
-                  ),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Poppins',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w300,
+              Flexible(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Icon(
+                      Icons.description,
+                      size: 18.0,
                     ),
-                  ),
-                ],
+                    SizedBox(width: 2,),
+                    Flexible(
+                      child: Text(
+                        description,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
