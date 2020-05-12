@@ -129,6 +129,7 @@ class _CalendarState extends State<Calendar> {
               listString.forEach((s) => print(s.name));
               print("");
             });
+            _selectedEvents = _events[_selectedDay] ?? [];
           }
 
           return Container(

@@ -102,13 +102,16 @@ class _EventCardItemState extends State<EventCardItem> {
                     Icons.description,
                     size: 18.0,
                   ),
-                  Text(
-                    widget.description,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Poppins',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w300,
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Text(
+                      widget.description,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Poppins',
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                 ],
