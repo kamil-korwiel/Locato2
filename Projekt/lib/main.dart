@@ -2,19 +2,16 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Task.dart';
 import 'package:pageview/pages/Add/add_event.dart';
 import 'package:pageview/pages/Add/add_task.dart';
+import 'package:pageview/pages/HomePage.dart';
 import 'package:pageview/pages/GroupPage/GroupPage.dart';
-import 'package:pageview/pages/homepage.dart';
-import 'package:pageview/pages/grouptaskpage.dart';
 
 import 'Background/notification_helper_background.dart';
 import 'Baza_danych/database_helper.dart';
 import 'Baza_danych/localization_helper.dart';
-import 'Classes/Event.dart';
 import 'Classes/Localization.dart';
 import 'pages/calendar.dart';
 
@@ -27,22 +24,11 @@ void main() async {
 
   await AndroidAlarmManager.periodic(
       Duration(minutes: 1), 0, checkLocationRadius);
+
+  //AndroidAlarmManager.per
   AndroidAlarmManager.cancel(0);
   runApp(MyApp());
 }
-
-//MaterialColor myGrey = const MaterialColor(0xFF333333, const {
-//  50: const Color(0xFF333333),
-//  100: const Color(0xFF333333),
-//  200: const Color(0xFF333333),
-//  300: const Color(0xFF333333),
-//  400: const Color(0xFF333333),
-//  500: const Color(0xFF333333),
-//  600: const Color(0xFF333333),
-//  700: const Color(0xFF333333),
-//  800: const Color(0xFF333333),
-//  900: const Color(0xFF333333),
-//});
 
 class MyApp extends StatelessWidget {
   //final dbHelper = DatabaseHelper.instance;
@@ -297,27 +283,3 @@ updateDataOnThisDay() async{
   LocalizationHelper.resetAllStatus();
 
 }
-
-//    if (_listloc != null) {
-//      for (var loc in _listloc) {
-//        if(loc.id != 0) {
-//          dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
-//          print("Dystans pomiedzy punktami" + dist.toString());
-//          if (dist < distance) {
-//            id = loc.id;
-//            print("Id zadania w poblizu: " + id.toString());
-//
-//            _listtask = await TaskHelper.listsIDLocal(id);
-//            _listtask.forEach((t) => print("Task: ${t.name}"));
-//          }
-//        }
-//      }
-//    }
-//
-//
-//  Notifications_helper_background.now("Testeś tutaj:", pos.toString());
-//  //_list.clear();
-//
-//  /*if (id >= 0) {
-//    TaskHelper.listsIDLocal(id).th
-//  }*/

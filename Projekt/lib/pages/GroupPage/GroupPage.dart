@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pageview/Baza_danych/group_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'GroupCard.dart';
-import 'ItemGroup.dart';
 
 _GroupTaskPageState groupCardState;
 

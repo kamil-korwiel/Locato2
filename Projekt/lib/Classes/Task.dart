@@ -1,5 +1,3 @@
-import 'package:pageview/Classes/Notification.dart';
-
 import 'Group.dart';
 import 'Localization.dart';
 import 'Notifi.dart';

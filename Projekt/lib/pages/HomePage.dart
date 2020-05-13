@@ -5,7 +5,10 @@ import 'package:pageview/Baza_danych/event_helper.dart';
 
 import 'package:pageview/Classes/Event.dart';
 
-import 'package:pageview/Items/EventCard.dart';
+import 'HomePage/EventCard.dart';
+
+
+
 
 _HomePageEventsState homePageEventsState;
 

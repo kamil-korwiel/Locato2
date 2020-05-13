@@ -1,17 +1,12 @@
-//import 'dart:html';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/Baza_danych/database_helper.dart';
 import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Baza_danych/notification_helper.dart';
 import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Classes/Notifi.dart';
-import 'package:pageview/pages/Add/add_group.dart';
-import 'package:pageview/pages/Add/add_localization.dart';
 import 'package:pageview/pages/Add/add_notification.dart';
-import 'package:pageview/pages/Update/upgrade_notification.dart';
+
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -43,6 +38,7 @@ class _UpgradeEventState extends State<UpgradeEvent> {
 
   @override
   void initState() {
+    _downloadData();
     _name = widget.event.name;
     _description = widget.event.description;
     _date = DateFormat("yyyy-MM-dd").format(widget.event.beginTime);
@@ -60,6 +56,15 @@ class _UpgradeEventState extends State<UpgradeEvent> {
     _controllerDesc = TextEditingController(text: _description);
 
     super.initState();
+  }
+
+  void _downloadData() {
+    NotifiHelper.listsTaskID(widget.event.id).then((onList) {
+      if (onList != null) {
+        widget.event.listNotifi.addAll(onList);
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -332,7 +337,7 @@ class _UpgradeEventState extends State<UpgradeEvent> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => UpgradeNotificationEvent(widget.event)));
+            builder: (context) => AddNotificationEvent(widget.event)));
   }
 
   void acceptAndValidate() {

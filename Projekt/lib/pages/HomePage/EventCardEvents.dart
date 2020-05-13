@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Items/EventCard.dart';
-import 'package:pageview/Items/EventCardItem.dart';
+
 import 'package:pageview/Baza_danych/event_helper.dart';
-import 'package:pageview/pages/Add/add_event.dart';
+
 import 'package:pageview/pages/Update/upgrade_event.dart';
-import 'package:pageview/pages/homepage.dart';
+
+import '../HomePage.dart';
+import 'EventCardItem.dart';
 
 class EventCardEvents extends StatefulWidget {
   EventCardEvents(this.events);

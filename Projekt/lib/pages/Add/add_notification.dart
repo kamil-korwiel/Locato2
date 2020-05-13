@@ -4,7 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:pageview/Classes/Event.dart';
 import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/List/button_notification_list_builder_widget.dart';
+import 'button_notification_list_builder_widget.dart';
 
 class AddNotificationTask extends StatefulWidget {
   @override

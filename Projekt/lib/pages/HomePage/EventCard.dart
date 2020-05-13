@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Items/EventCardHeader.dart';
-import 'package:pageview/Items/EventCardEvents.dart';
+
+import 'EventCardEvents.dart';
+import 'EventCardHeader.dart';
+
 
 class EventCard extends StatelessWidget {
   String day;
