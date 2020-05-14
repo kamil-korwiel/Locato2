@@ -4,7 +4,7 @@ import 'package:pageview/Classes/Event.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/pages/Update/upgrade_event.dart';
+import 'package:pageview/pages/Update/update_event.dart';
 class Calendar extends StatefulWidget {
 
   @override
@@ -296,7 +296,7 @@ class _CalendarState extends State<Calendar> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        UpgradeEvent(event: event),
+                                        UpdateEvent(event: event),
                                   ),
                                 );
                               },

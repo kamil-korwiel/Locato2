@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/Update/upgrade_task.dart';
+import 'package:pageview/pages/Update/update_task.dart';
 import 'GroupCardItem.dart';
 import 'GroupPage.dart';
 
@@ -43,7 +43,7 @@ class _GroupCardTasksState extends State<GroupCardTasks> {
             },
             onPressedEdit: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => UpgradeTask(task)));
+                  MaterialPageRoute(builder: (context) => UpdateTask(task)));
             },
             onPressedDelete: () {
               TaskHelper.delete(task.id);

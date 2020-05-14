@@ -10,16 +10,16 @@ import 'package:pageview/pages/Add/add_notification.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-class UpgradeEvent extends StatefulWidget {
+class UpdateEvent extends StatefulWidget {
   @override
-  _UpgradeEventState createState() => _UpgradeEventState();
+  _UpdateEventState createState() => _UpdateEventState();
 
   Event event;
 
-  UpgradeEvent({this.event});
+  UpdateEvent({this.event});
 }
 
-class _UpgradeEventState extends State<UpgradeEvent> {
+class _UpdateEventState extends State<UpdateEvent> {
   TextEditingController _controllerName;
   TextEditingController _controllerDesc;
 

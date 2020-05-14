@@ -16,16 +16,16 @@ import 'package:pageview/pages/Add/add_notification.dart';
 
 
 
-class UpgradeTask extends StatefulWidget {
+class UpdateTask extends StatefulWidget {
   @override
-  _UpgradeTaskState createState() => _UpgradeTaskState();
+  _UpdateTaskState createState() => _UpdateTaskState();
 
 
   Task task;
-  UpgradeTask(this.task);
+  UpdateTask(this.task);
 }
 
-class _UpgradeTaskState extends State<UpgradeTask> {
+class _UpdateTaskState extends State<UpdateTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _controllerName ;
   TextEditingController controllerDesc ;

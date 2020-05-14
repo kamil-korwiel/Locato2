@@ -4,7 +4,7 @@ import 'package:pageview/Classes/Event.dart';
 
 import 'package:pageview/Baza_danych/event_helper.dart';
 
-import 'package:pageview/pages/Update/upgrade_event.dart';
+import 'package:pageview/pages/Update/update_event.dart';
 
 import '../HomePage.dart';
 import 'EventCardItem.dart';
@@ -42,7 +42,7 @@ class _EventCardEventsState extends State<EventCardEvents> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => UpgradeEvent(event: event),
+                  builder: (context) => UpdateEvent(event: event),
                 ),
               );
             },
