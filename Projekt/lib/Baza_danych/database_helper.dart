@@ -63,8 +63,8 @@ class DatabaseHelper {
      Nazwa          TEXT      DEFAULT NULL,
      Miasto         TEXT      DEFAULT NULL,
      Ulica          TEXT      DEFAULT NULL,
-     JestesBlisko   BOOLEAN   NOT NULL,
-     WyslanoPowiadomienie BOOLEAN NOT NULL
+     JestesBlisko   BOOLEAN   DEFAULT NULL,
+     WyslanoPowiadomienie BOOLEAN DEFAULT NULL
  )
            ''');
 
@@ -215,8 +215,7 @@ class DatabaseHelper {
     return Sqflite.firstIntValue(await db.rawQuery(q));
   }
 
-  Future<int> update(
-      String table, String columnId, int id, Map<String, dynamic> row) async {
+  Future<int> update(String table, String columnId, int id, Map<String, dynamic> row) async {
     Database db = await instance.database;
 
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);

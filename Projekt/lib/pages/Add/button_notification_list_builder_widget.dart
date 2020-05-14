@@ -14,7 +14,7 @@ class ListNotifi extends StatefulWidget {
 }
 
 class _ListNotifiState extends State<ListNotifi> {
-  List<Notifi> list;
+  //List<Notifi> list;
 
   @override
   void initState() {

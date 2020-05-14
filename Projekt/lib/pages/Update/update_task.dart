@@ -506,10 +506,11 @@ class _UpdateTaskState extends State<UpdateTask> {
 //
 //        widget.task.listNotifi.forEach((t) => print(t.duration));
 //
-      TaskHelper.update(widget.task);
-      GroupHelper.addlist(listOfGroup);
-      LocalizationHelper.addlist(listOfLocalization);
-//
+      TaskHelper.update(widget.task).then((onValue){
+        GroupHelper.addlist(listOfGroup);
+        LocalizationHelper.addlist(listOfLocalization);
+
+      });
       Navigator.of(context).pop();
 
 

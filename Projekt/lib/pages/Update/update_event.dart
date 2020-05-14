@@ -59,7 +59,7 @@ class _UpdateEventState extends State<UpdateEvent> {
   }
 
   void _downloadData() {
-    NotifiHelper.listsTaskID(widget.event.id).then((onList) {
+    NotifiHelper.listsEventID(widget.event.id).then((onList) {
       if (onList != null) {
         widget.event.listNotifi.addAll(onList);
         setState(() {});

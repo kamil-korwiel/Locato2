@@ -269,26 +269,12 @@ class AddNotificationEvent extends StatefulWidget {
   _AddNotificationEventState createState() => _AddNotificationEventState();
 
   Event event;
-
   AddNotificationEvent(this.event);
-
-// Notification notification;
-// AddNotification({this.notification});
-
 }
 
 class _AddNotificationEventState extends State<AddNotificationEvent> {
   final TextEditingController _text = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    _notifilist = widget.event.listNotifi;
-    dni = 0;
-    godziny = 0;
-    minuty = 1;
-    super.initState();
-  }
 
   List<Notifi> _notifilist = [];
   var duration;
@@ -297,11 +283,21 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   int dni;
   String name;
 
+  @override
+  void initState() {
+    _notifilist = widget.event.listNotifi;
+    dni = 0;
+    godziny = 0;
+    minuty = 1;
+
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title:
-            Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
+        Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
         // tu kontrolujesz przycisk wstecz
         leading: new IconButton(
             icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
@@ -416,13 +412,13 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   Widget buildcustomButton(String text, void action()) {
     return RaisedButton(
       color: Color(0xFF333366),
+      elevation: 5.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: Colors.white,
+          color: Colors.transparent,
         ),
       ),
-      elevation: 5.0,
       onPressed: () {
         action();
       },
@@ -439,6 +435,42 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     return SizedBox(
       height: 10.0,
     );
+  }
+
+  Widget buildCustomTextFieldwithValidation(
+      String label, String hint, TextEditingController control) {
+    return TextFormField(
+        controller: control,
+        decoration: new InputDecoration(
+            filled: true,
+            fillColor: Color(0xFF333366),
+            enabledBorder: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            focusedBorder: new OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.white)),
+            border: new OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(color: Colors.red),
+            ),
+            labelText: label,
+            labelStyle: TextStyle(color: Colors.white),
+            hintText: hint,
+            hintStyle: TextStyle(color: Colors.white),
+            suffixIcon: IconButton(
+                icon: Icon(Icons.clear, color: Colors.white),
+                onPressed: () {
+                  control.clear();
+                })),
+        keyboardType: TextInputType.number,
+        validator: (val) {
+          if (val.isEmpty) {
+            return 'Pole nie może być puste!';
+          }
+          return null;
+        });
   }
 
   void validateAndAdd() {
@@ -464,7 +496,7 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     }
 //    }
 //      print(
-//          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
+//          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idevent:${_notifilist.last.idevent} time: ${_notifilist.last.duration.toString()}");
 
     setState(() {});
   }
@@ -478,8 +510,9 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
   }
 
   void confirm() {
-    widget.event.listNotifi = _notifilist;
 
+
+    widget.event.listNotifi = _notifilist;
     Navigator.pop(context);
   }
 }

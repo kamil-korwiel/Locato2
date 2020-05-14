@@ -38,12 +38,12 @@ class NotifiHelper {
           dbHelper.insert('Powiadomienia', {
             'ID_Powiadomienia': n.id,
             'ID_Task': n.idTask,
-            'ID_Event': n.idEvent,
+            'ID_Event': -1,
             'Czas': n.duration.toString(),
           });
         }
       }
-      Notifications_helper_background.ListOfTaskNotifi(task);
+      //Notifications_helper_background.ListOfTaskNotifi(task);
     }
   }
 
@@ -60,13 +60,13 @@ class NotifiHelper {
           n.id = ++IdNotifi;
           dbHelper.insert('Powiadomienia', {
             'ID_Powiadomienia': n.id,
-            'ID_Task': n.idTask,
+            'ID_Task': -1,
             'ID_Event': n.idEvent,
             'Czas': n.duration.toString(),
           });
         }
       }
-      Notifications_helper_background.ListOfEventNotifi(event);
+      //Notifications_helper_background.ListOfEventNotifi(event);
     }
   }
 

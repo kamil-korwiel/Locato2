@@ -495,17 +495,18 @@ class _AddTaskState extends State<AddTask> {
 //
        _task.listNotifi.forEach((t) => print(t.duration));
 //
-        TaskHelper.add(_task);
-        GroupHelper.addlist(listOfGroup);
-        LocalizationHelper.addlist(listOfLocalization);
+        TaskHelper.add(_task).then((onvalue){
+          GroupHelper.addlist(listOfGroup);
+          LocalizationHelper.addlist(listOfLocalization);
+          Navigator.of(context).pop();
+        });
+
 //
-        Navigator.of(context).pop();
+
 
 
     }
   }
 
-  void selectedGroup(String selectedGroup) {
-    addTaskState.setState(() {});
-  }
+
 }

@@ -21,12 +21,13 @@ void main() async {
   DatabaseHelper();
   Notifications_helper_background.initialize();
   await AndroidAlarmManager.initialize();
+  await updateDataOnThisDay();
 
   await AndroidAlarmManager.periodic(
       Duration(minutes: 1), 0, checkLocationRadius);
 
   //AndroidAlarmManager.per
-  AndroidAlarmManager.cancel(0);
+  //AndroidAlarmManager.cancel(0);
   runApp(MyApp());
 }
 
@@ -220,16 +221,15 @@ class _HomePageState extends State<HomePage>
 
 void checkLocationRadius() async {
   List<Localization> _listloc = List();
-  List<Task> _listtask = List();
+
   double dist;
   Position pos;
-  int id = -1;
-  int distance = 100;
+  int distance = 200;
   DatabaseHelper();
   Notifications_helper_background.initialize();
 
   pos = await Geolocator().getCurrentPosition();
-  //print("Obecna lokalizacja: " + pos.toString());
+  print("Obecna lokalizacja: " + pos.toString());
 
   // DownloadData
   _listloc.addAll(await LocalizationHelper.lists());
@@ -242,20 +242,21 @@ void checkLocationRadius() async {
       loc.isNearBy = false;
 
         dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
-       // print("Dystans pomiedzy punktami " + dist.toString());
+        print("Dystans pomiedzy punktami " + dist.toString());
 
         if(dist < distance){
-        loc.isNearBy = true;
-        _listtask.addAll(await TaskHelper.listsIDLocal(loc.id));
+          List<Task> _listtask = List();
+          loc.isNearBy = true;
+          _listtask.addAll(await TaskHelper.listsIDLocal(loc.id));
 
           if(_listtask.isNotEmpty
-             // && (loc.wasNotified==false)
+              && (loc.wasNotified==false)
           ) {
 
             String title = "Na :${loc.street}";
             String decription = "Masz do zrobienia: ${_listtask
-                .length} zadania.\n" +
-                "Odleglosc od miesca: $dist m\n";
+                .length} zadania";
+                //"Odleglosc od miesca: $dist m\n";
 
             print("LocID ${loc.id}");
             print("List of Task: ${_listtask.length}");
@@ -265,7 +266,7 @@ void checkLocationRadius() async {
             _listtask.forEach((t) => print("TaskName: ${t.name}"));
 
             loc.wasNotified = true;
-            Notifications_helper_background.now(title, decription);
+           await Notifications_helper_background.now(title, decription);
 
           }
 

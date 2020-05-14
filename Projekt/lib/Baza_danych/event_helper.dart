@@ -25,6 +25,9 @@ class EventHelper {
       'Opis': newEvent.description,
     });
 
+
+    newEvent.listNotifi.forEach((n) => n.idEvent = IdEvent);
+    NotifiHelper.addListNotifiEvent(newEvent);
 //      if(newEvent.listNotifi.isNotEmpty) {
 //        newEvent.listNotifi.forEach((n) => n.idEvent = IdEvent);
 //        await NotifiHelper.addListNotifiEvent(newEvent);
@@ -40,6 +43,9 @@ class EventHelper {
       'Kolor': updatedEvent.color,
       'Opis': updatedEvent.description,
     });
+
+   updatedEvent.listNotifi.forEach((n) => n.idEvent = updatedEvent.id);
+    NotifiHelper.addListNotifiEvent(updatedEvent);
 
 //    if(updatedEvent.listNotifi.isNotEmpty) {
 //      updatedEvent.listNotifi.forEach((n) => n.idEvent = updatedEvent.id);

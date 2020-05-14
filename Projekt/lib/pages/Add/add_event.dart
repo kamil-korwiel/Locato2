@@ -25,13 +25,15 @@ class _AddEventState extends State<AddEvent> {
   Color _dateColor;
   Color _time1Color;
   Color _time2Color;
-  Event _event = Event();
+  Event _event;
   bool isDateSelected;
   bool isTime1Selected;
   bool isTime2Selected;
 
   @override
   void initState() {
+
+    _event =  Event();
     _controllerName = TextEditingController();
     _controllerDesc = TextEditingController();
     _dateColor = Colors.white;
@@ -86,7 +88,7 @@ class _AddEventState extends State<AddEvent> {
               buildCustomButtonWithValidation(
                   _time1Color,
                   (isTime1Selected)
-                      ? DateFormat("HH:mm").format(_time1)
+                      ? DateFormat("hh:mm").format(_time1)
                       : "Nie wybrano godziny rozpoczęcia",
                   Icons.access_time,
                   startTimePick,
@@ -353,6 +355,7 @@ class _AddEventState extends State<AddEvent> {
           itemStyle: TextStyle(color: Colors.white),
           cancelStyle: TextStyle(color: Colors.red),
           doneStyle: TextStyle(color: Colors.green),
+
           containerHeight: 210.0,
         ),
         showSecondsColumn: false,

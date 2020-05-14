@@ -240,12 +240,12 @@ class _AddGroupState extends State<AddGroup> {
   void goBack() {
     widget.listOfGroup.clear();
     list.forEach((g) {
-      //print("id: ${g.id} added: ${g.name} bool: ${g.isSelected}");
+      print("id: ${g.id.toString()} added: ${g.name} bool: ${g.isSelected}");
       if (g.id == null && g.isSelected == false) {
         //print("added: ${g.name} bool: ${g.isSelected}");
         widget.listOfGroup.add(g);
         print(g.name);
-        addTaskState.selectedGroup(g.name);
+        //addTaskState.setState((){});
       }
     });
 
@@ -259,7 +259,7 @@ class _AddGroupState extends State<AddGroup> {
 //      GroupHelper.add(new Group(name: _text.text));
 //      _text.clear();
 //      setState(() {});
-      list.add(Group(name: _text.text));
+      list.add(Group(name: _text.text,isSelected: false));
       setState(() {});
     }
   }
