@@ -6,7 +6,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:pageview/pages/Update/upgrade_event.dart';
 class Calendar extends StatefulWidget {
-  //Calendar({Key key}) : super(key:key);
 
   @override
   _CalendarState createState() => _CalendarState();
@@ -15,11 +14,9 @@ class Calendar extends StatefulWidget {
 class _CalendarState extends State<Calendar> {
   List<dynamic> _selectedEvents;
   Map<DateTime, List<Event>> _events;
-  //Map<DateTime, List> _events2;
   List<Event> _downloadEvents;
-
   CalendarController _calendarController;
-  final DateTime _selectedDay = DateFormat("yyyy-MM-dd").parse(DateFormat("yyyy-MM-dd").format(DateTime.now()));
+  DateTime _selectedDay; 
 
   @override
   void initState() {
@@ -27,55 +24,8 @@ class _CalendarState extends State<Calendar> {
     super.initState();
 
     _events = Map();
-//    _downloadData();
-//    _downloadEvents = List();
-//    _events = {
-//      DateTime(2020, 4, 30): ['Wydarzenie 1'],
-//      DateTime(2020, 5, 1): ['Wydarzenie 2', 'Wydarzenie 3', 'Wydarzenie 4'],
-//      DateTime(2020, 5, 3): ['Wydarzenie 5', 'Wydarzenie 6'],
-//      DateTime(2020, 5, 10): ['Wydarzenie 7'],
-//    };
-//    _selectedEvents = _events[_selectedDay] ?? [];
     _selectedEvents = List();
     _calendarController = CalendarController();
-  }
-
-  void _downloadData() {
-    EventHelper.lists().then((onList) {
-      if (onList != null) {
-        _downloadEvents = onList;
-        List<Event> tmpList = List();
-        Event e;
-        while (_downloadEvents.length != 0) {
-          e = _downloadEvents[0];
-          tmpList.clear();
-          tmpList.addAll(_downloadEvents);
-          List<Event> newList = List();
-          print("TMPLIST: ${tmpList.length}");
-          for (int i = 0; i < tmpList.length; i++) {
-            if (e.beginTime.day == tmpList[i].beginTime.day &&
-                e.beginTime.month == tmpList[i].beginTime.month &&
-                e.beginTime.year == tmpList[i].beginTime.year) {
-              newList.add(tmpList[i]);
-              print("Downloadlist: ${_downloadEvents.length}");
-              _downloadEvents.remove(tmpList[i]);
-              print(".");
-            }
-          }
-          tmpList.forEach((e) => print("Events: ${e.name}"));
-          _events.addAll({
-            DateTime(e.beginTime.year, e.beginTime.month, e.beginTime.day):
-                newList
-          });
-        }
-        _events.forEach((date, listString) {
-          print(date.toString());
-          listString.forEach((s) => print(s.name));
-          print("");
-        });
-        setState(() {});
-      }
-    });
   }
 
   @override
@@ -85,7 +35,7 @@ class _CalendarState extends State<Calendar> {
     super.dispose();
   }
 
-  void _onDaySelected(DateTime day, List events) {
+  void _onDaySelected(List events) {
     setState(() {
       _selectedEvents = events;
     });
@@ -129,6 +79,7 @@ class _CalendarState extends State<Calendar> {
               listString.forEach((s) => print(s.name));
               print("");
             });
+            _selectedDay = DateFormat("yyyy-MM-dd").parse(DateFormat("yyyy-MM-dd").format(_calendarController.selectedDay));
             _selectedEvents = _events[_selectedDay] ?? [];
           }
 
@@ -166,8 +117,7 @@ class _CalendarState extends State<Calendar> {
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarController: _calendarController,
       onDaySelected: (date, events) {
-        _onDaySelected(date, events);
-        print(date.toIso8601String());
+        _onDaySelected(events);
       },
       builders: CalendarBuilders(
         selectedDayBuilder: (context, date, events) => Container(
@@ -196,34 +146,6 @@ class _CalendarState extends State<Calendar> {
             ),
           ),
         ),
-        // dayBuilder: (context, date, events) => Container(
-        //   margin: const EdgeInsets.all(5.0),
-        //   alignment: Alignment.center,
-        //   decoration: BoxDecoration(
-        //     color: Colors.amber,
-        //     shape: BoxShape.circle,
-        //   ),
-        //   child: Text(
-        //     date.day.toString(),
-        //     style: TextStyle(
-        //       color: Colors.white,
-        //     ),
-        //   ),
-        // ),
-        // weekendDayBuilder: (context, date, events) => Container(
-        //   margin: const EdgeInsets.all(5.0),
-        //   alignment: Alignment.center,
-        //   decoration: BoxDecoration(
-        //     color: Colors.amber,
-        //     shape: BoxShape.circle,
-        //   ),
-        //   child: Text(
-        //     date.day.toString(),
-        //     style: TextStyle(
-        //       color: Colors.white,
-        //     ),
-        //   ),
-        // ),
         markersBuilder: (context, date, events, holidays) {
           final children = <Widget>[];
           if (events.isNotEmpty) {
@@ -271,37 +193,15 @@ class _CalendarState extends State<Calendar> {
       children: _selectedEvents
           .map((event) => Container(
                 decoration: BoxDecoration(
-                  //color: Colors.grey[700],
                   color: Color(0xFF534B83),
                   border: Border.all(width: 0.8),
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 margin:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                //child: ListTile(
-                //title: Text(event.name),
-                //onTap: () => print('${event.name}'),
-//            trailing: Row(
-//              children: <Widget>[
-//                IconButton(icon: Icon(Icons.edit),
-//                onPressed: () {
-//                  Navigator.push(
-//                    context,
-//                    MaterialPageRoute(
-//                      builder: (context) => UpgradeEvent(),
-//                    ),
-//                  );
-//                },
-//                ),
-//                IconButton(icon: Icon(Icons.delete),
-//                onPressed: () {
-//
-//                },
-//                ),
-//              ],
-//            ),
-                //),
                 child: ExpansionTile(
+                  key: GlobalKey(),
+                  initiallyExpanded: false,
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
