@@ -26,8 +26,6 @@ class _AddTaskState extends State<AddTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _controllerName = TextEditingController();
   TextEditingController controllerDesc = TextEditingController();
-
-  int id;
   Color dateColor;
   Color timeColor;
   bool isNotificationEnabled;
@@ -81,7 +79,7 @@ class _AddTaskState extends State<AddTask> {
         ),
         // tu kontrolujesz przycisk wstecz
         leading: new IconButton(
-            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+            icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -153,7 +151,16 @@ class _AddTaskState extends State<AddTask> {
               buildCustomTextField("Opis", "Wprowadź opis swojego zadania",
                   "Pole jest opcjonalne", controllerDesc),
               buildSpace(),
-              ButtonBar(
+              buildButtonBar(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildButtonBar(){
+    return ButtonBar(
                   children: [
                     buildButtonBarTile("Anuluj", Colors.red, goBack),
                     SizedBox(
@@ -164,12 +171,7 @@ class _AddTaskState extends State<AddTask> {
                   ],
                   alignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
-                  buttonMinWidth: 150),
-            ],
-          ),
-        ),
-      ),
-    );
+                  buttonMinWidth: 150);
   }
 
   Widget buildCustomTextFieldwithValidation(
@@ -501,10 +503,6 @@ class _AddTaskState extends State<AddTask> {
 
 
     }
-  }
-
-  void onBackPressed() {
-    goBack();
   }
 
   void selectedGroup(String selectedGroup) {
