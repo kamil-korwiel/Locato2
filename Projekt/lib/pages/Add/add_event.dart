@@ -59,7 +59,7 @@ class _AddEventState extends State<AddEvent> {
         ),
         // tu kontrolujesz przycisk wstecz
         leading: new IconButton(
-            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+            icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -125,18 +125,7 @@ class _AddEventState extends State<AddEvent> {
               buildCustomTextField("Opis", "Wpisz opis swojego wydarzenia",
                   "Pole jest opcjonalne", _controllerDesc),
               buildSpace(),
-              new ButtonBar(
-                  children: [
-                    buildButtonBarTile("Anuluj", Colors.red, goBack),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    buildButtonBarTile(
-                        "Dodaj", Colors.lightGreenAccent, acceptAndValidate),
-                  ],
-                  alignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  buttonMinWidth: 150),
+              buildButtonBar(),
             ],
           ),
         ),
@@ -280,6 +269,21 @@ class _AddEventState extends State<AddEvent> {
     );
   }
 
+ Widget buildButtonBar(){
+   return ButtonBar(
+                  children: [
+                    buildButtonBarTile("Anuluj", Colors.red, goBack),
+                    SizedBox(
+                      width: 30,
+                    ),
+                    buildButtonBarTile(
+                        "Dodaj", Colors.lightGreenAccent, acceptAndValidate),
+                  ],
+                  alignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  buttonMinWidth: 150);
+ }
+
   Widget buildButtonBarTile(
       String text, Color color, GestureTapCallback onPressed) {
     return RaisedButton(
@@ -389,10 +393,6 @@ class _AddEventState extends State<AddEvent> {
   void goToNotificationPickPage() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => AddNotificationEvent(_event)));
-  }
-
-  void onBackPressed() {
-    goBack();
   }
 
   void acceptAndValidate() {
