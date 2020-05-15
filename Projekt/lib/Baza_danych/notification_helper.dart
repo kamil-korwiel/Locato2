@@ -43,7 +43,7 @@ class NotifiHelper {
           });
         }
       }
-      //Notifications_helper_background.ListOfTaskNotifi(task);
+      Notifications_helper_background.ListOfTaskNotifi(task);
     }
   }
 
@@ -66,7 +66,7 @@ class NotifiHelper {
           });
         }
       }
-      //Notifications_helper_background.ListOfEventNotifi(event);
+      Notifications_helper_background.ListOfEventNotifi(event);
     }
   }
 

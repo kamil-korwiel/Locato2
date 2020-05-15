@@ -5,12 +5,14 @@ import 'package:path_provider/path_provider.dart';
 class DatabaseHelper {
   static final _databaseName = "/Baza_danych";
   static final _databaseVersion = 1;
+  static int index;
 
   DatabaseHelper._privateConstructor();
   static DatabaseHelper instance;
 
   factory DatabaseHelper() {
     if (instance == null) {
+      index = 0;
       instance = DatabaseHelper._privateConstructor();
     }
     return instance;
@@ -26,7 +28,8 @@ class DatabaseHelper {
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = documentsDirectory.path + _databaseName;
-    print("path: " + path);
+    print("${index} path: " + path);
+    ++index;
     //deleteDatabase(path);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);

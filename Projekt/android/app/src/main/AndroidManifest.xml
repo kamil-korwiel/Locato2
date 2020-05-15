@@ -13,7 +13,7 @@
         <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
         android:name=".Application"
-        android:label="pageview"
+        android:label="Locato"
         android:icon="@mipmap/ic_launcher">
 
         <!-- Google Maps API-->

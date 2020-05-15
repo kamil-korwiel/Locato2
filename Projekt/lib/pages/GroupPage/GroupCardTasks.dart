@@ -36,10 +36,28 @@ class _GroupCardTasksState extends State<GroupCardTasks> {
           GroupCardItem(
             task,
             onPressedDone: () {
-              task.done = !task.done;
-              TaskHelper.updateDone(task);
+
+              if(task.localization.id != 0){
+                if(task.localization.isNearBy == true){
+                  task.done = !task.done;
+                  TaskHelper.updateDone(task);
+                }else{
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Nie jesteś bisko miejsca"),
+                          content: Text("Jeśli nie jsteś bisko miejsca zadania nie możesz go zakonczyć"),
+                        );
+                      });
+                }
+              }else{
+                task.done = !task.done;
+                TaskHelper.updateDone(task);
+              }
               setState(() {});
               groupCardState.setState(() {});
+
             },
             onPressedEdit: () {
               Navigator.of(context).push(

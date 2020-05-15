@@ -27,19 +27,19 @@ class _GroupCardState extends State<GroupCard> {
   @override
   void initState() {
     _list = List();
-    _downloadData();
+//    _downloadData();
 
     super.initState();
   }
 
-  void _downloadData() {
-    TaskHelper.listsID(widget.group.id).then((onList) {
-      if (onList != null) {
-        _list.addAll(onList);
-        setState(() {});
-      }
-    });
-  }
+//  void _downloadData() {
+//    TaskHelper.listsID(widget.group.id).then((onList) {
+//      if (onList != null) {
+//        _list.addAll(onList);
+//        setState(() {});
+//      }
+//    });
+//  }
 
   // Stary build bez FutureBuild ~Filip
   /*@override

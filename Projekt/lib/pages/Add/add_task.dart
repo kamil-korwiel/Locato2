@@ -7,6 +7,7 @@ import 'package:pageview/Baza_danych/localization_helper.dart';
 import 'package:pageview/Baza_danych/task_helper.dart';
 import 'package:pageview/Classes/Group.dart';
 import 'package:pageview/Classes/Localization.dart';
+import 'package:pageview/Classes/Notifi.dart';
 import 'package:pageview/Classes/Task.dart';
 
 import 'add_group.dart';
@@ -34,6 +35,7 @@ class _AddTaskState extends State<AddTask> {
   bool isLocalizationSelected;
   DateTime _terminData;
   DateTime _terminCzas;
+  DateTime _today;
 
   Task _task;
   List<Localization> listOfLocalization;
@@ -44,6 +46,7 @@ class _AddTaskState extends State<AddTask> {
     print("start");
     listOfLocalization = List();
     listOfGroup = List();
+    _today = DateTime.now();
 
     isNotificationEnabled = false;
     isDateSelected = false;
@@ -106,7 +109,7 @@ class _AddTaskState extends State<AddTask> {
               buildCustomButtonWithValidation(
                   timeColor,
                   (isTimeSelected)
-                      ? DateFormat("HH:mm").format(_terminCzas)
+                      ? DateFormat("hh:mm").format(_terminCzas)
                       : "Nie wybrano godziny",
                   Icons.access_time,
                   timePick,
@@ -494,6 +497,16 @@ class _AddTaskState extends State<AddTask> {
          print("Longitude: ${_task.localization.longitude}");
 //
        _task.listNotifi.forEach((t) => print(t.duration));
+
+      List<Notifi> listN  = List();
+      listN.addAll( _task.listNotifi);
+
+      for(Notifi element in listN){
+        if(_task.endTime.subtract(element.duration).isBefore(_today)){
+          print("delete: ${_task.endTime.subtract(element.duration)}");
+          _task.listNotifi.remove(element);
+        }
+      }
 //
         TaskHelper.add(_task).then((onvalue){
           GroupHelper.addlist(listOfGroup);

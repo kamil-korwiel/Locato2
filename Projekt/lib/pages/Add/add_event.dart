@@ -5,6 +5,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:pageview/Baza_danych/event_helper.dart';
 import 'package:pageview/Classes/Event.dart';
+import 'package:pageview/Classes/Notifi.dart';
 import 'add_notification.dart';
 
 class AddEvent extends StatefulWidget {
@@ -18,8 +19,9 @@ class _AddEventState extends State<AddEvent> {
   TextEditingController _controllerName;
   TextEditingController _controllerDesc;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  DateTime _today;
   DateTime _date;
+
   DateTime _time1;
   DateTime _time2;
   Color _dateColor;
@@ -34,6 +36,7 @@ class _AddEventState extends State<AddEvent> {
   void initState() {
 
     _event =  Event();
+    _today = DateTime.now();
     _controllerName = TextEditingController();
     _controllerDesc = TextEditingController();
     _dateColor = Colors.white;
@@ -98,7 +101,7 @@ class _AddEventState extends State<AddEvent> {
               buildCustomButtonWithValidation(
                   _time2Color,
                   (isTime2Selected)
-                      ? DateFormat("HH:mm").format(_time2)
+                      ? DateFormat("hh:mm").format(_time2)
                       : "Nie wybrano godziny zakończenia",
                   Icons.access_time,
                   endTimePick,
@@ -418,8 +421,7 @@ class _AddEventState extends State<AddEvent> {
           _time2Color = Colors.white;
 
           _event.name = _controllerName.value.text;
-          _event.description = _controllerDesc.text; 
-          //TODO tutaj teraz przypisuje godziny i przy print jest wszystko fajnie 
+          _event.description = _controllerDesc.text;
           _event.beginTime = DateTime(_date.year, _date.month, _date.day, _time1.hour, _time1.minute);
           _event.endTime = DateTime(_date.year, _date.month, _date.day, _time2.hour, _time2.minute);
 //            print("Name: "+_event.name);
@@ -429,6 +431,22 @@ class _AddEventState extends State<AddEvent> {
 //            print("Desc: "+_event.description);
 //            print("Notifi: ");
 //            _event.listNotifi.forEach((e) => print(e.duration));
+//          for(int i=0; i<_event.listNotifi.length; i++){
+//            if(_event.beginTime.subtract(_event.listNotifi[i].duration).isBefore(_today)){
+//              print("delete: ${_event.beginTime.subtract(_event.listNotifi[i].duration)}");
+//              _event.listNotifi.remove(_event.listNotifi[i].listNotifi);
+//            }
+//          }
+          List<Notifi> listN  = List();
+          listN.addAll( _event.listNotifi);
+
+          for(Notifi element in listN){
+            if(_event.beginTime.subtract(element.duration).isBefore(_today)){
+              print("delete: ${_event.beginTime.subtract(element.duration)}");
+              _event.listNotifi.remove(element);
+            }
+          }
+
           EventHelper.add(_event);
           Navigator.of(context).pop();
         } else {

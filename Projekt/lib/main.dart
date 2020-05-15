@@ -19,16 +19,18 @@ void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   DatabaseHelper();
-  Notifications_helper_background.initialize();
+  await Notifications_helper_background.init();
   await AndroidAlarmManager.initialize();
   await updateDataOnThisDay();
 
-  await AndroidAlarmManager.periodic(
-      Duration(minutes: 1), 0, checkLocationRadius);
+
 
   //AndroidAlarmManager.per
-  //AndroidAlarmManager.cancel(0);
+
   runApp(MyApp());
+  await AndroidAlarmManager.periodic(
+      Duration(minutes: 1), 0, checkLocationRadius);
+  //AndroidAlarmManager.cancel(0);
 }
 
 class MyApp extends StatelessWidget {
@@ -226,7 +228,9 @@ void checkLocationRadius() async {
   Position pos;
   int distance = 200;
   DatabaseHelper();
-  Notifications_helper_background.initialize();
+  Notifications_helper_background.init();
+
+
 
   pos = await Geolocator().getCurrentPosition();
   print("Obecna lokalizacja: " + pos.toString());
@@ -234,7 +238,7 @@ void checkLocationRadius() async {
   // DownloadData
   _listloc.addAll(await LocalizationHelper.lists());
   _listloc.removeWhere((l) => l.id == 0);
-
+  //Notifications_helper_background.now("TEST", pos.toString());
   if(_listloc.isNotEmpty){
     print("Length list loc: ${_listloc.length}");
 
@@ -243,6 +247,7 @@ void checkLocationRadius() async {
 
         dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
         print("Dystans pomiedzy punktami " + dist.toString());
+
 
         if(dist < distance){
           List<Task> _listtask = List();
