@@ -19,7 +19,11 @@ class GroupCardItem extends StatelessWidget {
       {this.onPressedDone, this.onPressedEdit, this.onPressedDelete}) {
     this.name = task.name;
     this.done = task.done;
-    this.date = DateFormat("yyyy-MM-dd hh:mm").format(task.endTime);
+    if (task.endTime != null) {
+      this.date = DateFormat("yyyy-MM-dd hh:mm").format(task.endTime);
+    } else {
+      this.date = "";
+    }
     this.localization = task.localization;
     this.description = task.description;
   }
@@ -61,33 +65,37 @@ class GroupCardItem extends StatelessWidget {
                   ),
                 ),
                 // Lokalizacja zadania
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.location_on, size: 12.0),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: Text(
-                        txt,
+                localization.city != null
+                    ? Row(
+                        children: <Widget>[
+                          Icon(Icons.location_on, size: 12.0),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Text(
+                              txt,
+                              style: TextStyle(
+                                color: Color(0xFFB6B2DF),
+                                fontFamily: 'Poppins',
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                // Data zadania
+                date.isNotEmpty
+                    ? Text(
+                        date,
                         style: TextStyle(
                           color: Color(0xFFB6B2DF),
                           fontFamily: 'Poppins',
                           fontSize: 12.0,
                           fontWeight: FontWeight.w300,
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                // Data zadania
-                Text(
-                  date,
-                  style: TextStyle(
-                    color: Color(0xFFB6B2DF),
-                    fontFamily: 'Poppins',
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
+                      )
+                    : Container(),
               ],
             ),
             Container(

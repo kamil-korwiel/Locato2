@@ -198,8 +198,7 @@ class DatabaseHelper {
           "${m['Miasto'].toString()}\t"
           "${m['Ulica'].toString()}\t"
           "${m['JestesBlisko'].toString()}\t"
-          "${m['WyslanoPowiadomienie'].toString()}"
-      );
+          "${m['WyslanoPowiadomienie'].toString()}");
     });
     print("\nID_Powiadomienia\t" "ID_Task\t" "ID_Event\t" "Czas\t");
     mapNotifi.forEach((m) {
@@ -215,7 +214,8 @@ class DatabaseHelper {
     return Sqflite.firstIntValue(await db.rawQuery(q));
   }
 
-  Future<int> update(String table, String columnId, int id, Map<String, dynamic> row) async {
+  Future<int> update(
+      String table, String columnId, int id, Map<String, dynamic> row) async {
     Database db = await instance.database;
 
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);

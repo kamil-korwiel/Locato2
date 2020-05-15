@@ -9,13 +9,12 @@ import 'package:pageview/pages/GroupPage/GroupCardTasks.dart';
 //_GroupCardState groupCardState;
 
 class GroupCard extends StatefulWidget {
-
 //  _GroupCardState createState() {
 //    groupCardState = _GroupCardState();
 //    return groupCardState;
 //  }
   @override
-  _GroupCardState createState() =>  _GroupCardState();
+  _GroupCardState createState() => _GroupCardState();
   Group group;
 
   GroupCard(this.group);
@@ -28,7 +27,7 @@ class _GroupCardState extends State<GroupCard> {
   @override
   void initState() {
     _list = List();
-    //_downloadData();
+    _downloadData();
 
     super.initState();
   }
