@@ -1,6 +1,6 @@
 # pageview
 
-A new Flutter project.
+A Mobile App of a team nr 16.
 
 ## Getting Started
 
