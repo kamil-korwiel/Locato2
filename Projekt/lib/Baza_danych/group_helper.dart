@@ -1,5 +1,5 @@
-import 'package:pageview/Classes/Group.dart';
-import 'package:pageview/Classes/Task.dart';
+import 'package:Locato/Classes/Group.dart';
+import 'package:Locato/Classes/Task.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'database_helper.dart';

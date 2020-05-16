@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:pageview/Baza_danych/group_helper.dart';
-import 'package:pageview/Classes/Group.dart';
-import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/Add/add_task.dart';
+import 'package:Locato/Baza_danych/group_helper.dart';
+import 'package:Locato/Classes/Group.dart';
+import 'package:Locato/Classes/Task.dart';
+import 'package:Locato/pages/Add/add_task.dart';
 
 class AddGroup extends StatefulWidget {
   @override

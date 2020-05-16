@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:pageview/Baza_danych/localization_helper.dart';
-import 'package:pageview/Classes/Localization.dart';
-import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/Add/add_location2.dart';
+import 'package:Locato/Baza_danych/localization_helper.dart';
+import 'package:Locato/Classes/Localization.dart';
+import 'package:Locato/Classes/Task.dart';
+import 'package:Locato/pages/Add/add_location2.dart';
 
 class AddLocalization extends StatefulWidget {
   @override

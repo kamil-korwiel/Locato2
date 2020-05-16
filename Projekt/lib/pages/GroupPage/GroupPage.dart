@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pageview/Baza_danych/group_helper.dart';
-import 'package:pageview/Classes/Group.dart';
+import 'package:Locato/Baza_danych/group_helper.dart';
+import 'package:Locato/Classes/Group.dart';
 import 'GroupCard.dart';
 
 _GroupTaskPageState groupCardState;

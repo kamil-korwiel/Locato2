@@ -2,12 +2,12 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:pageview/Baza_danych/task_helper.dart';
-import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/Add/add_event.dart';
-import 'package:pageview/pages/Add/add_task.dart';
-import 'package:pageview/pages/HomePage.dart';
-import 'package:pageview/pages/GroupPage/GroupPage.dart';
+import 'package:Locato/Baza_danych/task_helper.dart';
+import 'package:Locato/Classes/Task.dart';
+import 'package:Locato/pages/Add/add_event.dart';
+import 'package:Locato/pages/Add/add_task.dart';
+import 'package:Locato/pages/HomePage.dart';
+import 'package:Locato/pages/GroupPage/GroupPage.dart';
 
 import 'Background/notification_helper_background.dart';
 import 'Baza_danych/database_helper.dart';

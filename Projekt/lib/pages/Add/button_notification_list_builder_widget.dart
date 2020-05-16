@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:pageview/Baza_danych/notification_helper.dart';
-import 'package:pageview/Classes/Notifi.dart';
+import 'package:Locato/Baza_danych/notification_helper.dart';
+import 'package:Locato/Classes/Notifi.dart';
 import 'package:duration/duration.dart';
 
 class ListNotifi extends StatefulWidget {

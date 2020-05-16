@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Classes/Notifi.dart';
-import 'package:pageview/Classes/Task.dart';
+import 'package:Locato/Classes/Event.dart';
+import 'package:Locato/Classes/Notifi.dart';
+import 'package:Locato/Classes/Task.dart';
 import 'button_notification_list_builder_widget.dart';
 
 class AddNotificationTask extends StatefulWidget {

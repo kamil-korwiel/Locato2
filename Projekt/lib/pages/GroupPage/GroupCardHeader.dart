@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pageview/Classes/Group.dart';
+import 'package:Locato/Classes/Group.dart';
 
 class GroupCardHeader extends StatelessWidget {
   var procent = 0.1;

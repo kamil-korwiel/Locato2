@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/Classes/Event.dart';
+import 'package:Locato/Classes/Event.dart';
 
 class EventCardItem extends StatefulWidget {
   @override

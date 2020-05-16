@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
-import 'package:pageview/Background/notification_helper_background.dart';
-import 'package:pageview/Baza_danych/notification_helper.dart';
-import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Classes/Notifi.dart';
+import 'package:Locato/Background/notification_helper_background.dart';
+import 'package:Locato/Baza_danych/notification_helper.dart';
+import 'package:Locato/Classes/Event.dart';
+import 'package:Locato/Classes/Notifi.dart';
 
 import 'database_helper.dart';
 

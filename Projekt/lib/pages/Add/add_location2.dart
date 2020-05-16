@@ -8,7 +8,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:pageview/Classes/Localization.dart';
+import 'package:Locato/Classes/Localization.dart';
 
 // Autosugestia adresow
 Future<List> fetchAddress(String query, LatLng position) async {

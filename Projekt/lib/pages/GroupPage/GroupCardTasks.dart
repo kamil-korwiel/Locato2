@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pageview/Baza_danych/task_helper.dart';
-import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/Update/update_task.dart';
+import 'package:Locato/Baza_danych/task_helper.dart';
+import 'package:Locato/Classes/Task.dart';
+import 'package:Locato/pages/Update/update_task.dart';
 import 'GroupCardItem.dart';
 import 'GroupPage.dart';
 

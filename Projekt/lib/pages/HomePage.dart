@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:pageview/Baza_danych/event_helper.dart';
+import 'package:Locato/Baza_danych/event_helper.dart';
 
-import 'package:pageview/Classes/Event.dart';
+import 'package:Locato/Classes/Event.dart';
 
 import 'HomePage/EventCard.dart';
 

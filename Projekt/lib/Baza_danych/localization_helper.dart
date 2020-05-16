@@ -1,4 +1,4 @@
-import 'package:pageview/Classes/Localization.dart';
+import 'package:Locato/Classes/Localization.dart';
 import 'package:sqflite/sqflite.dart';
 import 'database_helper.dart';
 

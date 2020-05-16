@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:intl/intl.dart';
-import 'package:pageview/Baza_danych/group_helper.dart';
-import 'package:pageview/Baza_danych/localization_helper.dart';
-import 'package:pageview/Baza_danych/notification_helper.dart';
-import 'package:pageview/Baza_danych/task_helper.dart';
-import 'package:pageview/Classes/Group.dart';
-import 'package:pageview/Classes/Localization.dart';
-import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/pages/Add/add_group.dart';
-import 'package:pageview/pages/Add/add_localization.dart';
-import 'package:pageview/pages/Add/add_notification.dart';
+import 'package:Locato/Baza_danych/group_helper.dart';
+import 'package:Locato/Baza_danych/localization_helper.dart';
+import 'package:Locato/Baza_danych/notification_helper.dart';
+import 'package:Locato/Baza_danych/task_helper.dart';
+import 'package:Locato/Classes/Group.dart';
+import 'package:Locato/Classes/Localization.dart';
+import 'package:Locato/Classes/Task.dart';
+import 'package:Locato/pages/Add/add_group.dart';
+import 'package:Locato/pages/Add/add_localization.dart';
+import 'package:Locato/pages/Add/add_notification.dart';
 
 
 

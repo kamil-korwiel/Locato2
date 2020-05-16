@@ -2,10 +2,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/Baza_danych/event_helper.dart';
-import 'package:pageview/Baza_danych/notification_helper.dart';
-import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/pages/Add/add_notification.dart';
+import 'package:Locato/Baza_danych/event_helper.dart';
+import 'package:Locato/Baza_danych/notification_helper.dart';
+import 'package:Locato/Classes/Event.dart';
+import 'package:Locato/pages/Add/add_notification.dart';
 
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

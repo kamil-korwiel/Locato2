@@ -1,10 +1,10 @@
 import 'package:intl/intl.dart';
-import 'package:pageview/Background/notification_helper_background.dart';
-import 'package:pageview/Baza_danych/group_helper.dart';
-import 'package:pageview/Baza_danych/localization_helper.dart';
-import 'package:pageview/Classes/Group.dart';
-import 'package:pageview/Classes/Localization.dart';
-import 'package:pageview/Classes/Task.dart';
+import 'package:Locato/Background/notification_helper_background.dart';
+import 'package:Locato/Baza_danych/group_helper.dart';
+import 'package:Locato/Baza_danych/localization_helper.dart';
+import 'package:Locato/Classes/Group.dart';
+import 'package:Locato/Classes/Localization.dart';
+import 'package:Locato/Classes/Task.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'database_helper.dart';

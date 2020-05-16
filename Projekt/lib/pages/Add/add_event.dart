@@ -1,11 +1,10 @@
 import 'dart:ui';
-import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/Baza_danych/event_helper.dart';
-import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Classes/Notifi.dart';
+import 'package:Locato/Baza_danych/event_helper.dart';
+import 'package:Locato/Classes/Event.dart';
+import 'package:Locato/Classes/Notifi.dart';
 import 'add_notification.dart';
 
 class AddEvent extends StatefulWidget {

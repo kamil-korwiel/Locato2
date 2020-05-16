@@ -1,4 +1,4 @@
-import 'package:pageview/Classes/Notifi.dart';
+import 'package:Locato/Classes/Notifi.dart';
 
 
 class Event {

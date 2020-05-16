@@ -2,10 +2,10 @@ import 'dart:isolate';
 import 'dart:math';
 import 'package:duration/duration.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:pageview/Baza_danych/notification_helper.dart';
-import 'package:pageview/Classes/Event.dart';
-import 'package:pageview/Classes/Notifi.dart';
-import 'package:pageview/Classes/Task.dart';
+import 'package:Locato/Baza_danych/notification_helper.dart';
+import 'package:Locato/Classes/Event.dart';
+import 'package:Locato/Classes/Notifi.dart';
+import 'package:Locato/Classes/Task.dart';
 
 
 abstract class Notifications_helper_background{

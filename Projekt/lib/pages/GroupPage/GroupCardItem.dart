@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pageview/Classes/Task.dart';
-import 'package:pageview/Classes/Localization.dart';
+import 'package:Locato/Classes/Task.dart';
+import 'package:Locato/Classes/Localization.dart';
 
 class GroupCardItem extends StatelessWidget {
   final Function onPressedDone;
