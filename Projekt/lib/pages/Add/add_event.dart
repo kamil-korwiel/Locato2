@@ -9,24 +9,27 @@ import 'add_notification.dart';
 
 class AddEvent extends StatefulWidget {
   @override
-  _AddEventState createState() => _AddEventState();
+  AddEventState createState() => AddEventState();
 
   AddEvent();
 }
 
-class _AddEventState extends State<AddEvent> {
+class AddEventState extends State<AddEvent> {
+  
+  ///Stores user's input in a textfield.
   TextEditingController _controllerName;
   TextEditingController _controllerDesc;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime _today;
   DateTime _date;
-
   DateTime _time1;
   DateTime _time2;
   Color _dateColor;
   Color _time1Color;
   Color _time2Color;
   Event _event;
+  
+  ///Default value is false, changes after user pick a date.
   bool isDateSelected;
   bool isTime1Selected;
   bool isTime2Selected;
@@ -45,11 +48,7 @@ class _AddEventState extends State<AddEvent> {
     isDateSelected = false;
     isTime1Selected = false;
     isTime2Selected = false;
-//
-//    if (widget.update != null) {
-//      _controllerName = TextEditingController(text: _name);
-//      _controllerDesc = TextEditingController(text: _description);
-//    }
+
     super.initState();
   }
 
@@ -61,7 +60,7 @@ class _AddEventState extends State<AddEvent> {
           'Dodaj wydarzenie',
           style: TextStyle(color: Colors.white),
         ),
-        // tu kontrolujesz przycisk wstecz
+        /// tu kontrolujesz przycisk wstecz
         leading: new IconButton(
             icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
@@ -72,11 +71,11 @@ class _AddEventState extends State<AddEvent> {
           child: ListView(
             children: <Widget>[
               buildSpace(),
-              //textfield z nazwa
+              ///textfield z nazwa
               buildCustomTextFieldwithValidation("Nazwa",
                   "Wprowadź nazwę swojego wydarzenia", _controllerName),
               buildSpace(),
-              //button z data
+              ///button z data
               buildCustomButtonWithValidation(
                   _dateColor,
                   (isDateSelected)
@@ -86,7 +85,7 @@ class _AddEventState extends State<AddEvent> {
                   datePick,
                   buildClearButton(clearDate)),
               buildSpace(),
-              //button z rozpoczeciem
+              ///button z rozpoczeciem
               buildCustomButtonWithValidation(
                   _time1Color,
                   (isTime1Selected)
@@ -96,7 +95,7 @@ class _AddEventState extends State<AddEvent> {
                   startTimePick,
                   buildClearButton(clearTime1)),
               buildSpace(),
-              //button z zakonczeniem
+              ///button z zakonczeniem
               buildCustomButtonWithValidation(
                   _time2Color,
                   (isTime2Selected)
@@ -106,7 +105,7 @@ class _AddEventState extends State<AddEvent> {
                   endTimePick,
                   buildClearButton(clearTime2)),
               buildSpace(),
-              //button z notyfikacjami
+              ///button z notyfikacjami
               buildCustomButton(
                   ((_event.listNotifi).isEmpty)
                       ? "Nie wybrano powiadomień"
@@ -125,7 +124,6 @@ class _AddEventState extends State<AddEvent> {
                   goToNotificationPickPage,
                   buildClearButton(clearNotifiList)),
               buildSpace(),
-              //textfield z opisem
               buildCustomTextField("Opis", "Wpisz opis swojego wydarzenia",
                   "Pole jest opcjonalne", _controllerDesc),
               buildSpace(),
@@ -343,7 +341,6 @@ class _AddEventState extends State<AddEvent> {
         showTitleActions: true,
         minTime: DateTime(2020, 1, 1),
         maxTime: DateTime(2025, 12, 31), onConfirm: (date) {
-      /// tu jest  save data
       isDateSelected = true;
       _date = date;
       setState(() {});
@@ -362,7 +359,6 @@ class _AddEventState extends State<AddEvent> {
         ),
         showSecondsColumn: false,
         showTitleActions: true, onConfirm: (time) {
-      // print('confirm $time');
       isTime1Selected = true;
       _time1 = time;
       setState(() {});
@@ -423,19 +419,7 @@ class _AddEventState extends State<AddEvent> {
           _event.description = _controllerDesc.text;
           _event.beginTime = DateTime(_date.year, _date.month, _date.day, _time1.hour, _time1.minute);
           _event.endTime = DateTime(_date.year, _date.month, _date.day, _time2.hour, _time2.minute);
-//            print("Name: "+_event.name);
-    //        print("BeginTime: "+_event.beginTime.toString());
-  //          print("EndTime: "+_event.endTime.toString());
-//            print("Name: "+_event.cycle);
-//            print("Desc: "+_event.description);
-//            print("Notifi: ");
-//            _event.listNotifi.forEach((e) => print(e.duration));
-//          for(int i=0; i<_event.listNotifi.length; i++){
-//            if(_event.beginTime.subtract(_event.listNotifi[i].duration).isBefore(_today)){
-//              print("delete: ${_event.beginTime.subtract(_event.listNotifi[i].duration)}");
-//              _event.listNotifi.remove(_event.listNotifi[i].listNotifi);
-//            }
-//          }
+
           List<Notifi> listN  = List();
           listN.addAll( _event.listNotifi);
 

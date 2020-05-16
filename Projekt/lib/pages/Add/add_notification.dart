@@ -40,7 +40,6 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
       appBar: AppBar(
         title:
             Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
-        // tu kontrolujesz przycisk wstecz
         leading: new IconButton(
             icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
@@ -236,10 +235,6 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
     if (notthesame) {
       _notifilist.add(Notifi(duration: duration));
     }
-//    }
-//      print(
-//          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idTask:${_notifilist.last.idTask} time: ${_notifilist.last.duration.toString()}");
-
     setState(() {});
   }
 
@@ -298,7 +293,6 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
       appBar: AppBar(
         title:
         Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
-        // tu kontrolujesz przycisk wstecz
         leading: new IconButton(
             icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
@@ -494,10 +488,6 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     if (notthesame) {
       _notifilist.add(Notifi(duration: duration));
     }
-//    }
-//      print(
-//          "id:${_notifilist.last.id} idEvent:${_notifilist.last.idEvent} idevent:${_notifilist.last.idevent} time: ${_notifilist.last.duration.toString()}");
-
     setState(() {});
   }
 

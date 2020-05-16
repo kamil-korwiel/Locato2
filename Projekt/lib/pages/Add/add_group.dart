@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:Locato/Baza_danych/group_helper.dart';
 import 'package:Locato/Classes/Group.dart';
 import 'package:Locato/Classes/Task.dart';
-import 'package:Locato/pages/Add/add_task.dart';
 
 class AddGroup extends StatefulWidget {
   @override
@@ -29,11 +28,9 @@ class _AddGroupState extends State<AddGroup> {
     _downloadData();
 
     super.initState();
-    //print(widget.task.idGroup);
   }
 
   void _downloadData() {
-//    print("lenght of list before ${widget.listOfGroup.length}");
     GroupHelper.lists().then((onList) {
       if (onList != null) {
         downloadlist = onList;
@@ -165,7 +162,6 @@ class _AddGroupState extends State<AddGroup> {
   }
 
   Widget buildRemoveButton(int _index) {
-//    if (list[_index].id == null) {
       return SizedBox(
         width: 30,
         child: IconButton(
@@ -203,9 +199,6 @@ class _AddGroupState extends State<AddGroup> {
           },
         ),
       );
-//    } else {
-//      return Container();
-//    }
   }
 
   Widget buildCustomButton(String text, void action()) {
@@ -235,22 +228,16 @@ class _AddGroupState extends State<AddGroup> {
     );
   }
 
-  //TODO KAMIL - gdy nie wybierzesz grupy a tylko utworzysz to SelectedGroup jest null i nie dziala potwierdz
-
   void goBack() {
     widget.listOfGroup.clear();
     list.forEach((g) {
       print("id: ${g.id.toString()} added: ${g.name} bool: ${g.isSelected}");
       if (g.id == null && g.isSelected == false) {
-        //print("added: ${g.name} bool: ${g.isSelected}");
         widget.listOfGroup.add(g);
         print(g.name);
         //addTaskState.setState((){});
       }
     });
-
-//    print("lenght of list after ${widget.listOfGroup.length}");
-
     Navigator.pop(context);
   }
 

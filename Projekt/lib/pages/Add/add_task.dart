@@ -59,16 +59,9 @@ class _AddTaskState extends State<AddTask> {
       done: false,
     );
 
-//     _terminData = DateTime();
-//     _terminCzas = DateTime();
-
     dateColor = Colors.white;
     timeColor = Colors.white;
 
-//    if (widget.update != null) {
-//      _controllerName = TextEditingController(text: _name);
-//      controllerDesc = TextEditingController(text: _description);
-//    }
     super.initState();
   }
 
@@ -80,7 +73,6 @@ class _AddTaskState extends State<AddTask> {
           'Dodaj zadanie',
           style: TextStyle(color: Colors.white),
         ),
-        // tu kontrolujesz przycisk wstecz
         leading: new IconButton(
             icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
@@ -91,11 +83,9 @@ class _AddTaskState extends State<AddTask> {
           child: ListView(
             children: <Widget>[
               buildSpace(),
-              //textfield z nazwa
               buildCustomTextFieldwithValidation(
                   "Nazwa", "Podaj nazwę nowego zadania", _controllerName),
               buildSpace(),
-              //button z data
               buildCustomButtonWithValidation(
                   dateColor,
                   (isDateSelected)
@@ -105,7 +95,6 @@ class _AddTaskState extends State<AddTask> {
                   datePick,
                   buildClearButton(clearDate)),
               buildSpace(),
-              //button z godzina
               buildCustomButtonWithValidation(
                   timeColor,
                   (isTimeSelected)
@@ -115,7 +104,6 @@ class _AddTaskState extends State<AddTask> {
                   timePick,
                   buildClearButton(clearTime)),
               buildSpace(),
-              //button grupa
               buildCustomButton(
                   (_task.group.id == 0)
                       ? "Nie wybrano grupy"
@@ -124,7 +112,6 @@ class _AddTaskState extends State<AddTask> {
                   goToGroupPickPage,
                   buildClearButton(clearGroup)),
               buildSpace(),
-              //button powiadomienia
               buildCustomNotificationButton(
                 ((_task.listNotifi).isEmpty)
                     ? "Nie wybrano powiadomień"
@@ -471,7 +458,6 @@ class _AddTaskState extends State<AddTask> {
     if (_formKey.currentState.validate()) {
         _task.name = _controllerName.text;
         _task.description = controllerDesc.text;
-        //TODO zrobic zeby data nie byla obowiazkowa (ogolnie)
       if(isTimeSelected && isDateSelected) {
         print("isTimeSelected: $isTimeSelected");
         print("isDateSelected: $isDateSelected");
@@ -479,24 +465,6 @@ class _AddTaskState extends State<AddTask> {
       }else{
         _task.listNotifi.clear();
       }
-
-//        if (isNotificationEnabled)
-//          clearNotifiList(); // clear listy powiadomien jesli ktos usunie terminy i bedzie dodawal task
-
-        //print(_task.name + " " + "Opis: " + _task.description+ "Group: "+ _task.idGroup.toString());
-         print("");
-         print("Name: "+_task.name);
-         print("EndTask: "+_task.endTime.toString());
-         print("Desc: ${_task.description}");
-         print("idGroup: ${_task.group.id}");
-         print("Grupa: ${_task.group.name}");
-         print("idLokalizacja: ${_task.localization.id}");
-         print("Localization: ${_task.localization.name}");
-         print("City: ${_task.localization.city}");
-         print("Latitude: ${_task.localization.latitude}");
-         print("Longitude: ${_task.localization.longitude}");
-//
-       _task.listNotifi.forEach((t) => print(t.duration));
 
       List<Notifi> listN  = List();
       listN.addAll( _task.listNotifi);
@@ -507,14 +475,14 @@ class _AddTaskState extends State<AddTask> {
           _task.listNotifi.remove(element);
         }
       }
-//
+
         TaskHelper.add(_task).then((onvalue){
           GroupHelper.addlist(listOfGroup);
           LocalizationHelper.addlist(listOfLocalization);
           Navigator.of(context).pop();
         });
 
-//
+
 
 
 

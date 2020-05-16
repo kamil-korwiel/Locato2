@@ -18,8 +18,6 @@ class AddLocalization extends StatefulWidget {
 class _AddLocalizationState extends State<AddLocalization> {
   List<Localization> localizationlist;
   List<Localization> downloadlist;
-//  int currentIndex = 0;
-//  int length = 0;
 
   @override
   void initState() {
@@ -61,7 +59,6 @@ class _AddLocalizationState extends State<AddLocalization> {
           "Dodaj Lokalizację",
           style: TextStyle(color: Colors.white),
         ),
-        // tu kontrolujesz przycisk wstecz
         leading: new IconButton(
             icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
       ),
@@ -117,7 +114,6 @@ class _AddLocalizationState extends State<AddLocalization> {
   }
 
   Widget buildRemoveButton(int _index) {
-    // if (localizationlist[_index].id == null) {
     return SizedBox(
       width: 30,
       child: IconButton(
@@ -158,9 +154,6 @@ class _AddLocalizationState extends State<AddLocalization> {
         },
       ),
     );
-    // } else {
-    //    return Container();
-    // }
   }
 
   Widget buildCustomButton(String text, void action()) {
@@ -213,7 +206,6 @@ class _AddLocalizationState extends State<AddLocalization> {
   }
 
   void removeFromList(int _index) {
-    //TODO sprawdz która jest z bazy i dopiero wtedy wywal
     localizationlist.removeAt(_index);
     setState(() {});
   }
