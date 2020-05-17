@@ -15,46 +15,33 @@ class AddEvent extends StatefulWidget {
 
 class AddEventState extends State<AddEvent> {
   
-  ///Stores user's input in a TextFormField.
+///Stores user's input in a TextFormField.
   TextEditingController _controllerName;
-
-   ///Stores user's input in a TextFormField.
+///Stores user's input in a TextFormField.
   TextEditingController _controllerDesc;
-
-  ///Individual key for a Form widget, used to validate user's input.
+///Individual key for a Form widget, used to validate user's input.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  ///Stores current date;
+///Stores current date;
   DateTime _today;
-
-  ///Stores event's date.
+///Stores event's date.
   DateTime _date;
-
-  ///Stores event's starting time.
+///Stores event's starting time.
   DateTime _time1;
-
-  ///Stores event's end time.
+///Stores event's end time.
   DateTime _time2;
-
-  ///Stores color of a button displaying event's date.
+///Stores color of a button displaying event's date.
   Color _dateColor;
-
-  ///Stores color of a button displaying event's starting time.
+///Stores color of a button displaying event's starting time.
   Color _time1Color;
-
-  ///Stores color of a button displaying event's end time.
+///Stores color of a button displaying event's end time.
   Color _time2Color;
-
-  ///Object of an Event class.
+///Object of an Event class.
   Event _event;
-
-  ///Default value is false, changes after user picks a date.
+///Default value is false, changes after user picks a date.
   bool isDateSelected;
-
-  ///Default value is false, changes after user picks an event's starting time.
+///Default value is false, changes after user picks an event's starting time.
   bool isTime1Selected;
-
-  ///Default value is false, changes after user picks an event's end time.
+///Default value is false, changes after user picks an event's end time.
   bool isTime2Selected;
 
   @override
@@ -153,15 +140,15 @@ class AddEventState extends State<AddEvent> {
     );
   }
 
-  ///Builds a TextFormField with a validation.
-  ///Checks if user did fill the field.
-  ///On empty field returns a message.
+///Builds a TextFormField with a validation.
+///Checks if user did fill the field.
+///On empty field returns a message.
   Widget buildCustomTextFieldwithValidation(
-    ///Stores text shown on the label of a TextFormField.
+///Stores text shown on the label of a TextFormField.
       String label,
-    ///Stores text shown inside the TextFormField as a hint.
+///Stores text shown inside the TextFormField as a hint.
        String hint,
-    ///Used to control user's input.
+///Used to control user's input.
         TextEditingController control) {
     return TextFormField(
         controller: control,
