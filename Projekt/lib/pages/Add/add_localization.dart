@@ -9,14 +9,21 @@ class AddLocalization extends StatefulWidget {
   @override
   _AddLocalizationState createState() => _AddLocalizationState();
 
+  ///Element of a Task class.
   Task task;
+
+  ///List of localizations which will be added to a task.
   List<Localization> listOfLocal;
 
+  ///Adds localization.
   AddLocalization(this.task, this.listOfLocal);
 }
 
 class _AddLocalizationState extends State<AddLocalization> {
+  ///List of localizations created by user.
   List<Localization> localizationlist;
+
+  ///List of localizations from data base.
   List<Localization> downloadlist;
 
   @override
@@ -28,12 +35,13 @@ class _AddLocalizationState extends State<AddLocalization> {
     super.initState();
   }
 
+  ///Downloads list of a localistions from data base.
   void _downloadData() {
     LocalizationHelper.lists().then((onList) {
       if (onList != null) {
         downloadlist = onList;
 
-        if(0 != widget.task.localization.id){
+        if (0 != widget.task.localization.id) {
           localizationlist.add(widget.task.localization);
         }
         downloadlist.removeAt(0);
@@ -59,8 +67,8 @@ class _AddLocalizationState extends State<AddLocalization> {
           "Dodaj Lokalizację",
           style: TextStyle(color: Colors.white),
         ),
-        leading: new IconButton(
-            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        leading:
+            new IconButton(icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -74,6 +82,7 @@ class _AddLocalizationState extends State<AddLocalization> {
     );
   }
 
+  ///Builds a Listview with a tiles containing every localization created by user.
   Widget buildList() {
     return new ListView.builder(
         physics: ScrollPhysics(),
@@ -92,16 +101,14 @@ class _AddLocalizationState extends State<AddLocalization> {
                     ),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                    Container(
-                      child: Text(" " +
-                          localizationlist[index]
-                              .name
-                              .toString()),
-                    ),
-                    buildRemoveButton(index),
-                  ]),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                              " " + localizationlist[index].name.toString()),
+                        ),
+                        buildRemoveButton(index),
+                      ]),
                   color: localizationlist[index].isSelected
                       ? Color(0xFF333366)
                       : Colors.transparent,
@@ -113,50 +120,61 @@ class _AddLocalizationState extends State<AddLocalization> {
         });
   }
 
-  Widget buildRemoveButton(int _index) {
+  ///Builds a button to remove a localization from list.
+  ///Contains a warning about consequences of removing an element.
+  Widget buildRemoveButton(
+
+      ///Stores id of a list element.
+      int _index) {
     return SizedBox(
       width: 30,
       child: IconButton(
         color: Colors.white,
         icon: Icon(Icons.clear),
         onPressed: () {
-          if (localizationlist[_index].id != null){
-
+          if (localizationlist[_index].id != null) {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: Text("Uwaga"),
-                    content: Text("Usuniecie tego rekordu doprowadzi do Usunięcia w każdym innym Zadaniu Lokalizacji"),
+                    content: Text(
+                        "Usuniecie tego rekordu doprowadzi do Usunięcia w każdym innym Zadaniu Lokalizacji"),
                     actions: <Widget>[
                       FlatButton(
                         child: Text("OK"),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).pop();
-                          LocalizationHelper.deleteAndReplaceIdTask(localizationlist[_index].id);
+                          LocalizationHelper.deleteAndReplaceIdTask(
+                              localizationlist[_index].id);
                           removeFromList(_index);
                         },
                       ),
                       FlatButton(
                         child: Text("Anuluj"),
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
                     ],
                   );
                 });
-
-          }else{
+          } else {
             removeFromList(_index);
           }
-
         },
       ),
     );
   }
 
-  Widget buildCustomButton(String text, void action()) {
+  ///Builds a button used to display every localization created by user.
+  Widget buildCustomButton(
+
+      ///Stores a text displayed inside the button.
+      String text,
+
+      ///Receives a void function which is getting used after button pressed.
+      GestureTapCallback onPressed) {
     return RaisedButton(
       color: Color(0xFF333366),
       shape: RoundedRectangleBorder(
@@ -165,9 +183,7 @@ class _AddLocalizationState extends State<AddLocalization> {
           color: Colors.white,
         ),
       ),
-      onPressed: () {
-        action();
-      },
+      onPressed: onPressed,
       child: Text(
         '$text',
         style: TextStyle(
@@ -177,12 +193,14 @@ class _AddLocalizationState extends State<AddLocalization> {
     );
   }
 
+  ///Builds a space between widgets in a column.
   Widget buildSpace() {
     return SizedBox(
       height: 10.0,
     );
   }
 
+  ///Takes user to previous page.
   void goBack() {
     widget.listOfLocal.clear();
     localizationlist.forEach((g) {
@@ -196,20 +214,22 @@ class _AddLocalizationState extends State<AddLocalization> {
     setState(() {});
   }
 
-  void onBackPressed() {
-    goBack();
-  }
-
+  ///Takes user to localization pick page.
   void goToLocationPickPage() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => AddLocation(localizationlist)));
   }
 
-  void removeFromList(int _index) {
+  ///Removes an element from a list.
+  void removeFromList(
+
+      ///Stores id of a list element.
+      int _index) {
     localizationlist.removeAt(_index);
     setState(() {});
   }
 
+  ///Checks if localization is selected by user.
   void checkifselected(_index) {
     if (localizationlist[_index].isSelected == true) {
       localizationlist[_index].isSelected = false;

@@ -24,21 +24,49 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+  ///Individual key for a Form widget, used to validate user's input.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  ///Stores user's input in a TextFormField.
   TextEditingController _controllerName = TextEditingController();
+
+  ///Stores user's input in a TextFormField.
   TextEditingController controllerDesc = TextEditingController();
+
+  ///Stores color of a button displaying task's date.
   Color dateColor;
+
+  ///Stores color of a button displaying task's time.
   Color timeColor;
+
+  ///Default value is false, changes after user picks time and date.
   bool isNotificationEnabled;
+
+  ///Default value is false, changes after user picks time.
   bool isTimeSelected;
+
+  ///Default value is false, changes after user picks a date.
   bool isDateSelected;
+
+  ///Default value is false, changes after  sets a localization.
   bool isLocalizationSelected;
+
+  ///Stores task's date.
   DateTime _terminData;
+
+  ///Stores task's time.
   DateTime _terminCzas;
+
+  ///Stores current date;
   DateTime _today;
 
+  ///An object of a class Task.
   Task _task;
+
+  ///List of localizations created by user.
   List<Localization> listOfLocalization;
+
+  ///List of groups created by user.
   List<Group> listOfGroup;
 
   @override
@@ -73,8 +101,8 @@ class _AddTaskState extends State<AddTask> {
           'Dodaj zadanie',
           style: TextStyle(color: Colors.white),
         ),
-        leading: new IconButton(
-            icon: Icon(Icons.arrow_back), onPressed: goBack),
+        leading:
+            new IconButton(icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -149,23 +177,33 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildButtonBar(){
+  ///Builds a row with two buttons inside of it.
+  Widget buildButtonBar() {
     return ButtonBar(
-                  children: [
-                    buildButtonBarTile("Anuluj", Colors.red, goBack),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    buildButtonBarTile(
-                        "Dodaj", Colors.lightGreenAccent, acceptAndValidate)
-                  ],
-                  alignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  buttonMinWidth: 150);
+        children: [
+          buildButtonBarTile("Anuluj", Colors.red, goBack),
+          SizedBox(
+            width: 30,
+          ),
+          buildButtonBarTile(
+              "Dodaj", Colors.lightGreenAccent, acceptAndValidate)
+        ],
+        alignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        buttonMinWidth: 150);
   }
 
+  ///Builds a TextFormField with validation.
   Widget buildCustomTextFieldwithValidation(
-      String label, String hint, TextEditingController control) {
+
+      ///Stores text shown on the label of a TextFormField.
+      String label,
+
+      ///Stores text shown inside TextFormField as a hint.
+      String hint,
+
+      ///Used to control user's input.
+      TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
@@ -199,7 +237,11 @@ class _AddTaskState extends State<AddTask> {
         });
   }
 
-  Widget buildClearButton(GestureTapCallback onPressed) {
+  ///Builds a button responsible for clearing data.
+  Widget buildClearButton(
+
+      ///Receives a void function which is getting used after button pressed.
+      GestureTapCallback onPressed) {
     return SizedBox(
       width: 30,
       child: IconButton(
@@ -210,19 +252,35 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildNotifiListClearButton(GestureTapCallback onPressed) {
+  ///Builds a button responsible for clearing notification list created by user.
+  Widget buildNotifiListClearButton(
+
+      ///Receives a void function which is getting used after button pressed.
+      GestureTapCallback onPressed) {
     return SizedBox(
       width: 30,
       child: IconButton(
         color: Colors.white,
         icon: Icon(Icons.clear),
-        onPressed: (isNotificationEnabled)? onPressed : null,
+        onPressed: (isNotificationEnabled) ? onPressed : null,
       ),
     );
   }
 
+  ///Builds a TextFormField without validation.
   Widget buildCustomTextField(
-      String label, String hint, String helper, TextEditingController control) {
+
+      ///Stores text shown on the label of a TextFormField.
+      String label,
+
+      ///Stores text shown inside TextFormField as a hint.
+      String hint,
+
+      ///Stores text shown under TextFormField as an extra information.
+      String helper,
+
+      ///Used to control user's input.
+      TextEditingController control) {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
@@ -249,14 +307,31 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  ///Builds a space between widgets in a column.
   Widget buildSpace() {
     return SizedBox(
       height: 10.0,
     );
   }
 
-  Widget buildCustomButtonWithValidation(Color textcolor, String text,
-      IconData icon, GestureTapCallback onPressed, Widget clearButton) {
+  ///Builds a button with validation.
+  Widget buildCustomButtonWithValidation(
+
+      ///Stores a color of text inside the button.
+      ///Depends on validation result.
+      Color textcolor,
+
+      ///Stores text shown inside the button.
+      String text,
+
+      ///Stores icon shown before text inside the button.
+      IconData icon,
+
+      ///Accpets void function which is going to get used after button pressed.
+      GestureTapCallback onPressed,
+
+      ///Widget of a button responsible for clearing user's input.
+      Widget clearButton) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -290,8 +365,20 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  Widget buildCustomButton(String text, IconData icon,
-      GestureTapCallback onPressed, Widget clearButton) {
+  ///Builds a button without validation.
+  Widget buildCustomButton(
+
+      ///Stores text shown inside the button.
+      String text,
+
+      ///Stores icon shown before text inside the button.
+      IconData icon,
+
+      ///Receives void function which is going to get used after button pressed.
+      GestureTapCallback onPressed,
+
+      ///Widget of a button responsible for clearing user's input.
+      Widget clearButton) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -322,8 +409,17 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  ///Builds a button responsible for pick and clear notifications.
   Widget buildCustomNotificationButton(
-      String text, IconData icon, GestureTapCallback onPressed) {
+
+      ///Stores text shown inside the button.
+      String text,
+
+      ///Receives void function which is going to get used after button pressed.
+      IconData icon,
+
+      ///Widget of a button responsible for clearing user's input.
+      GestureTapCallback onPressed) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -356,8 +452,18 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  ///Builds a button for a button bar.
   Widget buildButtonBarTile(
-      String text, Color color, GestureTapCallback onPressed) {
+
+      ///Stores text shown inside a button.
+      String text,
+
+      ///Stores color of a button.
+      ///Changing on button press.
+      Color color,
+
+      ///Receives a void function which is getting used after button pressed.
+      GestureTapCallback onPressed) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -368,33 +474,39 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
+  ///Erases date of a task which user already picked.
   void clearDate() {
     isDateSelected = false;
     isNotificationEnabled = false;
     setState(() {});
   }
 
+  ///Erases time of a task which user already picked.
   void clearTime() {
     isTimeSelected = false;
     isNotificationEnabled = false;
     setState(() {});
   }
 
+  ///Erases localization of a task which user already picked.
   void clearLocalization() {
     _task.localization = Localization(id: 0);
     setState(() {});
   }
 
+  ///Erases group of a task which user already picked.
   void clearGroup() {
     _task.group = Group(id: 0);
     setState(() {});
   }
 
+  ///Clears notification list of a task which user already picked.
   void clearNotifiList() {
     (_task.listNotifi).clear();
     setState(() {});
   }
 
+  ///Builds interface responsible for picking a date.
   void datePick() {
     DatePicker.showDatePicker(context,
         theme: DatePickerTheme(
@@ -414,6 +526,7 @@ class _AddTaskState extends State<AddTask> {
     }, currentTime: DateTime.now(), locale: LocaleType.pl);
   }
 
+  ///Builds interface responsible for picking a time.
   void timePick() {
     DatePicker.showTimePicker(context,
         theme: DatePickerTheme(
@@ -432,15 +545,18 @@ class _AddTaskState extends State<AddTask> {
     }, currentTime: DateTime.now(), locale: LocaleType.pl);
   }
 
+  ///Takes user to previous page.
   void goBack() {
     Navigator.pop(context);
   }
 
+  ///Takes user to notification pick page.
   void goToNotificationPickPage() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => AddNotificationTask(_task)));
   }
 
+  ///Takes user to localization pick page.
   void goToLocalizationPickPage() {
     isLocalizationSelected = true;
     Navigator.push(
@@ -449,45 +565,42 @@ class _AddTaskState extends State<AddTask> {
             builder: (context) => AddLocalization(_task, listOfLocalization)));
   }
 
+  ///Takes user to group pick page.
   void goToGroupPickPage() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => AddGroup(_task, listOfGroup)));
   }
 
+  ///Validates user's input.
+  ///If accepted adds new Task.
   void acceptAndValidate() {
     if (_formKey.currentState.validate()) {
-        _task.name = _controllerName.text;
-        _task.description = controllerDesc.text;
-      if(isTimeSelected && isDateSelected) {
+      _task.name = _controllerName.text;
+      _task.description = controllerDesc.text;
+      if (isTimeSelected && isDateSelected) {
         print("isTimeSelected: $isTimeSelected");
         print("isDateSelected: $isDateSelected");
-        _task.endTime = DateTime(_terminData.year, _terminData.month, _terminData.day, _terminCzas.hour, _terminCzas.minute);
-      }else{
+        _task.endTime = DateTime(_terminData.year, _terminData.month,
+            _terminData.day, _terminCzas.hour, _terminCzas.minute);
+      } else {
         _task.listNotifi.clear();
       }
 
-      List<Notifi> listN  = List();
-      listN.addAll( _task.listNotifi);
+      List<Notifi> listN = List();
+      listN.addAll(_task.listNotifi);
 
-      for(Notifi element in listN){
-        if(_task.endTime.subtract(element.duration).isBefore(_today)){
+      for (Notifi element in listN) {
+        if (_task.endTime.subtract(element.duration).isBefore(_today)) {
           print("delete: ${_task.endTime.subtract(element.duration)}");
           _task.listNotifi.remove(element);
         }
       }
 
-        TaskHelper.add(_task).then((onvalue){
-          GroupHelper.addlist(listOfGroup);
-          LocalizationHelper.addlist(listOfLocalization);
-          Navigator.of(context).pop();
-        });
-
-
-
-
-
+      TaskHelper.add(_task).then((onvalue) {
+        GroupHelper.addlist(listOfGroup);
+        LocalizationHelper.addlist(listOfLocalization);
+        Navigator.of(context).pop();
+      });
     }
   }
-
-
 }

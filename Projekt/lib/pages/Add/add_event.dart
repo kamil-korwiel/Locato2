@@ -14,40 +14,51 @@ class AddEvent extends StatefulWidget {
 }
 
 class AddEventState extends State<AddEvent> {
-  
-///Stores user's input in a TextFormField.
+  ///Stores user's input in a TextFormField.
   TextEditingController _controllerName;
-///Stores user's input in a TextFormField.
+
+  ///Stores user's input in a TextFormField.
   TextEditingController _controllerDesc;
-///Individual key for a Form widget, used to validate user's input.
+
+  ///Individual key for a Form widget, used to validate user's input.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-///Stores current date;
+
+  ///Stores current date;
   DateTime _today;
-///Stores event's date.
+
+  ///Stores event's date.
   DateTime _date;
-///Stores event's starting time.
+
+  ///Stores event's starting time.
   DateTime _time1;
-///Stores event's end time.
+
+  ///Stores event's end time.
   DateTime _time2;
-///Stores color of a button displaying event's date.
+
+  ///Stores color of a button displaying event's date.
   Color _dateColor;
-///Stores color of a button displaying event's starting time.
+
+  ///Stores color of a button displaying event's starting time.
   Color _time1Color;
-///Stores color of a button displaying event's end time.
+
+  ///Stores color of a button displaying event's end time.
   Color _time2Color;
-///Object of an Event class.
+
+  ///Object of an Event class.
   Event _event;
-///Default value is false, changes after user picks a date.
+
+  ///Default value is false, changes after user picks a date.
   bool isDateSelected;
-///Default value is false, changes after user picks an event's starting time.
+
+  ///Default value is false, changes after user picks an event's starting time.
   bool isTime1Selected;
-///Default value is false, changes after user picks an event's end time.
+
+  ///Default value is false, changes after user picks an event's end time.
   bool isTime2Selected;
 
   @override
   void initState() {
-
-    _event =  Event();
+    _event = Event();
     _today = DateTime.now();
     _controllerName = TextEditingController();
     _controllerDesc = TextEditingController();
@@ -70,9 +81,10 @@ class AddEventState extends State<AddEvent> {
           'Dodaj wydarzenie',
           style: TextStyle(color: Colors.white),
         ),
+
         ///Builds a go Back button.
-        leading: new IconButton(
-            icon: Icon(Icons.arrow_back), onPressed: goBack),
+        leading:
+            new IconButton(icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -121,8 +133,9 @@ class AddEventState extends State<AddEvent> {
                               : ((_event.listNotifi).length < 21)
                                   ? "Wybrano ${(_event.listNotifi).length} powiadomień"
                                   : ((_event.listNotifi).length % 10 == 2 ||
-                                          (_event.listNotifi).length % 10 == 3 ||
-                                          (_event.listNotifi).length % 10 == 4 )
+                                          (_event.listNotifi).length % 10 ==
+                                              3 ||
+                                          (_event.listNotifi).length % 10 == 4)
                                       ? "Wybrano ${(_event.listNotifi).length} powiadomienia"
                                       : "Wybrano ${(_event.listNotifi).length} powiadomień",
                   Icons.notifications,
@@ -140,16 +153,19 @@ class AddEventState extends State<AddEvent> {
     );
   }
 
-///Builds a TextFormField with a validation.
-///Checks if user did fill the field.
-///On empty field returns a message.
+  ///Builds a TextFormField with a validation.
+  ///Checks if user did fill the field.
+  ///On empty field returns a message.
   Widget buildCustomTextFieldwithValidation(
-///Stores text shown on the label of a TextFormField.
+
+      ///Stores text shown on the label of a TextFormField.
       String label,
-///Stores text shown inside the TextFormField as a hint.
-       String hint,
-///Used to control user's input.
-        TextEditingController control) {
+
+      ///Stores text shown inside the TextFormField as a hint.
+      String hint,
+
+      ///Used to control user's input.
+      TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
@@ -185,14 +201,18 @@ class AddEventState extends State<AddEvent> {
 
   ///Builds a TextFormField without validation.
   Widget buildCustomTextField(
-    ///Stores text shown on the label of a TextFormField.
+
+      ///Stores text shown on the label of a TextFormField.
       String label,
-    ///Stores text shown inside TextFormField as a hint.
-       String hint,
-    ///Stores text shown under TextFormField as an extra information.
-       String helper,
-    ///Used to control user's input.
-        TextEditingController control) {
+
+      ///Stores text shown inside TextFormField as a hint.
+      String hint,
+
+      ///Stores text shown under TextFormField as an extra information.
+      String helper,
+
+      ///Used to control user's input.
+      TextEditingController control) {
     return TextFormField(
       controller: control,
       decoration: new InputDecoration(
@@ -225,19 +245,25 @@ class AddEventState extends State<AddEvent> {
       height: 10.0,
     );
   }
+
   ///Builds a button with validation.
   Widget buildCustomButtonWithValidation(
-    ///Stores a color of text inside the button.
-    ///Depends on validation result.
-    Color textcolor,
-    ///Stores text shown inside the button.
-    String text,
-    ///Stores icon shown before text inside the button.
-    IconData icon, 
-    ///Accpets void function which is going to get used after button pressed.
-    GestureTapCallback onPressed,
-    ///Widget of a button responsible for clearing user's input.
-    Widget clearButton) {
+
+      ///Stores a color of text inside the button.
+      ///Depends on validation result.
+      Color textcolor,
+
+      ///Stores text shown inside the button.
+      String text,
+
+      ///Stores icon shown before text inside the button.
+      IconData icon,
+
+      ///Accpets void function which is going to get used after button pressed.
+      GestureTapCallback onPressed,
+
+      ///Widget of a button responsible for clearing user's input.
+      Widget clearButton) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -272,15 +298,19 @@ class AddEventState extends State<AddEvent> {
   }
 
   ///Builds a button without validation.
-  Widget buildCustomButton(    
-    ///Stores text shown inside the button.
-    String text,
-    ///Stores icon shown before text inside the button.
-    IconData icon, 
-    ///Receives void function which is going to get used after button pressed.
-    GestureTapCallback onPressed,
-    ///Widget of a button responsible for clearing user's input.
-    Widget clearButton) {
+  Widget buildCustomButton(
+
+      ///Stores text shown inside the button.
+      String text,
+
+      ///Stores icon shown before text inside the button.
+      IconData icon,
+
+      ///Receives void function which is going to get used after button pressed.
+      GestureTapCallback onPressed,
+
+      ///Widget of a button responsible for clearing user's input.
+      Widget clearButton) {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       elevation: 5.0,
@@ -312,28 +342,31 @@ class AddEventState extends State<AddEvent> {
   }
 
   ///Builds a row with two buttons inside of it.
- Widget buildButtonBar(){
-   return ButtonBar(
-                  children: [
-                    buildButtonBarTile("Anuluj", Colors.red, goBack),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    buildButtonBarTile(
-                        "Dodaj", Colors.lightGreenAccent, acceptAndValidate),
-                  ],
-                  alignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  buttonMinWidth: 150);
- }
-  
+  Widget buildButtonBar() {
+    return ButtonBar(
+        children: [
+          buildButtonBarTile("Anuluj", Colors.red, goBack),
+          SizedBox(
+            width: 30,
+          ),
+          buildButtonBarTile(
+              "Dodaj", Colors.lightGreenAccent, acceptAndValidate),
+        ],
+        alignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        buttonMinWidth: 150);
+  }
+
   ///Builds a button for a button bar.
   Widget buildButtonBarTile(
+
       ///Stores text shown inside a button.
-      String text, 
+      String text,
+
       ///Stores color of a button.
       ///Changing on button press.
-      Color color, 
+      Color color,
+
       ///Receives a void function which is getting used after button pressed.
       GestureTapCallback onPressed) {
     return RaisedButton(
@@ -348,8 +381,9 @@ class AddEventState extends State<AddEvent> {
 
   ///Builds a button responsible for clearing data.
   Widget buildClearButton(
-    ///Receives a void function which is getting used after button pressed.
-    GestureTapCallback onPressed) {
+
+      ///Receives a void function which is getting used after button pressed.
+      GestureTapCallback onPressed) {
     return SizedBox(
       width: 30,
       child: IconButton(
@@ -411,7 +445,6 @@ class AddEventState extends State<AddEvent> {
           itemStyle: TextStyle(color: Colors.white),
           cancelStyle: TextStyle(color: Colors.red),
           doneStyle: TextStyle(color: Colors.green),
-
           containerHeight: 210.0,
         ),
         showSecondsColumn: false,
@@ -422,7 +455,7 @@ class AddEventState extends State<AddEvent> {
     }, currentTime: new DateTime.now(), locale: LocaleType.pl);
     setState(() {});
   }
-  
+
   ///Builds interface responsible for picking an end time.
   void endTimePick() {
     DatePicker.showTimePicker(context,
@@ -479,14 +512,16 @@ class AddEventState extends State<AddEvent> {
 
           _event.name = _controllerName.value.text;
           _event.description = _controllerDesc.text;
-          _event.beginTime = DateTime(_date.year, _date.month, _date.day, _time1.hour, _time1.minute);
-          _event.endTime = DateTime(_date.year, _date.month, _date.day, _time2.hour, _time2.minute);
+          _event.beginTime = DateTime(
+              _date.year, _date.month, _date.day, _time1.hour, _time1.minute);
+          _event.endTime = DateTime(
+              _date.year, _date.month, _date.day, _time2.hour, _time2.minute);
 
-          List<Notifi> listN  = List();
-          listN.addAll( _event.listNotifi);
+          List<Notifi> listN = List();
+          listN.addAll(_event.listNotifi);
 
-          for(Notifi element in listN){
-            if(_event.beginTime.subtract(element.duration).isBefore(_today)){
+          for (Notifi element in listN) {
+            if (_event.beginTime.subtract(element.duration).isBefore(_today)) {
               print("delete: ${_event.beginTime.subtract(element.duration)}");
               _event.listNotifi.remove(element);
             }

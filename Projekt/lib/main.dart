@@ -49,12 +49,6 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
           primaryTextTheme:
               TextTheme(title: TextStyle(color: Colors.amberAccent))),
-      /* theme: ThemeData(
-        primaryColor: Color(0xFF333366),
-        canvasColor: Colors.white,
-        accentColor: Color(0xffBB86FC),
-        backgroundColor: Colors.white,
-      ),*/
       home: HomePage(),
       debugShowCheckedModeBanner: false,
     );

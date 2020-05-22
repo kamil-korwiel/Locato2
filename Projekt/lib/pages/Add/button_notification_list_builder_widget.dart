@@ -14,8 +14,6 @@ class ListNotifi extends StatefulWidget {
 }
 
 class _ListNotifiState extends State<ListNotifi> {
-  //List<Notifi> list;
-
   @override
   void initState() {
     super.initState();
@@ -24,8 +22,8 @@ class _ListNotifiState extends State<ListNotifi> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
-          child: new ListView.builder(
-        physics: ScrollPhysics(),
+      child: new ListView.builder(
+          physics: ScrollPhysics(),
           shrinkWrap: true,
           itemCount: widget.lista.length,
           itemBuilder: (context, index) {
@@ -44,8 +42,8 @@ class _ListNotifiState extends State<ListNotifi> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.all(10),
-                        child: buildListTextTile(index)),
+                          padding: EdgeInsets.all(10),
+                          child: buildListTextTile(index)),
                       buildRemoveButton(index),
                     ],
                   ),
@@ -56,19 +54,28 @@ class _ListNotifiState extends State<ListNotifi> {
     );
   }
 
+  ///Builds a space between widgets in a column.
   Widget buildSpace() {
     return SizedBox(
       height: 10.0,
     );
   }
 
-  Widget buildSpaceBetween(double _width) {
+  ///Builds a space between widgets in a row.
+  Widget buildSpaceBetween(
+
+      ///Specifies width of a space.
+      double _width) {
     return SizedBox(
       width: _width,
     );
   }
 
-  Widget buildListTextTile(int _index) {
+  ///Builds a field with a text displayed inside of it.
+  Widget buildListTextTile(
+
+      ///Stores id of a list element.
+      int _index) {
     return SizedBox(
       width: 150,
       child: Text(
@@ -77,7 +84,11 @@ class _ListNotifiState extends State<ListNotifi> {
     );
   }
 
-  Widget buildRemoveButton(int _index) {
+  ///Builds a button to remove an element from list.
+  Widget buildRemoveButton(
+
+      ///Stores id of a list element.
+      int _index) {
     return SizedBox(
       child: IconButton(
         icon: Icon(Icons.clear),
@@ -88,6 +99,7 @@ class _ListNotifiState extends State<ListNotifi> {
     );
   }
 
+  ///Builds a field with an icon displayed inside of it.
   Widget buildListIconTile() {
     return Container(
       width: 20,
@@ -98,6 +110,7 @@ class _ListNotifiState extends State<ListNotifi> {
     );
   }
 
+  ///Removes an element from a list.
   void removeFromList(int _index) {
     if (widget.lista[_index].id != null) {
       NotifiHelper.delete(widget.lista[_index].id);

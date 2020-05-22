@@ -10,19 +10,34 @@ class AddNotificationTask extends StatefulWidget {
   @override
   _AddNotificationTaskState createState() => _AddNotificationTaskState();
 
+  ///An object of a Task class.
   Task task;
   AddNotificationTask(this.task);
 }
 
 class _AddNotificationTaskState extends State<AddNotificationTask> {
+  ///Stores user's input in a TextFormField.
   final TextEditingController _text = new TextEditingController();
+
+  ///Individual key for a Form widget, used to validate user's input.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  ///List of notifications created by user.
   List<Notifi> _notifilist = [];
+
+  ///Stores duration.
   var duration;
+
+  ///Stores minutes.
   int minuty;
+
+  ///Stores hours.
   int godziny;
+
+  ///Stores days.
   int dni;
+
+  ///Stores String used to display a notification on a button.
   String name;
 
   @override
@@ -40,8 +55,8 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
       appBar: AppBar(
         title:
             Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
-        leading: new IconButton(
-            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+        leading:
+            new IconButton(icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -74,16 +89,20 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
               ),
             ),
             buildSpace(),
-            buildcustomButton("Dodaj", validateAndAdd),
+            buildCustomButton("Dodaj", validateAndAdd),
             buildSpace(),
             ListNotifi(_notifilist),
             buildSpace(),
-            buildcustomButton("Potwierdź", confirm)
+            buildCustomButton("Potwierdź", confirm),
           ])),
     );
   }
 
-  Widget buildPickerNameTile(String _value) {
+  ///Builds names above the pickers to show if user sets a day, hour or minute.
+  Widget buildPickerNameTile(
+
+      ///Stores text displayed on a tile above the picker.
+      String _value) {
     return Flexible(
       child: Container(
         decoration: BoxDecoration(
@@ -102,7 +121,14 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
     );
   }
 
-  Widget buildNumberPicker1(int _min, int _max) {
+  ///Builds interface responsible for picking amount of days.
+  Widget buildNumberPicker1(
+
+      ///Stores minimum value of a picker.
+      int _min,
+
+      ///Stores maximum value of a picker.
+      int _max) {
     return NumberPicker.integer(
         listViewWidth: double.infinity,
         itemExtent: 40,
@@ -118,7 +144,14 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
         onChanged: (value) => setState(() => dni = value));
   }
 
-  Widget buildNumberPicker2(int _min, int _max) {
+  ///Builds interface responsible for picking amount of hours.
+  Widget buildNumberPicker2(
+
+      ///Stores minimum value of a picker.
+      int _min,
+
+      ///Stores maximum value of a picker.
+      int _max) {
     return NumberPicker.integer(
         listViewWidth: double.infinity,
         itemExtent: 40,
@@ -134,7 +167,14 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
         onChanged: (value) => setState(() => godziny = value));
   }
 
-  Widget buildNumberPicker3(int _min, int _max) {
+  ///Builds interface responsible for picking amount of minutes.
+  Widget buildNumberPicker3(
+
+      ///Stores minimum value of a picker.
+      int _min,
+
+      ///Stores maximum value of a picker.
+      int _max) {
     return NumberPicker.integer(
         listViewWidth: double.infinity,
         itemExtent: 40,
@@ -150,7 +190,14 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
         onChanged: (value) => setState(() => minuty = value));
   }
 
-  Widget buildcustomButton(String text, void action()) {
+  ///Builds a button without validation.
+  Widget buildCustomButton(
+
+      ///Stores text shown inside the button.
+      String text,
+
+      ///Receives void function which is going to get used after button pressed.
+      GestureTapCallback onPressed) {
     return RaisedButton(
       color: Color(0xFF333366),
       elevation: 5.0,
@@ -160,9 +207,7 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
           color: Colors.transparent,
         ),
       ),
-      onPressed: () {
-        action();
-      },
+      onPressed: onPressed,
       child: Text(
         '$text',
         style: TextStyle(
@@ -172,14 +217,26 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
     );
   }
 
+  ///Builds a space between widgets in a column.
   Widget buildSpace() {
     return SizedBox(
       height: 10.0,
     );
   }
 
+  ///Builds a TextFormField with a validation.
+  ///Checks if user did fill the field.
+  ///On empty field returns a message.
   Widget buildCustomTextFieldwithValidation(
-      String label, String hint, TextEditingController control) {
+
+      ///Stores text shown on the label of a TextFormField.
+      String label,
+
+      ///Stores text shown inside the TextFormField as a hint.
+      String hint,
+
+      ///Used to control user's input.
+      TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
@@ -214,6 +271,8 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
         });
   }
 
+  ///Validates user's input.
+  ///If accepted adds new notification to a list.
   void validateAndAdd() {
     bool notthesame = true;
 
@@ -238,22 +297,13 @@ class _AddNotificationTaskState extends State<AddNotificationTask> {
     setState(() {});
   }
 
+  ///Takes user to previous page.
   void goBack() {
     Navigator.pop(context);
   }
 
-  void onBackPressed() {
-    goBack();
-  }
-
+  ///Adds created list to a task.
   void confirm() {
-//    List<Notifi> noti = List();
-//    for (Notifi n in _notifilist) {
-//      if (n.id == null) {
-//        noti.add(n);
-//      }
-//    }
-
     widget.task.listNotifi = _notifilist;
     Navigator.pop(context);
   }
@@ -268,14 +318,28 @@ class AddNotificationEvent extends StatefulWidget {
 }
 
 class _AddNotificationEventState extends State<AddNotificationEvent> {
+  ///Stores user's input in a TextFormField.
   final TextEditingController _text = new TextEditingController();
+
+  ///Individual key for a Form widget, used to validate user's input.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  ///List of notifications created by user.
   List<Notifi> _notifilist = [];
+
+  ///Stores duration.
   var duration;
+
+  ///Stores minutes.
   int minuty;
+
+  ///Stores hours.
   int godziny;
+
+  ///Stores days.
   int dni;
+
+  ///Stores String used to display a notification on a button.
   String name;
 
   @override
@@ -292,9 +356,9 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     return Scaffold(
       appBar: AppBar(
         title:
-        Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
-        leading: new IconButton(
-            icon: Icon(Icons.arrow_back), onPressed: onBackPressed),
+            Text("Dodaj powiadomienie", style: TextStyle(color: Colors.white)),
+        leading:
+            new IconButton(icon: Icon(Icons.arrow_back), onPressed: goBack),
       ),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -327,16 +391,20 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
               ),
             ),
             buildSpace(),
-            buildcustomButton("Dodaj", validateAndAdd),
+            buildCustomButton("Dodaj", validateAndAdd),
             buildSpace(),
             ListNotifi(_notifilist),
             buildSpace(),
-            buildcustomButton("Potwierdź", confirm)
+            buildCustomButton("Potwierdź", confirm)
           ])),
     );
   }
 
-  Widget buildPickerNameTile(String _value) {
+  ///Builds names above the pickers to show if user sets a day, hour or minute.
+  Widget buildPickerNameTile(
+
+      ///Stores text displayed on a tile above the picker.
+      String _value) {
     return Flexible(
       child: Container(
         decoration: BoxDecoration(
@@ -355,7 +423,14 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     );
   }
 
-  Widget buildNumberPicker1(int _min, int _max) {
+  ///Builds interface responsible for picking amount of days.
+  Widget buildNumberPicker1(
+
+      ///Stores minimum value of a picker.
+      int _min,
+
+      ///Stores maximum value of a picker.
+      int _max) {
     return NumberPicker.integer(
         listViewWidth: double.infinity,
         itemExtent: 40,
@@ -371,7 +446,14 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
         onChanged: (value) => setState(() => dni = value));
   }
 
-  Widget buildNumberPicker2(int _min, int _max) {
+  ///Builds interface responsible for picking amount of days.
+  Widget buildNumberPicker2(
+
+      ///Stores minimum value of a picker.
+      int _min,
+
+      ///Stores maximum value of a picker.
+      int _max) {
     return NumberPicker.integer(
         listViewWidth: double.infinity,
         itemExtent: 40,
@@ -387,7 +469,14 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
         onChanged: (value) => setState(() => godziny = value));
   }
 
-  Widget buildNumberPicker3(int _min, int _max) {
+  ///Builds interface responsible for picking amount of days.
+  Widget buildNumberPicker3(
+
+      ///Stores minimum value of a picker.
+      int _min,
+
+      ///Stores maximum value of a picker.
+      int _max) {
     return NumberPicker.integer(
         listViewWidth: double.infinity,
         itemExtent: 40,
@@ -403,7 +492,14 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
         onChanged: (value) => setState(() => minuty = value));
   }
 
-  Widget buildcustomButton(String text, void action()) {
+  ///Builds a button without validation.
+  Widget buildCustomButton(
+
+      ///Stores text shown inside the button.
+      String text,
+
+      ///Receives void function which is going to get used after button pressed.
+      GestureTapCallback onPressed) {
     return RaisedButton(
       color: Color(0xFF333366),
       elevation: 5.0,
@@ -413,9 +509,7 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
           color: Colors.transparent,
         ),
       ),
-      onPressed: () {
-        action();
-      },
+      onPressed: onPressed,
       child: Text(
         '$text',
         style: TextStyle(
@@ -425,14 +519,26 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     );
   }
 
+  ///Builds a space between widgets in a column.
   Widget buildSpace() {
     return SizedBox(
       height: 10.0,
     );
   }
 
+  ///Builds a TextFormField with a validation.
+  ///Checks if user did fill the field.
+  ///On empty field returns a message.
   Widget buildCustomTextFieldwithValidation(
-      String label, String hint, TextEditingController control) {
+
+      ///Stores text shown on the label of a TextFormField.
+      String label,
+
+      ///Stores text shown inside the TextFormField as a hint.
+      String hint,
+
+      ///Used to control user's input.
+      TextEditingController control) {
     return TextFormField(
         controller: control,
         decoration: new InputDecoration(
@@ -467,6 +573,8 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
         });
   }
 
+  ///Validates user's input.
+  ///If accepted adds new notification to a list.
   void validateAndAdd() {
     bool notthesame = true;
 
@@ -491,17 +599,13 @@ class _AddNotificationEventState extends State<AddNotificationEvent> {
     setState(() {});
   }
 
+  ///Takes user to previous page.
   void goBack() {
     Navigator.pop(context);
   }
 
-  void onBackPressed() {
-    goBack();
-  }
-
+  ///Adds created list to an event.
   void confirm() {
-
-
     widget.event.listNotifi = _notifilist;
     Navigator.pop(context);
   }

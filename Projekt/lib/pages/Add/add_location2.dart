@@ -10,7 +10,7 @@ import 'dart:convert';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:Locato/Classes/Localization.dart';
 
-// Autosugestia adresow
+///Suggests adresses.
 Future<List> fetchAddress(String query, LatLng position) async {
   String fullQuery = 'https://autosuggest.search.hereapi.com/v1/autosuggest?at=' +
       position.latitude.toString() +
@@ -19,23 +19,15 @@ Future<List> fetchAddress(String query, LatLng position) async {
       "&limit=5&lang=pl&q=" +
       query +
       "&apiKey=wCXJuE5nXL-3L6I79NXtYR3kt-V0bqeqHNfTEFWoyk0&result_types=address";
-  /*String fullQuery =
-      'https://autocomplete.geocoder.ls.hereapi.com/6.2/suggest.json?apiKey=wCXJuE5nXL-3L6I79NXtYR3kt-V0bqeqHNfTEFWoyk0&query=' +
-          query;*/
   final response = await http.get(fullQuery);
 
   if (response.statusCode == 200) {
     // Serwer zwrocil OK, wiec przekaz obrobionego JSONa
     var responseJson = json.decode(utf8.decode(response.bodyBytes))['items'];
-    /*return (responseJson['results'] as List)
-        .map((p) => Adresy.fromJson(p))
-        .toList();*/
+
     return (responseJson as List).map((f) => Adres.fromJson(f)).toList();
-    /*return responseJson.map((f) {
-      return Adres.fromJson(f).toString();
-    }).toList();*/
   } else {
-    throw Exception('Blad w ladowaniu adresow');
+    throw Exception('Błąd w ładowaniu adresów');
   }
 }
 
@@ -81,6 +73,7 @@ class AddLocation extends StatefulWidget {
   @override
   _AddLocationState createState() => _AddLocationState();
 
+  ///List of localizations.
   List<Localization> listofLocal;
 
   AddLocation(this.listofLocal);
@@ -90,19 +83,18 @@ class _AddLocationState extends State<AddLocation> {
   Completer<GoogleMapController> mapController = Completer();
   Future<List<Adres>> futureAdresy;
 
-  // Funkcja inicjujaca mape
+  ///Initiates map.
   _onMapCreated(GoogleMapController controller) {
     setState(() {
       mapController.complete(controller);
     });
   }
 
-  // Funkcja wywolywana przy ruchu mapa w aplikacji
+  ///Function called on position change.
   _onCameraMove(CameraPosition position) {
     _lastPosition = position.target;
   }
 
-  // Wykonywana tylko przy inicjowaniu + pobranie lokalizacji uzytkownika na starcie
   @override
   void initState() {
     super.initState();
@@ -111,17 +103,29 @@ class _AddLocationState extends State<AddLocation> {
   }
 
   //Zmienne: kontroler TextField, pozycji na mapie
+  ///Stores user's input in a TextFormField.
   var adresController = TextEditingController();
+
+  ///Stores user's input in a TextFormField.
   var nazwaController = TextEditingController();
+
+  ///Frequency of map refreshing.
   final Throttling thrTxt =
       new Throttling(duration: Duration(milliseconds: 500));
+
+  ///Stores initial position on a map.
   static LatLng _initialPosition;
+
+  ///Stores last position on a map.
   static LatLng _lastPosition = _initialPosition;
+
+  ///Element of a class Localization.
   Localization dbLokalizacja = new Localization();
 
+  ///Individual key for a Form widget, used to validate user's input.
   final _formKey = new GlobalKey<FormState>();
 
-  // Dekoracja szaro-zolta
+  ///Custom decoration template.
   InputDecoration _buildInputDecoration(String hint, String iconPath) {
     return InputDecoration(
       focusedBorder: UnderlineInputBorder(
@@ -143,11 +147,10 @@ class _AddLocationState extends State<AddLocation> {
     );
   }
 
-  // Dekoracja nowa - granatowa
+  ///Currently used decoration template.
   InputDecoration _buildInputDecoration2(
       String label, String hint, String iconPath) {
     return InputDecoration(
-      //contentPadding: new EdgeInsets.all(5.0),
       filled: true,
       fillColor: new Color(0xFF333366),
       enabledBorder: new OutlineInputBorder(
@@ -171,7 +174,7 @@ class _AddLocationState extends State<AddLocation> {
     );
   }
 
-// Funkcja zapisuje obecna lokalizacje do zmiennej _initialPosition
+  ///Saving current position to _initialPosition variable.
   void _getLocation() async {
     Position currentLocation;
     try {
@@ -195,7 +198,7 @@ class _AddLocationState extends State<AddLocation> {
     locationToAddress();
   }
 
-  // Zamiana lokalizacji na adres - ulica i numer
+  ///Getting street and house number from localization format.
   void locationToAddress() async {
     final coordinates =
         new Coordinates(_lastPosition.latitude, _lastPosition.longitude);
@@ -208,7 +211,7 @@ class _AddLocationState extends State<AddLocation> {
     dbLokalizacja.city = adresKrotki[1];
   }
 
-  // Zamiana wprowadzonego tekstu na lokalizacje
+  ///Changing user's input to localization format.
   Future<void> addressToLocation(String query) async {
     //final query = adresController.text;
     var adres = await Geocoder.local.findAddressesFromQuery(query);
@@ -257,7 +260,7 @@ class _AddLocationState extends State<AddLocation> {
     );
   }
 
-// Elementy ekranu
+  ///Builds TextFormField with validation for name of a localization picked by user.
   Widget _buildNazwaLokalizacji() {
     return TextFormField(
       controller: nazwaController,
@@ -270,6 +273,7 @@ class _AddLocationState extends State<AddLocation> {
     );
   }
 
+  ///Creates a field for adress with validation.
   Widget _buildAdres() {
     return Form(
       child: TypeAheadFormField(
@@ -284,7 +288,6 @@ class _AddLocationState extends State<AddLocation> {
         },
         itemBuilder: (context, suggestion) {
           return ListTile(
-            //contentPadding: EdgeInsets.fromLTRB(10.0, 0, 20.0, 0),
             leading: Icon(Icons.location_on),
             title: Text(suggestion.toString()),
             trailing: Text(suggestion.odleglosc < 1000
@@ -304,6 +307,7 @@ class _AddLocationState extends State<AddLocation> {
     );
   }
 
+  ///Builds a map.
   Widget _buildMapa() {
     return Container(
         margin: const EdgeInsets.only(top: 25.0),
@@ -338,6 +342,7 @@ class _AddLocationState extends State<AddLocation> {
               ]));
   }
 
+  ///Adds localization to data base.
   Widget _buildDodaj(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 35.0),
