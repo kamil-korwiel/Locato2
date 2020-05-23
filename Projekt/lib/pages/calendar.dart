@@ -12,17 +12,21 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
+  ///Stores events in selected day.
   List<dynamic> _selectedEvents;
+  ///Stores dates with list of events.
   Map<DateTime, List<Event>> _events;
+  ///Stores list of events from database.
   List<Event> _downloadEvents;
+  ///Used to control values changed in the calendar.
   CalendarController _calendarController;
+  ///Stores selected day.
   DateTime _selectedDay; 
 
   @override
   void initState() {
     initializeDateFormatting();
     super.initState();
-
     _events = Map();
     _selectedEvents = List();
     _calendarController = CalendarController();
@@ -31,11 +35,12 @@ class _CalendarState extends State<Calendar> {
   @override
   void dispose() {
     _calendarController.dispose();
-
     super.dispose();
   }
-
-  void _onDaySelected(List events) {
+  ///Used to change list of events in _selectedEvents after pick another day.
+  void _onDaySelected(
+    ///Stores list of events.
+    List events) {
     setState(() {
       _selectedEvents = events;
     });
@@ -49,7 +54,9 @@ class _CalendarState extends State<Calendar> {
           if (snapshot.data != null && snapshot.connectionState == ConnectionState.done) {
             _events.clear();
             _downloadEvents = snapshot.data;
+            ///Stores temporary list of events.
             List<Event> tmpList = List();
+            ///Object of an Event class.
             Event e;
             while (_downloadEvents.length != 0) {
               e = _downloadEvents[0];
@@ -101,7 +108,7 @@ class _CalendarState extends State<Calendar> {
         }
     );
     }
-
+  ///Builds a calendar.
   Widget _buildTableCalendar() {
     return TableCalendar(
       calendarStyle: CalendarStyle(),
@@ -163,6 +170,8 @@ class _CalendarState extends State<Calendar> {
     );
   }
 
+  ///Builds event marker.
+  ///Shows counter of events in specific day.
   Widget _buildEventsMarker(DateTime date, List<Event> events) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -187,7 +196,8 @@ class _CalendarState extends State<Calendar> {
       ),
     );
   }
-
+  ///Builds event list.
+  ///Shows list of events after select specific day.
   Widget _buildEventList() {
     return ListView(
       children: _selectedEvents

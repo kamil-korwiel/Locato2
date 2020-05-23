@@ -3,11 +3,15 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
+  ///Stores database name.
   static final _databaseName = "/Baza_danych";
+  ///Stores database version.
   static final _databaseVersion = 1;
+  ///
   static int index;
-
+  ///Constructor to create instance of DatabaseHelper.
   DatabaseHelper._privateConstructor();
+  ///Stores instance of database.
   static DatabaseHelper instance;
 
   factory DatabaseHelper() {
@@ -19,14 +23,17 @@ class DatabaseHelper {
   }
 
   static Database _database;
+  ///Create database object and provide it with a getter where we will instantiate the database if it's not.
   Future<Database> get database async {
     if (_database != null) return _database;
     _database = await _initDatabase();
     return _database;
   }
-
+  ///Opens database and create it if it doesn't exist.
   _initDatabase() async {
+    ///Stores documents directory name where application may place data.
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    ///Stores path to database.
     String path = documentsDirectory.path + _databaseName;
     print("${index} path: " + path);
     ++index;
@@ -34,8 +41,12 @@ class DatabaseHelper {
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
-
-  Future _onCreate(Database db, int version) async {
+  ///Used to create tables.
+  Future _onCreate(
+    ///Stores database.
+    Database db, 
+    ///Stores database version.
+    int version) async {
     await db.execute('''
            CREATE TABLE Grupa (
      ID_Grupa     INTEGER   PRIMARY KEY,
@@ -104,13 +115,21 @@ class DatabaseHelper {
            '''); //D, D2, ... , D7,W,M,Y
 //    FOREIGN KEY(Powiadomienie) REFERENCES Powiadomienia(ID_Powiadomienia),
   }
-
-  Future<int> insert(String table, Map<String, dynamic> row) async {
+  ///Used to insert row into table.
+  Future<int> insert(
+    ///Stores table name.
+    String table, 
+    ///Stores contents of row to insert.
+    Map<String, dynamic> row) async {
+    ///Stores instance of database.
     Database db = await instance.database;
     return await db.insert(table, row);
   }
-
-  Future<List<Map<String, dynamic>>> queryAllRows(String table) async {
+  ///Used to query all rows from table.
+  Future<List<Map<String, dynamic>>> queryAllRows(
+    ///Stores table name.
+    String table) async {
+    ///Stores instance of database.
     Database db = await instance.database;
     return await db.query(table);
   }
@@ -119,30 +138,37 @@ class DatabaseHelper {
 //    Database db = await instance.database;
 //    return await db.rawQuery('SELECT * FROM Powiadomienia_Wydarzen WHERE $id');
 //  }
-
+  ///Used to query list of tasks from specific group.
   Future<List<Map<String, dynamic>>> queryIdRowsTask(int id) async {
+    ///Stores instance of database.
     Database db = await instance.database;
     return await db.rawQuery('SELECT * FROM Task WHERE Grupa=$id');
   }
-
+  ///Used to query events from 7 days.
   Future<List<Map<String, dynamic>>> queryEventWeekend() async {
+    ///Stores instance of database.
     Database db = await instance.database;
     return await db.rawQuery(
         "SELECT * FROM Wydarzenie WHERE date(Termin_od) >= date('now') AND date(Termin_od) <= date('now','+7 day')");
   }
-
-  Future<List<Map<String, dynamic>>> queryEventDay(int day) async {
+  ///Used to query events from specific day.
+  Future<List<Map<String, dynamic>>> queryEventDay(
+    ///Stores day which we want to query events list.
+    int day) async {
+    ///Stores instance of database.
     Database db = await instance.database;
     return await db.rawQuery(
         "SELECT * FROM Wydarzenie WHERE date(Termin_od) = date('now','+$day day')");
   }
-
+  ///
   Future<List<Map<String, int>>> queryTaskNotifiId(int id) async {
+    ///Stores instance of database.
     Database db = await instance.database;
     return await db.rawQuery("SELECT * FROM Powiadomienia WHERE ID_Task= $id");
   }
-
+  ///Used to query all tables from database
   Future<void> showalltables() async {
+    ///Stores instance of database.
     Database db = await instance.database;
     List<Map<String, dynamic>> mapGroup =
         await db.rawQuery("SELECT * FROM Grupa");
@@ -211,20 +237,37 @@ class DatabaseHelper {
           "${m['Czas'].toString()}\t");
     });
   }
-
-  Future<int> query(String q) async {
+  ///Return row count in specific table.
+  Future<int> query(
+    ///Stores table name.
+    String q) async {
+    ///Stores instance of database.
     Database db = await instance.database;
     return Sqflite.firstIntValue(await db.rawQuery(q));
   }
-
+  ///Used to upated row in database.
   Future<int> update(
-      String table, String columnId, int id, Map<String, dynamic> row) async {
+      ///Stores table name.
+      String table, 
+      ///Stores column id name in specific table.
+      String columnId, 
+      ///Stores row id to update.
+      int id, 
+      ///Stores contents of row to update.
+      Map<String, dynamic> row) async {
+    ///Stores instance of database.
     Database db = await instance.database;
-
     return await db.update(table, row, where: '$columnId = ?', whereArgs: [id]);
   }
-
-  Future<int> delete(String table, String columnId, int id) async {
+  ///Used to delete row from database.
+  Future<int> delete(
+    ///Stores table name.
+    String table, 
+    ///Stores column id name in specific table.
+    String columnId, 
+    ///Stores row id to delete.
+    int id) async {
+    ///Stores instance of database.
     Database db = await instance.database;
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
