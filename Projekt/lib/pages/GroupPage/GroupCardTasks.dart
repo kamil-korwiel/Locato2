@@ -10,6 +10,7 @@ class GroupCardTasks extends StatefulWidget {
   @override
   _GroupCardTasksState createState() => _GroupCardTasksState();
 
+  ///Stores a list of the group's tasks.
   List<Task> tasks;
 
   GroupCardTasks(this.tasks);
@@ -32,37 +33,44 @@ class _GroupCardTasksState extends State<GroupCardTasks> {
         ),
         SizedBox(height: 8.0),
         Divider(color: Colors.black54, height: 0.5),
+
+        ///Builds a list of group's tasks, where single task is defined as GroupCardItem class.
         for (var task in widget.tasks)
           GroupCardItem(
             task,
-            onPressedDone: () {
 
-              if(task.localization.id != 0){
-                if(task.localization.isNearBy == true){
+            ///Mark the task as completed.
+            onPressedDone: () {
+              if (task.localization.id != 0) {
+                if (task.localization.isNearBy == true) {
                   task.done = !task.done;
                   TaskHelper.updateDone(task);
-                }else{
+                } else {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text("Nie jesteś bisko miejsca"),
-                          content: Text("Jeśli nie jsteś bisko miejsca zadania nie możesz go zakonczyć"),
+                          content: Text(
+                              "Jeśli nie jsteś bisko miejsca zadania nie możesz go zakonczyć"),
                         );
                       });
                 }
-              }else{
+              } else {
                 task.done = !task.done;
                 TaskHelper.updateDone(task);
               }
               setState(() {});
               groupCardState.setState(() {});
-
             },
+
+            ///Takes user to page to edit selected task.
             onPressedEdit: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => UpdateTask(task)));
             },
+
+            ///Deletes selected task from list and database as well.
             onPressedDelete: () {
               TaskHelper.delete(task.id);
               groupCardState.setState(() {});

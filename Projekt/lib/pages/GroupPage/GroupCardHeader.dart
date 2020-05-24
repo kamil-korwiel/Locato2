@@ -3,9 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:Locato/Classes/Group.dart';
 
 class GroupCardHeader extends StatelessWidget {
-  var procent = 0.1;
+  ///Stores the percentage of group' progress for linear indicator view.
+  var procent = 0.0;
+
+  ///Obejct of a Group class.
   Group group;
+
+  ///Stores length of task list.
   int length;
+
+  ///Stores quantity of completed tasks.
   int howMuchDone;
 
   GroupCardHeader(this.group, this.howMuchDone, this.length);
@@ -18,15 +25,13 @@ class GroupCardHeader extends StatelessWidget {
       procent = howMuchDone / length;
     }
 
-//   print("Percent " + procent.toString());
-//    print("howmuchdone" + howMuchDone.toString() + "/" + length.toString());
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            ///Builds a name of the group with its numerical indication of tasks.
             Text(
               group.name,
               style: TextStyle(
@@ -46,6 +51,8 @@ class GroupCardHeader extends StatelessWidget {
           ],
         ),
         SizedBox(height: 2.0),
+
+        ///Builds a linear indicator with percentage.
         Stack(
           children: <Widget>[
             Container(

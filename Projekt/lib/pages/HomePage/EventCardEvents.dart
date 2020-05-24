@@ -12,6 +12,7 @@ import 'EventCardItem.dart';
 class EventCardEvents extends StatefulWidget {
   EventCardEvents(this.events);
 
+  ///Stores the list of the events for given day.
   List<Event> events;
 
   @override
@@ -35,9 +36,13 @@ class _EventCardEventsState extends State<EventCardEvents> {
 //        ),
         SizedBox(height: 8.0),
         Divider(color: Colors.black54, height: 0.5),
+
+        ///Builds a list of day's events, where single event is defined in EventCardItem class.
         for (var event in widget.events)
           EventCardItem(
             event,
+
+            ///Takes user to page to edit selected event.
             onPressedEdit: () {
               Navigator.push(
                 context,
@@ -46,6 +51,8 @@ class _EventCardEventsState extends State<EventCardEvents> {
                 ),
               );
             },
+
+            ///Deletes selected event from list and database as well.
             onPressedDelete: () {
               //TODO: DELETE FROM LIST OR DB
               EventHelper.delete(event.id);

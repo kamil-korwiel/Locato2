@@ -7,9 +7,7 @@ import 'package:Locato/Classes/Event.dart';
 
 import 'HomePage/EventCard.dart';
 
-
-
-
+///Stores state of HomePage class, if changed rebuild widget.
 _HomePageEventsState homePageEventsState;
 
 class HomePageEvents extends StatefulWidget {
@@ -21,6 +19,7 @@ class HomePageEvents extends StatefulWidget {
 }
 
 class _HomePageEventsState extends State<HomePageEvents> {
+  ///Stores the names of weekdays in Polish.
   static final List<String> listOfDays = [
     "Poniedziałek",
     "Wtorek",
@@ -30,14 +29,24 @@ class _HomePageEventsState extends State<HomePageEvents> {
     "Sobota",
     "Niedziela"
   ];
+
+  ///Stores a number of week's day, where 0 is current day.
   int day;
+
+  ///Stores a list of objects of Event class.
   List<Event> list;
+
+  ///Stores value of UI layout.
   double heightExtededAppBar = 200.0;
   //ScrollController _scrollController;
 
+  ///Stores value of UI layout.
   double heightImportantEvent = 80.0;
+
+  ///Stores value of UI layout.
   double widthImportantEvent = 100.0;
 
+  ///Stores a DateTime object.
   DateTime _date;
 
   @override
@@ -48,6 +57,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
     day = DateTime.now().day;
   }
 
+  ///Return a Polish name of given day.
   String getDay(int day) {
     //print(_date.timeZoneOffset);
     int val = (_date.day + day) % 7;
@@ -59,6 +69,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
     return FutureBuilder(
       future: EventHelper.lists(),
       builder: (ctxt, userData) {
+        ///Connects to database and download list of events.
         switch (userData.connectionState) {
           case ConnectionState.none:
           // return Container();
@@ -68,6 +79,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
           case ConnectionState.done:
             list = userData.data;
             if (list != null) {
+              ///Stores the list of lists of events.
               List<List<Event>> listaList = new List.generate(7, (i) => []);
 
               for (Event item in list) {
@@ -98,6 +110,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
                 //controller: _scrollController,
                 slivers: <Widget>[
                   SliverList(
+                    ///Builds a list of all events divided in days of incoming week, where single day is declared as EventCard class.
                     delegate: SliverChildBuilderDelegate(
                         (context, index) => EventCard(
                               getDay(index),

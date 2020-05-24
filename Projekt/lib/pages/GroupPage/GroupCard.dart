@@ -6,13 +6,7 @@ import 'package:Locato/Classes/Task.dart';
 import 'package:Locato/pages/GroupPage/GroupCardHeader.dart';
 import 'package:Locato/pages/GroupPage/GroupCardTasks.dart';
 
-//_GroupCardState groupCardState;
-
 class GroupCard extends StatefulWidget {
-//  _GroupCardState createState() {
-//    groupCardState = _GroupCardState();
-//    return groupCardState;
-//  }
   @override
   _GroupCardState createState() => _GroupCardState();
   Group group;
@@ -21,7 +15,10 @@ class GroupCard extends StatefulWidget {
 }
 
 class _GroupCardState extends State<GroupCard> {
+  ///Stores a list of the group's tasks.
   List<Task> _list;
+
+  ///Stores quantity of completed tasks, initialized as 0.
   int doneTasks = 0;
 
   @override
@@ -41,52 +38,13 @@ class _GroupCardState extends State<GroupCard> {
 //    });
 //  }
 
-  // Stary build bez FutureBuild ~Filip
-  /*@override
-  Widget build(BuildContext context) {
-    if (_list.isNotEmpty) {
-      doneTasks = 0;
-      _list.forEach((task) {
-        if (task.done) doneTasks++;
-      });
-    }
-    return Container(
-      // Odstep miedzy grupami
-      margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-      decoration: new BoxDecoration(
-        color: new Color(0xFF333366),
-        shape: BoxShape.rectangle,
-        borderRadius: new BorderRadius.circular(8.0),
-        boxShadow: <BoxShadow>[
-          new BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10.0,
-            offset: new Offset(0.0, 10.0),
-          ),
-        ],
-      ),
-      child: Column(
-        children: <Widget>[
-          Divider(
-            color: Colors.black12,
-            height: 0.5,
-          ),
-          _buildContent(),
-          Divider(
-            color: Colors.black12,
-            height: 0.5,
-          ),
-        ],
-      ),
-    );
-  }*/
-
   @override
   Widget build(BuildContext context) {
     doneTasks = 0;
     return FutureBuilder(
       future: TaskHelper.listsID(widget.group.id),
       builder: (context, snapshot) {
+        ///Connects to database.
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           // return Container();
@@ -139,6 +97,8 @@ class _GroupCardState extends State<GroupCard> {
     );
   }
 
+  ///Builds a content of the group card.
+  ///Starting with the header and then if not empty - tasks list.
   Widget _buildContent() {
     return Container(
         margin: new EdgeInsets.fromLTRB(20.0, 16.0, 16.0, 16.0),

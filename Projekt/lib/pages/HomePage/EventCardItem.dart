@@ -17,20 +17,41 @@ class EventCardItem extends StatefulWidget {
     //this.color
   }
   //final Event event;
+
+  ///Stores name of a event.
   String name;
+
+  ///Stores a date when the events starts.
   String eventStart;
+
+  ///Stores a date when the event ends.
   String eventEnd;
+
+  ///Stores a cycle of the event.
   String cycle;
+
+  ///Stores a true value if event is cyclic, false if otherwise.
   bool is_cyclic;
+
+  ///Stores a description of the event.
   String description;
+
+  ///Stores colour of a event.
   Color color;
+
+  ///Stores declaration of function, responsible to take user to edit page.
   final Function onPressedEdit;
+
+  ///Stores declaration of function responsible for deletion of event.
   final Function onPressedDelete;
 }
 
 class _EventCardItemState extends State<EventCardItem> {
   @override
   Widget build(BuildContext context) {
+    ///Builds a ExpansionTile.
+    ///Initially it shows only name and date of event.
+    ///On expanded shows event description and buttons to edit or delete event.
     return ListTileTheme(
       contentPadding: EdgeInsets.all(0),
       child: ExpansionTile(
@@ -119,11 +140,14 @@ class _EventCardItemState extends State<EventCardItem> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
+                  ///Builds a edit button.
                   IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: widget.onPressedEdit,
                   ),
                   SizedBox(width: 4.0),
+
+                  ///Builds a delete button.
                   IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: widget.onPressedDelete),

@@ -5,14 +5,28 @@ import 'package:Locato/Classes/Task.dart';
 import 'package:Locato/Classes/Localization.dart';
 
 class GroupCardItem extends StatelessWidget {
+  ///Stores declaration of function responsible for mark task as completed.
   final Function onPressedDone;
+
+  ///Stores declaration of function responsible to take user to edit page.
   final Function onPressedEdit;
+
+  ///Stores declaration of function responsible for deletion of task.
   final Function onPressedDelete;
 
+  ///Stores a name of task.
   String name;
+
+  ///Stores value of true if task is completed, false if otherwise.
   bool done;
+
+  ///Stores object of a Localization class, shows chosen task's localization.
   Localization localization;
+
+  ///Stores date of task.
   String date;
+
+  ///Stores description of task.
   String description;
 
   GroupCardItem(Task task,
@@ -44,6 +58,10 @@ class GroupCardItem extends StatelessWidget {
       }
     }
 
+    ///Builds a ExpansionTile.
+    ///Initially shows only name and if not empty localization and date.
+    ///Avalible button to mark task as completed.
+    ///On expanded shows task description and buttons to edit or delete task.
     return ListTileTheme(
       contentPadding: EdgeInsets.all(0),
       child: ExpansionTile(
@@ -98,6 +116,8 @@ class GroupCardItem extends StatelessWidget {
                     : Container(),
               ],
             ),
+
+            ///Builds a done task button.
             Container(
               padding: EdgeInsets.only(right: 10.0),
               child: IconButton(
@@ -158,11 +178,14 @@ class GroupCardItem extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
+                  ///Build an edit button.
                   IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: onPressedEdit,
                   ),
                   SizedBox(width: 4.0),
+
+                  ///Builds a delete button.
                   IconButton(
                       icon: Icon(Icons.delete), onPressed: onPressedDelete),
                 ],

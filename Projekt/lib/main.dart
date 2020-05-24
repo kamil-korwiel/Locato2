@@ -23,8 +23,6 @@ void main() async {
   await AndroidAlarmManager.initialize();
   await updateDataOnThisDay();
 
-
-
   //AndroidAlarmManager.per
 
   runApp(MyApp());
@@ -35,7 +33,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   //final dbHelper = DatabaseHelper.instance;
-  // This widget is the root of your application.
+  /// This widget is the root of application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -62,8 +60,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
+  ///Controller of tab bar menu in AppBar.
   TabController _tabController;
+
+  ///Controller of page view of app.
   PageController _pageController;
+
+  ///Stores a value if current page is eligmate to change. Protects from conflicts between TabController and PageController.
   var pageCanChange = true;
 
   @override
@@ -85,9 +88,12 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     // Zmienna szerokosci ekranu dla TabBaru
+    ///Stores value of UI layout setting for tab bar.
     var screenWidthTabBar = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
+      ///Builds main top bar of application.
+      ///Provides quick navigation menu between pages: callendar, events and tasks.
       appBar: AppBar(
           //title: Text("Locato"),
           leading: GestureDetector(
@@ -133,6 +139,9 @@ class _HomePageState extends State<HomePage>
               ),
             ),
           )),
+
+      ///Builds a main menu button, where is menu navigation.
+      ///Menu options are to add event/task.
       floatingActionButton: SpeedDial(
         elevation: 10.0,
         animatedIcon: AnimatedIcons.add_event,
@@ -145,6 +154,7 @@ class _HomePageState extends State<HomePage>
         onClose: () => print('Zamykam Dial na Tasks'),
         heroTag: 'speed-dial-hero-tag',
         children: [
+          ///Takes user to add event page.
           SpeedDialChild(
               child: Icon(Icons.event_note),
               backgroundColor: Color(0xFF444477),
@@ -158,6 +168,8 @@ class _HomePageState extends State<HomePage>
                   ),
                 );
               }),
+
+          ///Takes user to add task page.
           SpeedDialChild(
               child: Icon(Icons.check_box),
               backgroundColor: Color(0xFF444477),
@@ -184,6 +196,8 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
+
+      ///Builds main body of application with page view.
       body: PageView(
         controller: _pageController,
         onPageChanged: (page) {
@@ -201,6 +215,8 @@ class _HomePageState extends State<HomePage>
     );
   }
 
+  ///Used to prevent conficts of two navigation methods.
+  ///If user decides to scroll from right to left or from left to right, it blocks usage of tab bar until animations ends.
   onPageChange(int index, {PageController p, TabController t}) async {
     // Obsluga PageControllera
     if (p != null) {
@@ -215,6 +231,8 @@ class _HomePageState extends State<HomePage>
   }
 }
 
+///Used to check location radius of 200 meters.
+///If user is nearby of defined localization of some task's will be notified.
 void checkLocationRadius() async {
   List<Localization> _listloc = List();
 
@@ -224,8 +242,6 @@ void checkLocationRadius() async {
   DatabaseHelper();
   Notifications_helper_background.init();
 
-
-
   pos = await Geolocator().getCurrentPosition();
   print("Obecna lokalizacja: " + pos.toString());
 
@@ -233,53 +249,41 @@ void checkLocationRadius() async {
   _listloc.addAll(await LocalizationHelper.lists());
   _listloc.removeWhere((l) => l.id == 0);
   //Notifications_helper_background.now("TEST", pos.toString());
-  if(_listloc.isNotEmpty){
+  if (_listloc.isNotEmpty) {
     print("Length list loc: ${_listloc.length}");
 
-    for(Localization loc in _listloc){
+    for (Localization loc in _listloc) {
       loc.isNearBy = false;
 
-        dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
-        print("Dystans pomiedzy punktami " + dist.toString());
+      dist = await Geolocator().distanceBetween(
+          loc.latitude, loc.longitude, pos.latitude, pos.longitude);
+      print("Dystans pomiedzy punktami " + dist.toString());
 
+      if (dist < distance) {
+        List<Task> _listtask = List();
+        loc.isNearBy = true;
+        _listtask.addAll(await TaskHelper.listsIDLocal(loc.id));
 
-        if(dist < distance){
-          List<Task> _listtask = List();
-          loc.isNearBy = true;
-          _listtask.addAll(await TaskHelper.listsIDLocal(loc.id));
+        if (_listtask.isNotEmpty && (loc.wasNotified == false)) {
+          String title = "Na :${loc.street}";
+          String decription = "Masz do zrobienia: ${_listtask.length} zadania";
+          //"Odleglosc od miesca: $dist m\n";
 
-          if(_listtask.isNotEmpty
-              && (loc.wasNotified==false)
-          ) {
+          print("LocID ${loc.id}");
+          print("List of Task: ${_listtask.length}");
 
-            String title = "Na :${loc.street}";
-            String decription = "Masz do zrobienia: ${_listtask
-                .length} zadania";
-                //"Odleglosc od miesca: $dist m\n";
+          _listtask.forEach((t) => print("TaskName: ${t.name}"));
 
-            print("LocID ${loc.id}");
-            print("List of Task: ${_listtask.length}");
-
-
-
-            _listtask.forEach((t) => print("TaskName: ${t.name}"));
-
-            loc.wasNotified = true;
-           await Notifications_helper_background.now(title, decription);
-
-          }
-
+          loc.wasNotified = true;
+          await Notifications_helper_background.now(title, decription);
         }
-        LocalizationHelper.updateStatus(loc);
+      }
+      LocalizationHelper.updateStatus(loc);
     }
   }
-
 }
 
-
-updateDataOnThisDay() async{
-
+updateDataOnThisDay() async {
   TaskHelper.deleteDoneTaskToday();
   LocalizationHelper.resetAllStatus();
-
 }

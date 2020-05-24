@@ -5,9 +5,11 @@ import 'package:Locato/Classes/Event.dart';
 import 'EventCardEvents.dart';
 import 'EventCardHeader.dart';
 
-
 class EventCard extends StatelessWidget {
+  ///Stores a Polish name of day.
   String day;
+
+  ///Stores a list of events for given day.
   List<Event> events;
 
   EventCard(this.day, this.events);
@@ -48,6 +50,8 @@ class EventCard extends StatelessWidget {
     );
   }
 
+  ///Builds a content of the day's event card.
+  ///Starting with the header and then if not empty - list of the events for given day.
   Widget _buildContent() {
     return Container(
       margin: new EdgeInsets.fromLTRB(20.0, 16.0, 16.0, 16.0),

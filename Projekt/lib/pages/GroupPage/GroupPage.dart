@@ -3,6 +3,7 @@ import 'package:Locato/Baza_danych/group_helper.dart';
 import 'package:Locato/Classes/Group.dart';
 import 'GroupCard.dart';
 
+///Stores state of GroupPage class, if changed rebuild widget.
 _GroupTaskPageState groupCardState;
 
 class GroupTaskPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class GroupTaskPage extends StatefulWidget {
 }
 
 class _GroupTaskPageState extends State<GroupTaskPage> {
+  ///Stores a list of all groups.
   List<Group> listOfGroup;
   @override
   void initState() {
@@ -24,8 +26,6 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
   }
 
   void _downloadData() {
-    print(
-        "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@GroupPage downloadData");
     GroupHelper.lists().then((onList) {
       if (onList != null) {
         listOfGroup = onList;
@@ -40,6 +40,7 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
     return FutureBuilder(
         future: GroupHelper.lists(),
         builder: (context, snapshot) {
+          ///Download data from database.
           listOfGroup = snapshot.connectionState == ConnectionState.done
               ? snapshot.data
               : listOfGroup;
@@ -47,6 +48,7 @@ class _GroupTaskPageState extends State<GroupTaskPage> {
           return CustomScrollView(
             slivers: <Widget>[
               SliverList(
+                ///Builds a list of all groups, where single group is declared as GroupCard class.
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => GroupCard(
                     listOfGroup[index],
