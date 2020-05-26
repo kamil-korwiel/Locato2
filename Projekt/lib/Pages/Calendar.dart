@@ -1,10 +1,11 @@
+import 'package:Locato/Pages/Add_Update_pages.dart';
 import 'package:flutter/material.dart';
-import 'package:Locato/Baza_danych/event_helper.dart';
-import 'package:Locato/Classes/Event.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:Locato/pages/Update/update_event.dart';
+
+import '../Classes.dart';
+import '../database_helper.dart';
 class Calendar extends StatefulWidget {
 
   @override

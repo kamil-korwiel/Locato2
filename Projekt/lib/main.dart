@@ -1,19 +1,16 @@
+import 'package:Locato/Pages/GroupPage.dart';
+import 'package:Locato/database_helper.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:Locato/Baza_danych/task_helper.dart';
-import 'package:Locato/Classes/Task.dart';
-import 'package:Locato/pages/Add/add_event.dart';
-import 'package:Locato/pages/Add/add_task.dart';
-import 'package:Locato/pages/HomePage.dart';
-import 'package:Locato/pages/GroupPage/GroupPage.dart';
+
 
 import 'Background/notification_helper_background.dart';
-import 'Baza_danych/database_helper.dart';
-import 'Baza_danych/localization_helper.dart';
-import 'Classes/Localization.dart';
-import 'pages/calendar.dart';
+import 'Classes.dart';
+import 'Pages/Add_Update_pages.dart';
+import 'Pages/Calendar.dart';
+import 'Pages/HomePage.dart';
 
 void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
@@ -21,18 +18,16 @@ void main() async {
   DatabaseHelper();
   await Notifications_helper_background.init();
   await AndroidAlarmManager.initialize();
-  await updateDataOnThisDay();
-
-  //AndroidAlarmManager.per
-
   runApp(MyApp());
-  await AndroidAlarmManager.periodic(
-      Duration(minutes: 1), 0, checkLocationRadius);
-  //AndroidAlarmManager.cancel(0);
+  await AndroidAlarmManager.cancel(0);
+  await AndroidAlarmManager.periodic(const Duration(seconds: 5), 2, checkLocationRadius);
+  DateTime today = DateTime.now();
+  DateTime start = DateTime(today.year,today.month,today.day,6,0,0);
+  await AndroidAlarmManager.periodic(Duration(days: 1), 1, updateDataOnThisDay,startAt: start);
 }
 
 class MyApp extends StatelessWidget {
-  //final dbHelper = DatabaseHelper.instance;
+
   /// This widget is the root of application.
   @override
   Widget build(BuildContext context) {
@@ -184,16 +179,15 @@ class _HomePageState extends State<HomePage>
                 );
                 setState(() {});
               }),
-          SpeedDialChild(
-            child: Icon(Icons.data_usage),
-            label: 'DB',
-            labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
-            onTap: () {
-              // Notifications_helper_background.now("NOW", "FUCK");
-
-              DatabaseHelper.instance.showalltables();
-            },
-          ),
+//          SpeedDialChild(
+//            child: Icon(Icons.data_usage),
+//            label: 'DB',
+//            labelStyle: TextStyle(color: Colors.grey[900], fontSize: 18.0),
+//            onTap: () {
+//              TaskHelper.deleteDoneTaskToday();
+//              LocalizationHelper.resetAllStatus();
+//            },
+//          ),
         ],
       ),
 
@@ -249,15 +243,14 @@ void checkLocationRadius() async {
   _listloc.addAll(await LocalizationHelper.lists());
   _listloc.removeWhere((l) => l.id == 0);
   //Notifications_helper_background.now("TEST", pos.toString());
-  if (_listloc.isNotEmpty) {
+  if(_listloc.isNotEmpty){
     print("Length list loc: ${_listloc.length}");
 
-    for (Localization loc in _listloc) {
+    for(Localization loc in _listloc){
       loc.isNearBy = false;
 
-      dist = await Geolocator().distanceBetween(
-          loc.latitude, loc.longitude, pos.latitude, pos.longitude);
-      print("Dystans pomiedzy punktami " + dist.toString());
+        dist = await Geolocator().distanceBetween(loc.latitude, loc.longitude, pos.latitude, pos.longitude);
+        print("Dystans pomiedzy punktami " + dist.toString());
 
       if (dist < distance) {
         List<Task> _listtask = List();
@@ -284,6 +277,7 @@ void checkLocationRadius() async {
 }
 
 updateDataOnThisDay() async {
+  DatabaseHelper();
   TaskHelper.deleteDoneTaskToday();
   LocalizationHelper.resetAllStatus();
 }
