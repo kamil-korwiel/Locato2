@@ -1,12 +1,12 @@
 import 'dart:math';
-import 'package:Locato/database_helper.dart';
+import 'package:Locato/DatabaseHelper.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import '../Classes.dart';
+import '../MainClasses.dart';
 
 
 ///Abstract class, helping to schedule Notification on project Loacato
-abstract class Notifications_helper_background{
+abstract class NotificationHelperBackground{
   static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
   static AndroidInitializationSettings initSettingsAndroid;
   static IOSInitializationSettings initSettingsIOS;

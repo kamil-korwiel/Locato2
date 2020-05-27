@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'package:Locato/Background/notification_helper_background.dart';
+import 'package:Locato/Background/NotificationHelperBackground.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'Classes.dart';
+import 'MainClasses.dart';
 
 class DatabaseHelper {
   ///Stores database name.
@@ -328,7 +328,7 @@ class EventHelper {
   ///Delete Event and all Notifi in  DataBase and canceled Notifications
   static Future<void> delete(int pickedIdEvent) async {
     dbHelper.delete('Wydarzenie', 'ID_Wydarzenie', pickedIdEvent);
-    Notifications_helper_background.deleteEvent(pickedIdEvent);
+    NotificationHelperBackground.deleteEvent(pickedIdEvent);
   }
   ///Used to query all events
   static Future<List<Event>> lists() async {
@@ -585,7 +585,7 @@ class NotifiHelper {
           });
         }
       }
-      Notifications_helper_background.ListOfTaskNotifi(task);
+      NotificationHelperBackground.ListOfTaskNotifi(task);
     }
   }
   ///Adding list of Notifi to Database using Event
@@ -608,7 +608,7 @@ class NotifiHelper {
           });
         }
       }
-      Notifications_helper_background.ListOfEventNotifi(event);
+      NotificationHelperBackground.ListOfEventNotifi(event);
     }
   }
 
@@ -624,7 +624,7 @@ class NotifiHelper {
   ///Delete Notifi in Database
   static Future<void> delete(int id) async {
     dbHelper.delete('Powiadomienia', 'ID_Powiadomienia', id);
-    Notifications_helper_background.deleteNotifi(id);
+    NotificationHelperBackground.deleteNotifi(id);
   }
 
   static Future<void> deleteTask(Notifi notifi) async {
@@ -775,7 +775,7 @@ class TaskHelper {
   ///Delete 'Task' and  all 'Notifi' to DataBase and canceled Notifications
   static Future<void> delete(int pickedIdTask) async {
     dbHelper.delete('Task', 'ID_Task', pickedIdTask);
-    await Notifications_helper_background.deleteTask(pickedIdTask);
+    await NotificationHelperBackground.deleteTask(pickedIdTask);
   }
   ///Delete Task when is done and date is less then today
   static Future<void> deleteDoneTaskToday() async {

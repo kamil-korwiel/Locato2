@@ -13,8 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:throttling/throttling.dart';
 
-import '../Classes.dart';
-import '../database_helper.dart';
+import '../MainClasses.dart';
+import '../DatabaseHelper.dart';
 
 class AddEvent extends StatefulWidget {
 

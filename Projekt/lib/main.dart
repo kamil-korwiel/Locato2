@@ -1,13 +1,13 @@
 import 'package:Locato/Pages/GroupPage.dart';
-import 'package:Locato/database_helper.dart';
+import 'package:Locato/DatabaseHelper.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
 
 
-import 'Background/notification_helper_background.dart';
-import 'Classes.dart';
+import 'Background/NotificationHelperBackground.dart';
+import 'MainClasses.dart';
 import 'Pages/Add_Update_pages.dart';
 import 'Pages/Calendar.dart';
 import 'Pages/HomePage.dart';
@@ -16,7 +16,7 @@ void main() async {
   // TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   DatabaseHelper();
-  await Notifications_helper_background.init();
+  await NotificationHelperBackground.init();
   await AndroidAlarmManager.initialize();
   runApp(MyApp());
   await AndroidAlarmManager.cancel(0);
@@ -234,7 +234,7 @@ void checkLocationRadius() async {
   Position pos;
   int distance = 200;
   DatabaseHelper();
-  Notifications_helper_background.init();
+  NotificationHelperBackground.init();
 
   pos = await Geolocator().getCurrentPosition();
   print("Obecna lokalizacja: " + pos.toString());
@@ -268,7 +268,7 @@ void checkLocationRadius() async {
           _listtask.forEach((t) => print("TaskName: ${t.name}"));
 
           loc.wasNotified = true;
-          await Notifications_helper_background.now(title, decription);
+          await NotificationHelperBackground.now(title, decription);
         }
       }
       LocalizationHelper.updateStatus(loc);
