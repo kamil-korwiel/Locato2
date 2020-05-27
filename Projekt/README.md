@@ -56,6 +56,7 @@ Plugins:
 - [duration: ^2.0.11](https://pub.dev/packages/duration)
 - [percent_indicator: ^2.1.3](https://pub.dev/packages/percent_indicator/versions/2.1.3)
 - [numberpicker: ^1.2.0](https://pub.dev/packages/numberpicker)
+- [dartdoc 0.32.0](https://pub.dev/packages/dartdoc)
 
 Others:
 - [DBdiagram.io](https://dbdiagram.io/home)
