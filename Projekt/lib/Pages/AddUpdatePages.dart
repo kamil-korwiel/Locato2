@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:throttling/throttling.dart';
+import 'package:http/http.dart' as http;
 
 import '../MainClasses.dart';
 import '../DatabaseHelper.dart';
@@ -1132,7 +1133,7 @@ Future<List> fetchAddress(String query, LatLng position) async {
       "&limit=5&lang=pl&q=" +
       query +
       "&apiKey=wCXJuE5nXL-3L6I79NXtYR3kt-V0bqeqHNfTEFWoyk0&result_types=address";
-  var http;
+  //HttpRequest http;
   final response = await http.get(fullQuery);
 
   if (response.statusCode == 200) {
