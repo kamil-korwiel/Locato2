@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:Locato/Background/NotificationHelperBackground.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -461,7 +462,7 @@ class LocalizationHelper {
       'Nazwa': newLocalization.name,
       'Miasto': newLocalization.city,
       'Ulica': newLocalization.street,
-      'JestesBlisko': 0,
+      'JestesBlisko': newLocalization.isNearBy == true ? 1:0,
       'WyslanoPowiadomienie': 0,
     });
 
@@ -723,6 +724,12 @@ class TaskHelper {
 
     int IdGroup = newTask.group.id == null ? await GroupHelper.add(newTask.group) : newTask.group.id;
     //print("IDGROUP : $IdGroup");
+
+    //
+    Position pos = await Geolocator().getCurrentPosition();
+    double dist = await Geolocator().distanceBetween(newTask.localization.latitude, newTask.localization.longitude, pos.latitude, pos.longitude);
+
+    newTask.localization.isNearBy = dist < 200.0 ? true : false;
 
     int IdLocal =  newTask.localization.id == null ? await LocalizationHelper.add(newTask.localization) : newTask.localization.id;
 

@@ -437,30 +437,30 @@ class _GroupCardTasksState extends State<GroupCardTasks> {
 
             ///Mark the task as completed.
             onPressedDone: () {
-
-
-
-              if (task.localization.id != 0) {
-                if (task.localization.isNearBy == true) {
+              TaskHelper.dbHelper.query("SELECT JestesBlisko FROM Lokalizacja WHERE ID_Lokalizacji=${task.localization.id}").then((value) {
+                task.localization.isNearBy = value==1?true:false;
+                if (task.localization.id != 0) {
+                  if (task.localization.isNearBy == true) {
+                    task.done = !task.done;
+                    TaskHelper.updateDone(task);
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Nie jesteś bisko miejsca"),
+                            content: Text(
+                                "Jeśli nie jsteś bisko miejsca zadania nie możesz go zakonczyć"),
+                          );
+                        });
+                  }
+                } else {
                   task.done = !task.done;
                   TaskHelper.updateDone(task);
-                } else {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Nie jesteś bisko miejsca"),
-                          content: Text(
-                              "Jeśli nie jsteś bisko miejsca zadania nie możesz go zakonczyć"),
-                        );
-                      });
                 }
-              } else {
-                task.done = !task.done;
-                TaskHelper.updateDone(task);
-              }
-              setState(() {});
-              groupCardState.setState(() {});
+                setState(() {});
+                groupCardState.setState(() {});
+              });
             },
 
             ///Takes user to page to edit selected task.
