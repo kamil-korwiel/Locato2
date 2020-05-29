@@ -24,7 +24,7 @@ abstract class NotificationHelperBackground{
   static init(){
     if(_flutterLocalNotificationsPlugin == null) {
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-      initSettingsAndroid = AndroidInitializationSettings('app_icon');
+      initSettingsAndroid = AndroidInitializationSettings('app_icon_transparent');
       initSettingsIOS = IOSInitializationSettings();
       initSettings =
           InitializationSettings(initSettingsAndroid, initSettingsIOS);
