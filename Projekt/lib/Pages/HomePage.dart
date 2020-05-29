@@ -50,7 +50,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
   @override
   void initState() {
     super.initState();
-    _date = DateTime.now().add(Duration(days: 3));
+    _date = DateTime.now();
     list = List();
     day = DateTime.now().day;
   }
@@ -58,7 +58,7 @@ class _HomePageEventsState extends State<HomePageEvents> {
   ///Return a Polish name of given day.
   String getDay(int day) {
     //print(_date.timeZoneOffset);
-    int val = (_date.day + day) % 7;
+    int val = (_date.weekday + day -1 ) % 7;
     return listOfDays[val];
   }
 

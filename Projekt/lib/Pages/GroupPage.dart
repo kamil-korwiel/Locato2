@@ -437,6 +437,9 @@ class _GroupCardTasksState extends State<GroupCardTasks> {
 
             ///Mark the task as completed.
             onPressedDone: () {
+
+
+
               if (task.localization.id != 0) {
                 if (task.localization.isNearBy == true) {
                   task.done = !task.done;
